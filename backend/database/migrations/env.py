@@ -12,6 +12,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), "..", ".."))
 from app.core.config import settings
 from app.core.database import Base
 from app.models.user import User  # noqa: F401
+from app.models.category import Category  # noqa: F401
+from app.models.product import Product  # noqa: F401
 
 
 # this is the Alembic Config object, which provides
