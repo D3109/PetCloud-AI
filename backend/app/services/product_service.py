@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.models.category import Category
 from app.models.product import Product
 from app.schemas.product import ProductCreate
+from app.services import inventory_service
 
 
 def create_product(db: Session, data: ProductCreate) -> Product:
@@ -27,6 +28,9 @@ def create_product(db: Session, data: ProductCreate) -> Product:
     db.add(product)
     db.commit()
     db.refresh(product)
+
+    inventory_service.create_inventory_for_product(db, product.id)
+
     return product
 
 

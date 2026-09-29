@@ -7,3 +7,4 @@ pydantic-settings
 pydantic[email]
 bcrypt
 python-jose[cryptography]
+google-genai
