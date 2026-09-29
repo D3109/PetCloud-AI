@@ -50,7 +50,7 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
     sa.PrimaryKeyConstraint('product_id', 'category_id')
     )
-op.add_column('users', sa.Column('role', sa.String(), nullable=False, server_default='customer'))    # ### end Alembic commands ###
+    op.add_column('users', sa.Column('role', sa.String(), nullable=False, server_default='customer'))    # ### end Alembic commands ###
 
 
 def downgrade() -> None:
