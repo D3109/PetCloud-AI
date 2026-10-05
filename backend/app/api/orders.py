@@ -4,16 +4,20 @@ from sqlalchemy.orm import Session
 from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.models.user import User
-from app.schemas.order import OrderOut
+from app.schemas.order import CheckoutRequest, OrderOut
 from app.services import order_service
 
 router = APIRouter(prefix="/api/v1/orders", tags=["orders"])
 
 
 @router.post("/checkout", response_model=OrderOut, status_code=201)
-def checkout(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def checkout(
+    data: CheckoutRequest = CheckoutRequest(),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
     try:
-        order = order_service.checkout(db, current_user.id)
+        order = order_service.checkout(db, current_user.id, data.promotion_code)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     return order_service.to_out_dict(order)
