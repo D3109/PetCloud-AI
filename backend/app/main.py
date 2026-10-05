@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import ai, auth, cart, categories, inventory, orders, products, users
+from app.api import ai, auth, cart, categories, inventory, orders, payments, products, promotions, users
 
 app = FastAPI(title="PetCloud IA")
 
@@ -20,6 +20,8 @@ app.include_router(products.router)
 app.include_router(inventory.router)
 app.include_router(cart.router)
 app.include_router(orders.router)
+app.include_router(promotions.router)
+app.include_router(payments.router)
 app.include_router(ai.router)
 
 
