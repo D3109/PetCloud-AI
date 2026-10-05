@@ -17,6 +17,8 @@ from app.models.product import Product  # noqa: F401
 from app.models.inventory import Inventory  # noqa: F401
 from app.models.cart import Cart, CartItem  # noqa: F401
 from app.models.order import Order, OrderItem  # noqa: F401
+from app.models.promotion import Promotion  # noqa: F401
+from app.models.payment import Payment  # noqa: F401
 
 
 # this is the Alembic Config object, which provides

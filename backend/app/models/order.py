@@ -10,7 +10,10 @@ class Order(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     status = Column(String, nullable=False, default="pending")
+    subtotal_amount = Column(Numeric(10, 2), nullable=False, default=0)
+    discount_amount = Column(Numeric(10, 2), nullable=False, default=0)
     total_amount = Column(Numeric(10, 2), nullable=False, default=0)
+    promotion_code = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     items = relationship("OrderItem", cascade="all, delete-orphan", back_populates="order")

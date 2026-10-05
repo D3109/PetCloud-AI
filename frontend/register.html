@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>PetCloud — Registrarme</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main>
+    <h1>Crear cuenta</h1>
+    <form id="register-form">
+      <input type="text" id="reg-fullname" placeholder="Nombre completo (opcional)" />
+      <input type="email" id="reg-email" placeholder="Correo electrónico" required />
+      <input type="password" id="reg-password" placeholder="Contraseña" required />
+      <button type="submit">Registrarme</button>
+      <p id="reg-error" class="error"></p>
+    </form>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
