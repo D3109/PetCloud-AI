@@ -33,3 +33,10 @@ class UserRoleUpdate(BaseModel):
 
 class UserActiveUpdate(BaseModel):
     is_active: bool
+
+
+class ProfileUpdate(BaseModel):
+    """Datos que un usuario puede modificar de su propio perfil."""
+    full_name: str | None = None
+    current_password: str | None = None
+    new_password: str | None = None

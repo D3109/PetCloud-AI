@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 
-from app.core.security import hash_password
+from app.core.security import hash_password, verify_password
 from app.models.user import User
-from app.schemas.user import UserAdminCreate, UserCreate
+from app.schemas.user import ProfileUpdate, UserAdminCreate, UserCreate
 
 # Roles que existen en el sistema. "root" NO se incluye en los roles
 # asignables por API (ni por admin ni por root): el usuario ROOT solo se
@@ -78,6 +78,33 @@ def update_role(db: Session, user: User, role: str, actor: User) -> User:
     if role not in roles_assignable_by(actor.role):
         raise ValueError(f"No tienes permiso para asignar el rol '{role}'")
     user.role = role
+    db.commit()
+    db.refresh(user)
+    return user
+
+
+def update_own_profile(db: Session, user: User, data: ProfileUpdate) -> User:
+    """Permite a un usuario modificar su propio nombre y/o contraseña.
+
+    No permite cambiar email ni rol desde aqui (eso evita que alguien se
+    auto-asigne privilegios por esta via). Los usuarios originados en
+    Google (auth_provider="google") no tienen una contraseña que el
+    usuario conozca, asi que no pueden cambiarla por este endpoint.
+    """
+    if data.full_name is not None:
+        user.full_name = data.full_name
+
+    if data.new_password:
+        if user.auth_provider == "google":
+            raise ValueError(
+                "Esta cuenta inicia sesion con Google y no tiene contraseña local"
+            )
+        if not data.current_password or not verify_password(
+            data.current_password, user.hashed_password
+        ):
+            raise ValueError("La contraseña actual no es correcta")
+        user.hashed_password = hash_password(data.new_password)
+
     db.commit()
     db.refresh(user)
     return user

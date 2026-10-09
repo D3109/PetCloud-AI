@@ -26,6 +26,7 @@ async function renderNav() {
         ${loggedIn ? '<a href="cart.html">Carrito</a>' : ''}
         ${loggedIn ? '<a href="orders.html">Mis pedidos</a>' : ''}
         ${loggedIn ? '<a href="survey.html">Encuesta</a>' : ''}
+        ${loggedIn ? '<a href="profile.html">Mi perfil</a>' : ''}
         ${isAdmin ? '<a href="admin.html">Administrador</a>' : ''}
         ${loggedIn
           ? '<button id="logout-btn" class="link-btn">Cerrar sesión</button>'

@@ -6,7 +6,8 @@ from app.core.deps import get_current_user
 from app.core.security import create_access_token, verify_password
 from app.models.user import User
 from app.schemas.auth import GoogleLoginRequest, LoginRequest, TokenResponse
-from app.schemas.user import UserOut
+from app.schemas.user import ProfileUpdate, UserOut
+from app.services import user_service
 from app.services.google_auth_service import (
     GoogleLoginNotConfigured,
     InvalidGoogleToken,
@@ -32,6 +33,18 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
 @router.get("/me", response_model=UserOut)
 def read_current_user(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+@router.patch("/me", response_model=UserOut)
+def update_current_user_profile(
+    data: ProfileUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        return user_service.update_own_profile(db, current_user, data)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 
 @router.post("/google", response_model=TokenResponse)

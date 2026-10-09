@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>PetCloud — Mi perfil</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main>
+    <h1>Mi perfil</h1>
+
+    <section class="profile-section">
+      <h2>Mis datos</h2>
+      <form id="profile-form">
+        <label for="profile-email">Correo electrónico</label>
+        <input type="email" id="profile-email" disabled />
+
+        <label for="profile-fullname">Nombre completo</label>
+        <input type="text" id="profile-fullname" placeholder="Tu nombre completo" />
+
+        <button type="submit">Guardar nombre</button>
+        <p id="profile-error" class="error"></p>
+        <p id="profile-success" class="success"></p>
+      </form>
+    </section>
+
+    <section class="profile-section" id="password-section">
+      <h2>Cambiar contraseña</h2>
+      <form id="password-form">
+        <label for="current-password">Contraseña actual</label>
+        <input type="password" id="current-password" />
+
+        <label for="new-password">Nueva contraseña</label>
+        <input type="password" id="new-password" />
+
+        <button type="submit">Cambiar contraseña</button>
+        <p id="password-error" class="error"></p>
+        <p id="password-success" class="success"></p>
+      </form>
+    </section>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>
