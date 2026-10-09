@@ -43,6 +43,51 @@ nav { background: var(--color-primary); }
 
 main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
 
+/* Hero del catalogo */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(120deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+  color: #fff;
+  padding: 44px 20px;
+  text-align: center;
+}
+.hero-inner { position: relative; max-width: 700px; margin: 0 auto; z-index: 1; }
+.hero h1 { margin: 0 0 10px; font-size: 1.9rem; }
+.hero p { margin: 0 0 18px; opacity: 0.95; font-size: 1.02rem; }
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.hero-badges span {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.hero-deco {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9rem;
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-deco-left { left: -30px; transform: translateY(-50%) rotate(-18deg); }
+.hero-deco-right { right: -30px; transform: translateY(-50%) rotate(18deg); }
+
+.section-title { margin-top: 0; }
+
+@media (max-width: 640px) {
+  .hero-deco { display: none; }
+  .hero h1 { font-size: 1.5rem; }
+}
+
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; align-items: stretch; }
 
 .card {
