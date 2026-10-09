@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>PetCloud — Encuesta de satisfacción</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main>
+    <h1>Encuesta de satisfacción</h1>
+    <p class="muted">
+      Tu opinión nos ayuda a mejorar el sistema de recomendación con IA.
+      Responde según tu experiencia reciente en PetCloud (1 = muy en desacuerdo, 5 = muy de acuerdo).
+    </p>
+    <form id="survey-form" class="survey-form">
+      <fieldset>
+        <legend>Sistema de recomendación con IA</legend>
+        <div class="likert-row">
+          <label>Las recomendaciones que recibí fueron precisas</label>
+          <div class="likert-scale" data-field="precision_recomendacion"></div>
+        </div>
+        <div class="likert-row">
+          <label>El sistema fue fácil de usar</label>
+          <div class="likert-scale" data-field="facilidad_uso"></div>
+        </div>
+        <div class="likert-row">
+          <label>Confío en las recomendaciones del asistente</label>
+          <div class="likert-scale" data-field="confianza_usuario"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Satisfacción y seguridad de compra</legend>
+        <div class="likert-row">
+          <label>En general, estoy satisfecho(a) con mi experiencia de compra</label>
+          <div class="likert-scale" data-field="nivel_satisfaccion"></div>
+        </div>
+        <div class="likert-row">
+          <label>Sentí que mi compra fue segura</label>
+          <div class="likert-scale" data-field="percepcion_seguridad"></div>
+        </div>
+        <div class="likert-row">
+          <label>Volvería a comprar en PetCloud</label>
+          <div class="likert-scale" data-field="intencion_recompra"></div>
+        </div>
+      </fieldset>
+
+      <label for="comentario">Comentarios (opcional)</label>
+      <textarea id="comentario" rows="3" placeholder="Cuéntanos más..."></textarea>
+
+      <button type="submit">Enviar encuesta</button>
+      <p id="survey-error" class="error"></p>
+      <p id="survey-success" class="success"></p>
+    </form>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/survey.js"></script>
+</body>
+</html>

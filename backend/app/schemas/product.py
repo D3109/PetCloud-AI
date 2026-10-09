@@ -14,6 +14,14 @@ class ProductCreate(BaseModel):
     category_ids: list[int] = []
 
 
+class ProductUpdate(BaseModel):
+    name: str | None = None
+    description: str | None = None
+    price: Decimal | None = None
+    is_active: int | None = None
+    category_ids: list[int] | None = None
+
+
 class ProductOut(BaseModel):
     id: int
     name: str

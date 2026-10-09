@@ -27,3 +27,15 @@ def get_user_by_email(db: Session, email: str) -> User | None:
 
 def list_users(db: Session, skip: int = 0, limit: int = 100) -> list[User]:
     return db.query(User).offset(skip).limit(limit).all()
+
+
+VALID_ROLES = {"customer", "admin"}
+
+
+def update_role(db: Session, user: User, role: str) -> User:
+    if role not in VALID_ROLES:
+        raise ValueError(f"Rol invalido: {role}. Debe ser uno de {sorted(VALID_ROLES)}")
+    user.role = role
+    db.commit()
+    db.refresh(user)
+    return user

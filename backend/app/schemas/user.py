@@ -13,6 +13,11 @@ class UserOut(BaseModel):
     id: int
     email: EmailStr
     full_name: str | None = None
+    role: str
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserRoleUpdate(BaseModel):
+    role: str

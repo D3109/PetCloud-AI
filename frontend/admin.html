@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>PetCloud — Administrador</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <nav id="nav"></nav>
+  <main>
+    <h1>Panel de administrador</h1>
+    <div id="admin-guard" class="muted">Verificando permisos...</div>
+
+    <div id="admin-content" class="hidden">
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="productos">Productos</button>
+        <button class="tab-btn" data-tab="usuarios">Usuarios</button>
+        <button class="tab-btn" data-tab="encuestas">Encuestas</button>
+      </div>
+
+      <!-- Productos -->
+      <section id="tab-productos" class="tab-panel active">
+        <h2>Crear producto</h2>
+        <form id="product-form" class="inline-form">
+          <input id="p-name" placeholder="Nombre" required />
+          <input id="p-sku" placeholder="SKU" required />
+          <input id="p-price" type="number" step="0.01" min="0" placeholder="Precio" required />
+          <input id="p-description" placeholder="Descripción (opcional)" />
+          <button type="submit">Crear</button>
+        </form>
+        <p id="product-error" class="error"></p>
+
+        <h2>Catálogo (incluye inactivos)</h2>
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>Nombre</th><th>SKU</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="product-table-body"></tbody>
+        </table>
+      </section>
+
+      <!-- Usuarios -->
+      <section id="tab-usuarios" class="tab-panel">
+        <h2>Usuarios registrados</h2>
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>Correo</th><th>Nombre</th><th>Rol</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="user-table-body"></tbody>
+        </table>
+        <p id="user-error" class="error"></p>
+      </section>
+
+      <!-- Encuestas -->
+      <section id="tab-encuestas" class="tab-panel">
+        <h2>Resultados de satisfacción</h2>
+        <div id="survey-stats" class="stats-grid"></div>
+
+        <h2>Respuestas recientes</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Fecha</th><th>Usuario</th><th>Precisión</th><th>Facilidad</th>
+              <th>Confianza</th><th>Satisfacción</th><th>Seguridad</th><th>Recompra</th><th>Comentario</th>
+            </tr>
+          </thead>
+          <tbody id="survey-table-body"></tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
