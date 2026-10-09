@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, ConfigDict, field_validator
 
+from app.schemas.pet import PetCreate
+
 
 def _validate_password_strength(password: str) -> str:
     if len(password) < 8:
@@ -19,6 +21,9 @@ class UserCreate(BaseModel):
     full_name: str | None = None
     phone: str | None = None
     address: str | None = None
+    # Datos basicos de la mascota, capturados opcionalmente durante el
+    # registro si el usuario marca que quiere agregarlos.
+    pet: PetCreate | None = None
 
     @field_validator("password")
     @classmethod

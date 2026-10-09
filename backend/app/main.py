@@ -11,6 +11,7 @@ from app.api import (
     inventory,
     orders,
     payments,
+    pets,
     products,
     promotions,
     reports,
@@ -44,6 +45,7 @@ app.include_router(orders.router)
 app.include_router(promotions.router)
 app.include_router(payments.router)
 app.include_router(ai.router)
+app.include_router(pets.router)
 app.include_router(surveys.router)
 app.include_router(audit.router)
 app.include_router(dashboard.router)

@@ -1,6 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   const registerForm = document.getElementById('register-form');
   if (registerForm) {
+    const addPetCheckbox = document.getElementById('reg-add-pet');
+    const petFields = document.getElementById('reg-pet-fields');
+    if (addPetCheckbox && petFields) {
+      addPetCheckbox.addEventListener('change', () => {
+        petFields.hidden = !addPetCheckbox.checked;
+      });
+    }
+
     registerForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('reg-email').value;
@@ -17,6 +25,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      let pet = null;
+      if (addPetCheckbox && addPetCheckbox.checked) {
+        const petName = document.getElementById('pet-name').value.trim();
+        const petSpecies = document.getElementById('pet-species').value;
+        const petBreed = document.getElementById('pet-breed').value.trim();
+        const petBirthDate = document.getElementById('pet-birth-date').value;
+        if (!petName) {
+          errorBox.textContent = 'Escribe el nombre de tu mascota, o desmarca la casilla si no quieres añadirla ahora.';
+          return;
+        }
+        pet = {
+          name: petName,
+          species: petSpecies,
+          breed: petBreed || null,
+          birth_date: petBirthDate || null,
+        };
+      }
+
       try {
         await apiFetch('/api/v1/users', {
           method: 'POST',
@@ -26,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             full_name: fullName || null,
             phone: phone || null,
             address: address || null,
+            pet,
           }),
         });
         window.location.href = 'login.html';

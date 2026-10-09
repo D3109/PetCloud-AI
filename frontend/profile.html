@@ -37,6 +37,24 @@
       </form>
     </section>
 
+    <section class="profile-section" id="pets-section">
+      <h2>Mis mascotas</h2>
+      <div id="pets-list" class="pets-list"></div>
+      <form id="pet-form" class="pet-fields">
+        <input type="text" id="new-pet-name" placeholder="Nombre de tu mascota" />
+        <select id="new-pet-species">
+          <option value="perro">Perro</option>
+          <option value="gato">Gato</option>
+          <option value="otro">Otro</option>
+        </select>
+        <input type="text" id="new-pet-breed" placeholder="Raza (opcional)" />
+        <label class="field-label" for="new-pet-birth-date">Fecha de nacimiento (opcional)</label>
+        <input type="date" id="new-pet-birth-date" />
+        <button type="submit">Agregar mascota</button>
+        <p id="pet-error" class="error"></p>
+      </form>
+    </section>
+
     <section class="profile-section" id="password-section">
       <h2>Cambiar contraseña</h2>
       <form id="password-form">
@@ -56,7 +74,7 @@
   </main>
     <aside class="side-art side-art-right" aria-hidden="true"></aside>
   </div>
-  <footer id="site-footer"></footer>
+  <footer id="site-footer" class="site-footer"></footer>
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/nav.js"></script>

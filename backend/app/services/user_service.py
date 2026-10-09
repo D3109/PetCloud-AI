@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from app.core.security import hash_password, verify_password
 from app.models.user import User
 from app.schemas.user import ProfileUpdate, UserAdminCreate, UserCreate
+from app.services import pet_service
 
 # Roles que existen en el sistema. "root" NO se incluye en los roles
 # asignables por API (ni por admin ni por root): el usuario ROOT solo se
@@ -38,6 +39,10 @@ def create_user(db: Session, user_in: UserCreate) -> User:
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    if user_in.pet is not None:
+        pet_service.create_pet(db, user, user_in.pet)
+
     return user
 
 
