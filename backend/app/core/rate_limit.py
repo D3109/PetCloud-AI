@@ -40,3 +40,32 @@ def register_failure(key: str) -> None:
 
 def clear(key: str) -> None:
     _failed_attempts.pop(key.lower(), None)
+
+
+# --- Limite aparte para solicitudes de "olvide mi contraseña" ---
+# Mas permisivo que el de login (una persona real puede pedir el enlace
+# un par de veces si no le llega el correo a la primera), pero evita que
+# se use el endpoint para enviar correos en bucle a una víctima (spam) o
+# para intentar enumerar/forzar el sistema de correo.
+RESET_MAX_REQUESTS = 3
+RESET_WINDOW_SECONDS = 10 * 60  # 10 minutos
+
+_reset_requests: dict[str, list[float]] = defaultdict(list)
+
+
+def _prune_reset(key: str) -> list[float]:
+    now = time.time()
+    attempts = [t for t in _reset_requests.get(key, []) if now - t < RESET_WINDOW_SECONDS]
+    _reset_requests[key] = attempts
+    return attempts
+
+
+def is_reset_rate_limited(key: str) -> bool:
+    return len(_prune_reset(key.lower())) >= RESET_MAX_REQUESTS
+
+
+def register_reset_request(key: str) -> None:
+    key = key.lower()
+    attempts = _prune_reset(key)
+    attempts.append(time.time())
+    _reset_requests[key] = attempts
