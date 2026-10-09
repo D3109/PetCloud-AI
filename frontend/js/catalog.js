@@ -18,7 +18,8 @@ async function loadProducts() {
 
 function renderProductCard(product) {
   const categories = product.categories.map((c) => c.name).join(', ') || 'Sin categoría';
-  const fallback = `https://picsum.photos/seed/petcloud-${product.id}/300/200`;
+  const fallback =
+    'https://plus.unsplash.com/premium_photo-1729111978398-821b4930c4c2?w=300&h=200&fit=crop&auto=format&q=60';
   const imgSrc = product.image_url || fallback;
   return `
     <div class="card">
