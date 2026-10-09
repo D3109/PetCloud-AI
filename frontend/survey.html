@@ -10,8 +10,8 @@
   <main>
     <h1>Encuesta de satisfacción</h1>
     <p class="muted">
-      Tu opinión nos ayuda a mejorar el sistema de recomendación con IA.
-      Responde según tu experiencia reciente en PetCloud (1 = muy en desacuerdo, 5 = muy de acuerdo).
+      Son 10 preguntas rápidas (1 = muy en desacuerdo, 5 = muy de acuerdo) más una pregunta abierta.
+      Tu opinión nos ayuda a mejorar el sistema de recomendación con IA y toda tu experiencia de compra.
     </p>
     <p class="muted small" id="survey-order-context"></p>
     <form id="survey-form" class="survey-form">
@@ -47,8 +47,31 @@
         </div>
       </fieldset>
 
-      <label for="comentario">Comentarios (opcional)</label>
-      <textarea id="comentario" rows="3" placeholder="Cuéntanos más..."></textarea>
+      <fieldset>
+        <legend>Producto, atención y entrega</legend>
+        <div class="likert-row">
+          <label>Los productos que recibí tenían buena calidad</label>
+          <div class="likert-scale" data-field="calidad_productos"></div>
+        </div>
+        <div class="likert-row">
+          <label>La atención que recibí fue buena (soporte, respuesta a dudas)</label>
+          <div class="likert-scale" data-field="atencion_recibida"></div>
+        </div>
+        <div class="likert-row">
+          <label>El proceso de compra (carrito, pago) fue sencillo</label>
+          <div class="likert-scale" data-field="facilidad_proceso_compra"></div>
+        </div>
+        <div class="likert-row">
+          <label>El tiempo de entrega fue adecuado</label>
+          <div class="likert-scale" data-field="tiempo_entrega"></div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Pregunta abierta</legend>
+        <label for="comentario">¿Qué podríamos mejorar o qué fue lo que más te gustó? (opcional)</label>
+        <textarea id="comentario" rows="3" placeholder="Cuéntanos con tus propias palabras..."></textarea>
+      </fieldset>
 
       <button type="submit">Enviar encuesta</button>
       <p id="survey-error" class="error"></p>

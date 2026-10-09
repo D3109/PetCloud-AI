@@ -5,6 +5,10 @@ const SURVEY_FIELDS = [
   'nivel_satisfaccion',
   'percepcion_seguridad',
   'intencion_recompra',
+  'calidad_productos',
+  'atencion_recibida',
+  'facilidad_proceso_compra',
+  'tiempo_entrega',
 ];
 
 function renderLikertScale(container) {

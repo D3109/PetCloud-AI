@@ -561,7 +561,7 @@ async function loadSurveys() {
   const distBox = document.getElementById('survey-distribution');
   const tbody = document.getElementById('survey-table-body');
   statsBox.innerHTML = 'Cargando...';
-  tbody.innerHTML = '<tr><td colspan="9">Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="13">Cargando...</td></tr>';
   try {
     const stats = await apiFetch('/api/v1/surveys/stats');
     statsBox.innerHTML = [
@@ -572,12 +572,16 @@ async function loadSurveys() {
       renderStatTile('Satisfacción', stats.promedio_nivel_satisfaccion),
       renderStatTile('Seguridad', stats.promedio_percepcion_seguridad),
       renderStatTile('Intención recompra', stats.promedio_intencion_recompra),
+      renderStatTile('Calidad producto', stats.promedio_calidad_productos),
+      renderStatTile('Atención recibida', stats.promedio_atencion_recibida),
+      renderStatTile('Proceso de compra', stats.promedio_facilidad_proceso_compra),
+      renderStatTile('Tiempo de entrega', stats.promedio_tiempo_entrega),
     ].join('');
     if (distBox) distBox.innerHTML = renderSatisfactionDistribution(stats.distribucion_nivel_satisfaccion);
 
     const surveys = await apiFetch('/api/v1/surveys?limit=200');
     if (surveys.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9">Aún no hay respuestas.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="13">Aún no hay respuestas.</td></tr>';
       return;
     }
     tbody.innerHTML = surveys
@@ -592,6 +596,10 @@ async function loadSurveys() {
           <td>${s.nivel_satisfaccion}</td>
           <td>${s.percepcion_seguridad}</td>
           <td>${s.intencion_recompra}</td>
+          <td>${s.calidad_productos ?? '-'}</td>
+          <td>${s.atencion_recibida ?? '-'}</td>
+          <td>${s.facilidad_proceso_compra ?? '-'}</td>
+          <td>${s.tiempo_entrega ?? '-'}</td>
           <td>${s.comentario || '-'}</td>
         </tr>`
       )

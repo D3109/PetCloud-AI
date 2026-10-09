@@ -38,6 +38,10 @@ def create_survey(db: Session, user_id: int, data: SurveyCreate) -> Survey:
         existing.nivel_satisfaccion = data.nivel_satisfaccion
         existing.percepcion_seguridad = data.percepcion_seguridad
         existing.intencion_recompra = data.intencion_recompra
+        existing.calidad_productos = data.calidad_productos
+        existing.atencion_recibida = data.atencion_recibida
+        existing.facilidad_proceso_compra = data.facilidad_proceso_compra
+        existing.tiempo_entrega = data.tiempo_entrega
         existing.comentario = data.comentario
         db.commit()
         db.refresh(existing)
@@ -52,6 +56,10 @@ def create_survey(db: Session, user_id: int, data: SurveyCreate) -> Survey:
         nivel_satisfaccion=data.nivel_satisfaccion,
         percepcion_seguridad=data.percepcion_seguridad,
         intencion_recompra=data.intencion_recompra,
+        calidad_productos=data.calidad_productos,
+        atencion_recibida=data.atencion_recibida,
+        facilidad_proceso_compra=data.facilidad_proceso_compra,
+        tiempo_entrega=data.tiempo_entrega,
         comentario=data.comentario,
     )
     db.add(survey)
@@ -84,6 +92,10 @@ def get_stats(db: Session) -> SurveyStats:
         func.avg(Survey.nivel_satisfaccion),
         func.avg(Survey.percepcion_seguridad),
         func.avg(Survey.intencion_recompra),
+        func.avg(Survey.calidad_productos),
+        func.avg(Survey.atencion_recibida),
+        func.avg(Survey.facilidad_proceso_compra),
+        func.avg(Survey.tiempo_entrega),
     ).first()
 
     total = row[0] or 0
@@ -108,5 +120,9 @@ def get_stats(db: Session) -> SurveyStats:
         promedio_nivel_satisfaccion=avg(row[4]),
         promedio_percepcion_seguridad=avg(row[5]),
         promedio_intencion_recompra=avg(row[6]),
+        promedio_calidad_productos=avg(row[7]),
+        promedio_atencion_recibida=avg(row[8]),
+        promedio_facilidad_proceso_compra=avg(row[9]),
+        promedio_tiempo_entrega=avg(row[10]),
         distribucion_nivel_satisfaccion=distribucion_nivel_satisfaccion,
     )
