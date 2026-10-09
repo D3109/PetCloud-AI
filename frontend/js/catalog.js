@@ -18,8 +18,17 @@ async function loadProducts() {
 
 function renderProductCard(product) {
   const categories = product.categories.map((c) => c.name).join(', ') || 'Sin categoría';
+  const fallback = `https://picsum.photos/seed/petcloud-${product.id}/300/200`;
+  const imgSrc = product.image_url || fallback;
   return `
     <div class="card">
+      <img
+        class="card-image"
+        src="${imgSrc}"
+        alt="${product.name}"
+        loading="lazy"
+        onerror="this.onerror=null;this.src='${fallback}';"
+      />
       <h3>${product.name}</h3>
       <p class="muted">${categories}</p>
       <p class="price">$${Number(product.price).toLocaleString('es-CO')}</p>

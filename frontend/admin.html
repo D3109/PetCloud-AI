@@ -26,6 +26,7 @@
           <input id="p-sku" placeholder="SKU" required />
           <input id="p-price" type="number" step="0.01" min="0" placeholder="Precio" required />
           <input id="p-description" placeholder="Descripción (opcional)" />
+          <input id="p-image-url" placeholder="URL de imagen (opcional)" />
           <button type="submit">Crear</button>
         </form>
         <p id="product-error" class="error"></p>
@@ -41,6 +42,19 @@
 
       <!-- Usuarios -->
       <section id="tab-usuarios" class="tab-panel">
+        <h2>Crear usuario</h2>
+        <form id="user-form" class="inline-form">
+          <input id="u-email" type="email" placeholder="Correo" required />
+          <input id="u-password" type="password" placeholder="Contraseña" required />
+          <input id="u-fullname" placeholder="Nombre completo (opcional)" />
+          <select id="u-role">
+            <option value="customer" selected>Cliente</option>
+            <option value="admin">Administrador</option>
+          </select>
+          <button type="submit">Crear usuario</button>
+        </form>
+        <p id="user-form-error" class="error"></p>
+
         <h2>Usuarios registrados</h2>
         <table class="admin-table">
           <thead>

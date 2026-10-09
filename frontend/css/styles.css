@@ -53,6 +53,14 @@ main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
   box-shadow: 0 1px 4px rgba(193, 98, 58, 0.08);
 }
 .card h3 { margin: 0 0 6px; color: var(--color-text); }
+.card-image {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  background: var(--color-accent-light);
+}
 
 .muted { color: var(--color-muted); font-size: 0.9rem; }
 

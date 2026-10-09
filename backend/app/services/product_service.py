@@ -22,6 +22,7 @@ def create_product(db: Session, data: ProductCreate) -> Product:
         description=data.description,
         price=data.price,
         sku=data.sku,
+        image_url=data.image_url,
         is_active=1,
         categories=categories,
     )
@@ -58,6 +59,8 @@ def update_product(db: Session, product: Product, data: ProductUpdate) -> Produc
         product.description = data.description
     if data.price is not None:
         product.price = data.price
+    if data.image_url is not None:
+        product.image_url = data.image_url
     if data.is_active is not None:
         product.is_active = data.is_active
     if data.category_ids is not None:

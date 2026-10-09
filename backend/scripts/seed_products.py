@@ -81,6 +81,7 @@ def main():
                 description=description,
                 price=price,
                 sku=sku,
+                image_url=f"https://picsum.photos/seed/{sku}/400/300",
                 is_active=1,
                 categories=[categories_by_name[category_name]],
             )

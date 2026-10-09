@@ -19,6 +19,7 @@ class Product(Base):
     description = Column(String, nullable=True)
     price = Column(Numeric(10, 2), nullable=False)
     sku = Column(String, unique=True, nullable=False, index=True)
+    image_url = Column(String, nullable=True)
     is_active = Column(Integer, nullable=False, default=1)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 

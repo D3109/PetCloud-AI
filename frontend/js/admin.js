@@ -65,10 +65,17 @@ function setupProductForm() {
     const sku = document.getElementById('p-sku').value.trim();
     const price = document.getElementById('p-price').value;
     const description = document.getElementById('p-description').value.trim();
+    const imageUrl = document.getElementById('p-image-url').value.trim();
     try {
       await apiFetch('/api/v1/products', {
         method: 'POST',
-        body: JSON.stringify({ name, sku, price, description: description || null }),
+        body: JSON.stringify({
+          name,
+          sku,
+          price,
+          description: description || null,
+          image_url: imageUrl || null,
+        }),
       });
       form.reset();
       loadProducts();
@@ -110,6 +117,34 @@ async function loadUsers() {
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="5" class="error">${err.message}</td></tr>`;
   }
+}
+
+function setupUserForm() {
+  const form = document.getElementById('user-form');
+  const errorBox = document.getElementById('user-form-error');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.textContent = '';
+    const email = document.getElementById('u-email').value.trim();
+    const password = document.getElementById('u-password').value;
+    const fullName = document.getElementById('u-fullname').value.trim();
+    const role = document.getElementById('u-role').value;
+    try {
+      await apiFetch('/api/v1/users/admin', {
+        method: 'POST',
+        body: JSON.stringify({
+          email,
+          password,
+          full_name: fullName || null,
+          role,
+        }),
+      });
+      form.reset();
+      loadUsers();
+    } catch (err) {
+      errorBox.textContent = err.message;
+    }
+  });
 }
 
 async function changeRole(userId, role) {
@@ -202,6 +237,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   setupTabs();
   setupProductForm();
+  setupUserForm();
   loadProducts();
   loadUsers();
   loadSurveys();

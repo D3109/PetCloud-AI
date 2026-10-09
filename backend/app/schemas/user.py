@@ -9,6 +9,11 @@ class UserCreate(BaseModel):
     full_name: str | None = None
 
 
+class UserAdminCreate(UserCreate):
+    """Creacion de usuario hecha por un admin: permite fijar el rol de una vez."""
+    role: str = "customer"
+
+
 class UserOut(BaseModel):
     id: int
     email: EmailStr
