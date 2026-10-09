@@ -159,14 +159,34 @@ async function loadAuditLog() {
 
 // ---------- Productos ----------
 
+async function loadProductCategoryOptions() {
+  const select = document.getElementById('p-category');
+  if (!select || select.dataset.populated) return;
+  try {
+    const categories = await apiFetch('/api/v1/categories');
+    categories
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .forEach((c) => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = c.name;
+        select.appendChild(opt);
+      });
+    select.dataset.populated = 'true';
+  } catch (err) {
+    // si falla, el select simplemente queda sin opciones; no bloquea el formulario
+  }
+}
+
 async function loadProducts() {
   if (!canSeeTab('productos')) return;
   const tbody = document.getElementById('product-table-body');
-  tbody.innerHTML = '<tr><td colspan="9">Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="10">Cargando...</td></tr>';
   try {
     const products = await apiFetch('/api/v1/products?include_inactive=true&limit=500');
     if (products.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9">No hay productos todavía.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="10">No hay productos todavía.</td></tr>';
       return;
     }
     const petTypeLabels = { perro: 'Perro', gato: 'Gato', ambas: 'Ambas', otro: 'Otro' };
@@ -180,6 +200,10 @@ async function loadProducts() {
           <td>${p.brand || '-'}</td>
           <td>${petTypeLabels[p.pet_type] || '-'}</td>
           <td>$${Number(p.price).toLocaleString('es-CO')}</td>
+          <td>
+            <span class="stock-cell" data-id="${p.id}">${p.stock_quantity ?? 0}</span>
+            <button class="btn-small stock-adjust-btn" data-id="${p.id}" title="Ajustar existencias">✎</button>
+          </td>
           <td>${p.is_active ? 'Activo' : 'Inactivo'}</td>
           <td>${p.updated_at ? new Date(p.updated_at).toLocaleDateString('es-CO') : '-'}</td>
           <td>
@@ -191,8 +215,34 @@ async function loadProducts() {
     tbody.querySelectorAll('.deactivate-btn').forEach((btn) => {
       btn.addEventListener('click', () => deactivateProduct(btn.dataset.id));
     });
+    tbody.querySelectorAll('.stock-adjust-btn').forEach((btn) => {
+      btn.addEventListener('click', () => adjustProductStock(btn.dataset.id));
+    });
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="9" class="error">${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="10" class="error">${err.message}</td></tr>`;
+  }
+}
+
+async function adjustProductStock(productId) {
+  const current = document.querySelector(`.stock-cell[data-id="${productId}"]`)?.textContent || '0';
+  const input = prompt(
+    `Existencias actuales: ${current}.\nEscribe cuánto quieres sumar (positivo) o restar (negativo):`,
+    '0'
+  );
+  if (input === null) return;
+  const delta = Number(input);
+  if (!Number.isInteger(delta) || delta === 0) {
+    alert('Ingresa un número entero distinto de 0.');
+    return;
+  }
+  try {
+    await apiFetch(`/api/v1/inventory/${productId}/adjust`, {
+      method: 'PUT',
+      body: JSON.stringify({ delta }),
+    });
+    loadProducts();
+  } catch (err) {
+    alert(err.message);
   }
 }
 
@@ -208,6 +258,7 @@ async function deactivateProduct(id) {
 
 function setupProductForm() {
   if (!canSeeTab('productos')) return;
+  loadProductCategoryOptions();
   const form = document.getElementById('product-form');
   const errorBox = document.getElementById('product-error');
   form.addEventListener('submit', async (e) => {
@@ -220,8 +271,10 @@ function setupProductForm() {
     const imageUrl = document.getElementById('p-image-url').value.trim();
     const brand = document.getElementById('p-brand').value.trim();
     const petType = document.getElementById('p-pet-type').value;
+    const categoryId = document.getElementById('p-category').value;
+    const initialStock = Number(document.getElementById('p-stock').value || 0);
     try {
-      await apiFetch('/api/v1/products', {
+      const product = await apiFetch('/api/v1/products', {
         method: 'POST',
         body: JSON.stringify({
           name,
@@ -231,8 +284,15 @@ function setupProductForm() {
           image_url: imageUrl || null,
           brand: brand || null,
           pet_type: petType || null,
+          category_ids: categoryId ? [Number(categoryId)] : [],
         }),
       });
+      if (initialStock > 0) {
+        await apiFetch(`/api/v1/inventory/${product.id}/adjust`, {
+          method: 'PUT',
+          body: JSON.stringify({ delta: initialStock }),
+        });
+      }
       form.reset();
       loadProducts();
     } catch (err) {

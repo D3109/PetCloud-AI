@@ -59,6 +59,10 @@
             <option value="ambas">Ambas</option>
             <option value="otro">Otro</option>
           </select>
+          <select id="p-category">
+            <option value="">Categoría (opcional)</option>
+          </select>
+          <input id="p-stock" type="number" step="1" min="0" placeholder="Existencias iniciales" />
           <button type="submit">Crear</button>
         </form>
         <p id="product-error" class="error"></p>
@@ -66,7 +70,7 @@
         <h2>Catálogo (incluye inactivos)</h2>
         <table class="admin-table">
           <thead>
-            <tr><th>ID</th><th>Nombre</th><th>SKU</th><th>Marca</th><th>Mascota</th><th>Precio</th><th>Estado</th><th>Actualizado</th><th>Acciones</th></tr>
+            <tr><th>ID</th><th>Nombre</th><th>SKU</th><th>Marca</th><th>Mascota</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Actualizado</th><th>Acciones</th></tr>
           </thead>
           <tbody id="product-table-body"></tbody>
         </table>
