@@ -7,13 +7,13 @@ function renderFooter() {
     <div class="site-footer-inner">
       <div>
         <p class="site-footer-brand">🐾 PetCloud</p>
-        <p>Tienda virtual de productos para perros y gatos, con recomendaciones asistidas por IA.
-        Proyecto de demostración con fines educativos.</p>
+        <p>Tienda virtual de productos para perros y gatos, con recomendaciones asistidas por IA
+        para ayudarte a encontrar lo que tu mascota necesita.</p>
       </div>
       <div>
-        <h3>PetCloud S.A.S. (demo)</h3>
-        <p>NIT 900.000.000-1 (ficticio)<br />Bogotá, Colombia</p>
-        <p>contacto@petcloud.demo</p>
+        <h3>PetCloud S.A.S.</h3>
+        <p>NIT 900.000.000-1<br />Bogotá, Colombia</p>
+        <p>contacto@petcloud.com</p>
       </div>
       <div>
         <h3>Enlaces</h3>
@@ -26,7 +26,7 @@ function renderFooter() {
     </div>
     <div class="site-footer-bottom">
       <p class="site-footer-bottom-legal">
-        © ${year} PetCloud. Todos los derechos reservados. Proyecto de demostración, sin fines comerciales reales.
+        © ${year} PetCloud. Todos los derechos reservados.
         Las ilustraciones de producto son gráficos de referencia y los nombres de marcas mencionados en el
         catálogo son propiedad de sus respectivos dueños, mostrados únicamente a modo de referencia,
         sin afiliación ni respaldo real de esas marcas.
