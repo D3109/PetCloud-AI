@@ -12,14 +12,34 @@
     <div id="admin-guard" class="muted">Verificando permisos...</div>
 
     <div id="admin-content" class="hidden">
+      <p id="role-badge" class="muted"></p>
       <div class="tabs">
-        <button class="tab-btn active" data-tab="productos">Productos</button>
+        <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+        <button class="tab-btn" data-tab="productos">Productos</button>
         <button class="tab-btn" data-tab="usuarios">Usuarios</button>
         <button class="tab-btn" data-tab="encuestas">Encuestas</button>
+        <button class="tab-btn" data-tab="auditoria">Auditoría</button>
       </div>
 
+      <!-- Dashboard -->
+      <section id="tab-dashboard" class="tab-panel active">
+        <h2>Resumen general</h2>
+        <div id="dashboard-stats" class="stats-grid"></div>
+
+        <h2>Pedidos por estado</h2>
+        <div id="dashboard-orders" class="stats-grid"></div>
+
+        <h2>Últimas acciones administrativas</h2>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Fecha</th><th>Quién</th><th>Acción</th><th>Entidad</th><th>Detalle</th></tr>
+          </thead>
+          <tbody id="dashboard-audit-body"></tbody>
+        </table>
+      </section>
+
       <!-- Productos -->
-      <section id="tab-productos" class="tab-panel active">
+      <section id="tab-productos" class="tab-panel">
         <h2>Crear producto</h2>
         <form id="product-form" class="inline-form">
           <input id="p-name" placeholder="Nombre" required />
@@ -49,6 +69,8 @@
           <input id="u-fullname" placeholder="Nombre completo (opcional)" />
           <select id="u-role">
             <option value="customer" selected>Cliente</option>
+            <option value="atencion_cliente">Atención al cliente</option>
+            <option value="gestor_productos">Gestor de productos</option>
             <option value="admin">Administrador</option>
           </select>
           <button type="submit">Crear usuario</button>
@@ -58,7 +80,7 @@
         <h2>Usuarios registrados</h2>
         <table class="admin-table">
           <thead>
-            <tr><th>ID</th><th>Correo</th><th>Nombre</th><th>Rol</th><th>Acciones</th></tr>
+            <tr><th>ID</th><th>Correo</th><th>Nombre</th><th>Rol</th><th>Estado</th><th>Acciones</th></tr>
           </thead>
           <tbody id="user-table-body"></tbody>
         </table>
@@ -79,6 +101,18 @@
             </tr>
           </thead>
           <tbody id="survey-table-body"></tbody>
+        </table>
+      </section>
+
+      <!-- Auditoría -->
+      <section id="tab-auditoria" class="tab-panel">
+        <h2>Registro de auditoría</h2>
+        <p class="muted">Acciones administrativas sensibles: creación de usuarios, cambios de rol, bloqueos y cambios en productos.</p>
+        <table class="admin-table">
+          <thead>
+            <tr><th>Fecha</th><th>Quién</th><th>Acción</th><th>Entidad</th><th>ID</th><th>Detalle</th></tr>
+          </thead>
+          <tbody id="audit-table-body"></tbody>
         </table>
       </section>
     </div>

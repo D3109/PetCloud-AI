@@ -2,13 +2,14 @@ async function renderNav() {
   const nav = document.getElementById('nav');
   if (!nav) return;
 
+  const STAFF_ROLES = ['root', 'admin', 'gestor_productos', 'atencion_cliente'];
   const loggedIn = isLoggedIn();
   let isAdmin = false;
 
   if (loggedIn) {
     try {
       const me = await apiFetch('/api/v1/auth/me');
-      isAdmin = me.role === 'admin';
+      isAdmin = STAFF_ROLES.includes(me.role);
     } catch (err) {
       // token invalido o expirado: lo tratamos como no logueado
       clearToken();

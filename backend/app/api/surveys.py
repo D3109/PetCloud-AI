@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.core.deps import get_current_user, require_admin
+from app.core.deps import get_current_user, require_support
 from app.models.user import User
 from app.schemas.survey import SurveyCreate, SurveyOut, SurveyStats
 from app.services import survey_service
@@ -24,7 +24,7 @@ def list_surveys(
     skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db),
-    _: User = Depends(require_admin),
+    _: User = Depends(require_support),
 ):
     return survey_service.list_surveys(db, skip, limit)
 
@@ -32,6 +32,6 @@ def list_surveys(
 @router.get("/stats", response_model=SurveyStats)
 def survey_stats(
     db: Session = Depends(get_db),
-    _: User = Depends(require_admin),
+    _: User = Depends(require_support),
 ):
     return survey_service.get_stats(db)

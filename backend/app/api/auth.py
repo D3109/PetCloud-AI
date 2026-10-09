@@ -16,6 +16,8 @@ def login(credentials: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == credentials.email).first()
     if not user or not verify_password(credentials.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid email or password")
+    if not user.is_active:
+        raise HTTPException(status_code=403, detail="Esta cuenta esta bloqueada")
 
     token = create_access_token(subject=user.email)
     return TokenResponse(access_token=token)

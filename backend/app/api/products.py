@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.core.database import get_db
-from app.core.deps import require_admin
+from app.core.deps import require_product_manager
 from app.models.user import User
 from app.schemas.product import ProductCreate, ProductOut, ProductUpdate
-from app.services import product_service
+from app.services import audit_service, product_service
 
 router = APIRouter(prefix="/api/v1/products", tags=["products"])
 
@@ -14,15 +14,19 @@ router = APIRouter(prefix="/api/v1/products", tags=["products"])
 def create_product(
     data: ProductCreate,
     db: Session = Depends(get_db),
-    _: User = Depends(require_admin),
+    current_user: User = Depends(require_product_manager),
 ):
     existing = product_service.get_product_by_sku(db, data.sku)
     if existing:
         raise HTTPException(status_code=400, detail="SKU already exists")
     try:
-        return product_service.create_product(db, data)
+        product = product_service.create_product(db, data)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    audit_service.log_action(
+        db, current_user, "create_product", "product", product.id, product.sku
+    )
+    return product
 
 
 @router.get("", response_model=list[ProductOut])
@@ -48,24 +52,31 @@ def update_product(
     product_id: int,
     data: ProductUpdate,
     db: Session = Depends(get_db),
-    _: User = Depends(require_admin),
+    current_user: User = Depends(require_product_manager),
 ):
     product = product_service.get_product(db, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     try:
-        return product_service.update_product(db, product, data)
+        product = product_service.update_product(db, product, data)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    audit_service.log_action(
+        db, current_user, "update_product", "product", product.id, product.sku
+    )
+    return product
 
 
 @router.delete("/{product_id}", status_code=204)
 def delete_product(
     product_id: int,
     db: Session = Depends(get_db),
-    _: User = Depends(require_admin),
+    current_user: User = Depends(require_product_manager),
 ):
     product = product_service.get_product(db, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     product_service.deactivate_product(db, product)
+    audit_service.log_action(
+        db, current_user, "deactivate_product", "product", product.id, product.sku
+    )

@@ -10,7 +10,8 @@ class UserCreate(BaseModel):
 
 
 class UserAdminCreate(UserCreate):
-    """Creacion de usuario hecha por un admin: permite fijar el rol de una vez."""
+    """Creacion de usuario hecha por un admin/root: permite fijar el rol
+    de una vez (dentro de lo que el rol del creador tiene permitido asignar)."""
     role: str = "customer"
 
 
@@ -19,6 +20,7 @@ class UserOut(BaseModel):
     email: EmailStr
     full_name: str | None = None
     role: str
+    is_active: int
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
@@ -26,3 +28,7 @@ class UserOut(BaseModel):
 
 class UserRoleUpdate(BaseModel):
     role: str
+
+
+class UserActiveUpdate(BaseModel):
+    is_active: bool
