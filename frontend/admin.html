@@ -69,6 +69,7 @@
         <p id="product-error" class="error"></p>
 
         <h2>Catálogo (incluye inactivos)</h2>
+        <button type="button" id="export-inventory-csv" class="btn-small">Exportar inventario (CSV)</button>
         <table class="admin-table">
           <thead>
             <tr><th>ID</th><th>Nombre</th><th>SKU</th><th>Marca</th><th>Mascota</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Actualizado</th><th>Acciones</th></tr>
@@ -113,6 +114,7 @@
             <option value="pending">Pendientes</option>
             <option value="paid">Pagados</option>
           </select>
+          <button type="button" id="export-orders-csv" class="btn-small">Exportar pedidos (CSV)</button>
         </div>
         <table class="admin-table">
           <thead>
@@ -125,6 +127,7 @@
       <!-- Encuestas -->
       <section id="tab-encuestas" class="tab-panel">
         <h2>Resultados de satisfacción</h2>
+        <button type="button" id="export-surveys-csv" class="btn-small">Exportar encuestas (CSV)</button>
         <div id="survey-stats" class="stats-grid"></div>
         <div id="survey-distribution"></div>
 

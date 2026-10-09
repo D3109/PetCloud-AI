@@ -1,3 +1,6 @@
+from decimal import Decimal
+
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from app.models.category import Category
@@ -38,11 +41,49 @@ def create_product(db: Session, data: ProductCreate) -> Product:
 
 
 def list_products(
-    db: Session, skip: int = 0, limit: int = 100, include_inactive: bool = False
+    db: Session,
+    skip: int = 0,
+    limit: int = 100,
+    include_inactive: bool = False,
+    q: str | None = None,
+    category_id: int | None = None,
+    pet_type: str | None = None,
+    min_price: Decimal | None = None,
+    max_price: Decimal | None = None,
 ) -> list[Product]:
+    """Lista productos con busqueda y filtros opcionales:
+    - q: busca coincidencias (sin importar mayusculas) en nombre, marca y
+      descripcion, para que "correa" encuentre tambien productos cuya
+      marca o descripcion mencionen la palabra.
+    - category_id, pet_type: filtran por categoria exacta y tipo de mascota.
+    - min_price/max_price: rango de precio (cualquiera de los dos es opcional).
+    """
     query = db.query(Product)
     if not include_inactive:
         query = query.filter(Product.is_active == 1)
+
+    if q:
+        like = f"%{q.strip()}%"
+        query = query.filter(
+            or_(
+                Product.name.ilike(like),
+                Product.brand.ilike(like),
+                Product.description.ilike(like),
+            )
+        )
+
+    if category_id is not None:
+        query = query.filter(Product.categories.any(Category.id == category_id))
+
+    if pet_type is not None:
+        query = query.filter(Product.pet_type == pet_type)
+
+    if min_price is not None:
+        query = query.filter(Product.price >= min_price)
+
+    if max_price is not None:
+        query = query.filter(Product.price <= max_price)
+
     return query.offset(skip).limit(limit).all()
 
 

@@ -33,7 +33,13 @@
         <option value="ambas">Ambas</option>
         <option value="otro">Otro</option>
       </select>
-      <input id="filter-search" type="search" placeholder="Buscar producto..." />
+      <input id="filter-search" type="search" placeholder="Buscar por nombre, marca o descripción..." />
+      <div class="price-filter">
+        <input id="filter-price-min" type="number" min="0" step="1000" placeholder="Precio mín." />
+        <span class="price-filter-sep">—</span>
+        <input id="filter-price-max" type="number" min="0" step="1000" placeholder="Precio máx." />
+      </div>
+      <button type="button" id="filter-clear" class="btn-small">Limpiar filtros</button>
     </div>
     <div id="product-grid" class="grid"></div>
   </main>

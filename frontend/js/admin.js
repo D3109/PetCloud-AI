@@ -534,6 +534,37 @@ function setupOrderFilter() {
   document.getElementById('order-status-filter')?.addEventListener('change', loadOrders);
 }
 
+// ---------- Exportar reportes CSV ----------
+
+function setupCsvExportButtons() {
+  const buttons = [
+    { id: 'export-orders-csv', path: () => {
+        const status = document.getElementById('order-status-filter')?.value || '';
+        const qs = status ? `?status=${encodeURIComponent(status)}` : '';
+        return `/api/v1/admin/reports/orders.csv${qs}`;
+      }, filename: 'pedidos.csv' },
+    { id: 'export-surveys-csv', path: () => '/api/v1/admin/reports/surveys.csv', filename: 'encuestas.csv' },
+    { id: 'export-inventory-csv', path: () => '/api/v1/admin/reports/inventory.csv', filename: 'inventario.csv' },
+  ];
+  buttons.forEach(({ id, path, filename }) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      const originalText = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Descargando...';
+      try {
+        await downloadFile(path(), filename);
+      } catch (err) {
+        alert(`No se pudo exportar: ${err.message}`);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = originalText;
+      }
+    });
+  });
+}
+
 // ---------- Encuestas ----------
 
 function renderSatisfactionDistribution(distribucion) {
@@ -643,6 +674,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupProductForm();
   setupUserForm();
   setupOrderFilter();
+  setupCsvExportButtons();
   loadDashboard();
   loadProducts();
   loadUsers();

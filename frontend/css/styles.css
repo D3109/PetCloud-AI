@@ -583,6 +583,13 @@ h1 { color: var(--color-primary-dark); }
   background: var(--color-card);
 }
 .filters input[type="search"] { flex: 1 1 200px; }
+.price-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.price-filter input[type="number"] { width: 110px; }
+.price-filter-sep { color: var(--color-muted); }
 
 /* Etiquetas de marca / tipo de mascota en la tarjeta */
 .card-tags {

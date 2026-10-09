@@ -42,17 +42,27 @@ function getFilters() {
     category: document.getElementById('filter-category')?.value || '',
     petType: document.getElementById('filter-pet-type')?.value || '',
     search: (document.getElementById('filter-search')?.value || '').trim().toLowerCase(),
+    priceMin: document.getElementById('filter-price-min')?.value || '',
+    priceMax: document.getElementById('filter-price-max')?.value || '',
   };
 }
 
 function renderGrid() {
   const grid = document.getElementById('product-grid');
-  const { category, petType, search } = getFilters();
+  const { category, petType, search, priceMin, priceMax } = getFilters();
+  const minPrice = priceMin !== '' ? Number(priceMin) : null;
+  const maxPrice = priceMax !== '' ? Number(priceMax) : null;
 
   const filtered = ALL_PRODUCTS.filter((p) => {
     if (category && !p.categories.some((c) => c.name === category)) return false;
     if (petType && p.pet_type !== petType) return false;
-    if (search && !p.name.toLowerCase().includes(search)) return false;
+    if (search) {
+      const haystack = `${p.name} ${p.brand || ''} ${p.description || ''}`.toLowerCase();
+      if (!haystack.includes(search)) return false;
+    }
+    const price = Number(p.price);
+    if (minPrice !== null && price < minPrice) return false;
+    if (maxPrice !== null && price > maxPrice) return false;
     return true;
   });
 
@@ -187,7 +197,17 @@ document.addEventListener('DOMContentLoaded', () => {
   ['filter-category', 'filter-pet-type'].forEach((id) => {
     document.getElementById(id)?.addEventListener('change', renderGrid);
   });
-  document.getElementById('filter-search')?.addEventListener('input', renderGrid);
+  ['filter-search', 'filter-price-min', 'filter-price-max'].forEach((id) => {
+    document.getElementById(id)?.addEventListener('input', renderGrid);
+  });
+  document.getElementById('filter-clear')?.addEventListener('click', () => {
+    document.getElementById('filter-category').value = '';
+    document.getElementById('filter-pet-type').value = '';
+    document.getElementById('filter-search').value = '';
+    document.getElementById('filter-price-min').value = '';
+    document.getElementById('filter-price-max').value = '';
+    renderGrid();
+  });
 
   const backdrop = document.getElementById('product-modal-backdrop');
   backdrop?.addEventListener('click', (e) => {

@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -34,9 +36,24 @@ def list_products(
     skip: int = 0,
     limit: int = 100,
     include_inactive: bool = False,
+    q: str | None = None,
+    category_id: int | None = None,
+    pet_type: str | None = None,
+    min_price: Decimal | None = None,
+    max_price: Decimal | None = None,
     db: Session = Depends(get_db),
 ):
-    return product_service.list_products(db, skip, limit, include_inactive)
+    return product_service.list_products(
+        db,
+        skip=skip,
+        limit=limit,
+        include_inactive=include_inactive,
+        q=q,
+        category_id=category_id,
+        pet_type=pet_type,
+        min_price=min_price,
+        max_price=max_price,
+    )
 
 
 @router.get("/{product_id}", response_model=ProductOut)

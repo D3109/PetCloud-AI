@@ -13,6 +13,7 @@ from app.api import (
     payments,
     products,
     promotions,
+    reports,
     surveys,
     users,
 )
@@ -46,6 +47,7 @@ app.include_router(ai.router)
 app.include_router(surveys.router)
 app.include_router(audit.router)
 app.include_router(dashboard.router)
+app.include_router(reports.router)
 
 
 @app.get("/api/v1/health")
