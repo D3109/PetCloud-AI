@@ -1,14 +1,28 @@
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
+from app.models.order import Order
 from app.models.survey import Survey
 from app.schemas.survey import SurveyCreate, SurveyStats
 
 
 def create_survey(db: Session, user_id: int, data: SurveyCreate) -> Survey:
+    order_id = data.order_id
+    if order_id is not None:
+        # Solo se puede asociar la encuesta a un pedido propio; si no es
+        # del usuario (o no existe), se guarda la encuesta igual pero sin
+        # vincularla a ningun pedido, en vez de fallar la encuesta entera.
+        owned_order = (
+            db.query(Order)
+            .filter(Order.id == order_id, Order.user_id == user_id)
+            .first()
+        )
+        if owned_order is None:
+            order_id = None
+
     survey = Survey(
         user_id=user_id,
-        order_id=data.order_id,
+        order_id=order_id,
         precision_recomendacion=data.precision_recomendacion,
         facilidad_uso=data.facilidad_uso,
         confianza_usuario=data.confianza_usuario,

@@ -53,8 +53,14 @@ async function checkout() {
   errorBox.textContent = '';
   try {
     const order = await apiFetch('/api/v1/orders/checkout', { method: 'POST' });
-    alert(`¡Pedido #${order.id} creado! Total: $${Number(order.total_amount).toLocaleString('es-CO')}`);
-    loadCart();
+    const container = document.getElementById('cart-container');
+    container.innerHTML = `
+      <p class="success">
+        ¡Pedido #${order.id} creado! Total: $${Number(order.total_amount).toLocaleString('es-CO')}
+      </p>
+      <p>Ahora puedes completar el pago desde <a href="orders.html">Mis pedidos</a>.</p>
+      <a href="orders.html" class="survey-cta">Ir a Mis pedidos →</a>
+    `;
   } catch (err) {
     errorBox.textContent = err.message;
   }

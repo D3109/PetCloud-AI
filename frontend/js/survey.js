@@ -25,10 +25,23 @@ function getSelectedValue(field) {
   return checked ? Number(checked.value) : null;
 }
 
+function getOrderIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get('order_id');
+  const parsed = raw ? Number(raw) : null;
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   if (!isLoggedIn()) {
     window.location.href = 'login.html';
     return;
+  }
+
+  const orderId = getOrderIdFromUrl();
+  const contextBox = document.getElementById('survey-order-context');
+  if (orderId && contextBox) {
+    contextBox.textContent = `Esta encuesta quedará asociada a tu pedido #${orderId}.`;
   }
 
   document.querySelectorAll('.likert-scale').forEach(renderLikertScale);
@@ -46,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const field of SURVEY_FIELDS) {
       payload[field] = getSelectedValue(field);
     }
+    if (orderId) payload.order_id = orderId;
     const comentario = document.getElementById('comentario').value.trim();
     if (comentario) payload.comentario = comentario;
 
