@@ -23,6 +23,8 @@ def create_product(db: Session, data: ProductCreate) -> Product:
         price=data.price,
         sku=data.sku,
         image_url=data.image_url,
+        brand=data.brand,
+        pet_type=data.pet_type,
         is_active=1,
         categories=categories,
     )
@@ -61,6 +63,10 @@ def update_product(db: Session, product: Product, data: ProductUpdate) -> Produc
         product.price = data.price
     if data.image_url is not None:
         product.image_url = data.image_url
+    if data.brand is not None:
+        product.brand = data.brand
+    if data.pet_type is not None:
+        product.pet_type = data.pet_type
     if data.is_active is not None:
         product.is_active = data.is_active
     if data.category_ids is not None:

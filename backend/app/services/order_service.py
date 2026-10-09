@@ -80,8 +80,24 @@ def get_order(db: Session, user_id: int, order_id: int) -> Order | None:
     ).first()
 
 
-def to_out_dict(order: Order) -> dict:
-    return {
+def list_all_orders(
+    db: Session, skip: int = 0, limit: int = 100, status: str | None = None
+) -> list[Order]:
+    """Para uso administrativo (admin/root/atencion_cliente): todos los
+    pedidos de todos los clientes, opcionalmente filtrados por estado."""
+    query = db.query(Order).order_by(Order.created_at.desc())
+    if status:
+        query = query.filter(Order.status == status)
+    return query.offset(skip).limit(limit).all()
+
+
+def get_any_order(db: Session, order_id: int) -> Order | None:
+    """Para uso administrativo: busca un pedido sin restringir por dueño."""
+    return db.query(Order).filter(Order.id == order_id).first()
+
+
+def to_out_dict(order: Order, include_user: bool = False) -> dict:
+    data = {
         "id": order.id,
         "status": order.status,
         "subtotal_amount": order.subtotal_amount,
@@ -99,3 +115,7 @@ def to_out_dict(order: Order) -> dict:
             for item in order.items
         ],
     }
+    if include_user:
+        data["user_id"] = order.user_id
+        data["user_email"] = order.user.email if order.user else None
+    return data

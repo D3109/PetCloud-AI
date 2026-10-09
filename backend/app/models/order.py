@@ -17,6 +17,7 @@ class Order(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     items = relationship("OrderItem", cascade="all, delete-orphan", back_populates="order")
+    user = relationship("User")
 
 
 class OrderItem(Base):

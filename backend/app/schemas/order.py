@@ -26,5 +26,7 @@ class OrderOut(BaseModel):
     promotion_code: str | None = None
     created_at: datetime
     items: list[OrderItemOut]
+    user_id: int | None = None
+    user_email: str | None = None
 
     model_config = ConfigDict(from_attributes=True)

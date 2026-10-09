@@ -10,10 +10,10 @@ const ROLE_LABELS = {
 
 // Qué pestañas puede ver cada rol. root y admin ven todo.
 const TAB_ACCESS = {
-  root: ['dashboard', 'productos', 'usuarios', 'encuestas', 'auditoria'],
-  admin: ['dashboard', 'productos', 'usuarios', 'encuestas', 'auditoria'],
+  root: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'auditoria'],
+  admin: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'auditoria'],
   gestor_productos: ['productos'],
-  atencion_cliente: ['encuestas'],
+  atencion_cliente: ['pedidos', 'encuestas'],
 };
 
 function canSeeTab(tab) {
@@ -144,13 +144,14 @@ async function loadAuditLog() {
 async function loadProducts() {
   if (!canSeeTab('productos')) return;
   const tbody = document.getElementById('product-table-body');
-  tbody.innerHTML = '<tr><td colspan="6">Cargando...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="9">Cargando...</td></tr>';
   try {
     const products = await apiFetch('/api/v1/products?include_inactive=true&limit=500');
     if (products.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6">No hay productos todavía.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9">No hay productos todavía.</td></tr>';
       return;
     }
+    const petTypeLabels = { perro: 'Perro', gato: 'Gato', ambas: 'Ambas', otro: 'Otro' };
     tbody.innerHTML = products
       .map(
         (p) => `
@@ -158,8 +159,11 @@ async function loadProducts() {
           <td>${p.id}</td>
           <td>${p.name}</td>
           <td>${p.sku}</td>
+          <td>${p.brand || '-'}</td>
+          <td>${petTypeLabels[p.pet_type] || '-'}</td>
           <td>$${Number(p.price).toLocaleString('es-CO')}</td>
           <td>${p.is_active ? 'Activo' : 'Inactivo'}</td>
+          <td>${p.updated_at ? new Date(p.updated_at).toLocaleDateString('es-CO') : '-'}</td>
           <td>
             ${p.is_active ? `<button class="btn-small deactivate-btn" data-id="${p.id}">Desactivar</button>` : ''}
           </td>
@@ -170,7 +174,7 @@ async function loadProducts() {
       btn.addEventListener('click', () => deactivateProduct(btn.dataset.id));
     });
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="6" class="error">${err.message}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" class="error">${err.message}</td></tr>`;
   }
 }
 
@@ -196,6 +200,8 @@ function setupProductForm() {
     const price = document.getElementById('p-price').value;
     const description = document.getElementById('p-description').value.trim();
     const imageUrl = document.getElementById('p-image-url').value.trim();
+    const brand = document.getElementById('p-brand').value.trim();
+    const petType = document.getElementById('p-pet-type').value;
     try {
       await apiFetch('/api/v1/products', {
         method: 'POST',
@@ -205,6 +211,8 @@ function setupProductForm() {
           price,
           description: description || null,
           image_url: imageUrl || null,
+          brand: brand || null,
+          pet_type: petType || null,
         }),
       });
       form.reset();
@@ -345,6 +353,47 @@ function setupUserForm() {
   });
 }
 
+// ---------- Pedidos ----------
+
+const ORDER_STATUS_LABELS = { pending: 'Pendiente', paid: 'Pagado' };
+
+async function loadOrders() {
+  if (!canSeeTab('pedidos')) return;
+  const tbody = document.getElementById('order-table-body');
+  tbody.innerHTML = '<tr><td colspan="8">Cargando...</td></tr>';
+  const status = document.getElementById('order-status-filter')?.value || '';
+  try {
+    const qs = status ? `&status=${encodeURIComponent(status)}` : '';
+    const orders = await apiFetch(`/api/v1/orders/admin?limit=500${qs}`);
+    if (orders.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8">No hay pedidos todavía.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = orders
+      .map(
+        (o) => `
+        <tr>
+          <td>#${o.id}</td>
+          <td>${o.user_email || '-'}</td>
+          <td>${ORDER_STATUS_LABELS[o.status] || o.status}</td>
+          <td>$${Number(o.subtotal_amount).toLocaleString('es-CO')}</td>
+          <td>$${Number(o.discount_amount).toLocaleString('es-CO')}</td>
+          <td>$${Number(o.total_amount).toLocaleString('es-CO')}</td>
+          <td>${new Date(o.created_at).toLocaleDateString('es-CO')}</td>
+          <td>${o.items.map((i) => `${i.quantity}× ${i.product_name}`).join(', ')}</td>
+        </tr>`
+      )
+      .join('');
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="8" class="error">${err.message}</td></tr>`;
+  }
+}
+
+function setupOrderFilter() {
+  if (!canSeeTab('pedidos')) return;
+  document.getElementById('order-status-filter')?.addEventListener('change', loadOrders);
+}
+
 // ---------- Encuestas ----------
 
 async function loadSurveys() {
@@ -424,9 +473,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupTabs();
   setupProductForm();
   setupUserForm();
+  setupOrderFilter();
   loadDashboard();
   loadProducts();
   loadUsers();
+  loadOrders();
   loadSurveys();
   loadAuditLog();
 });

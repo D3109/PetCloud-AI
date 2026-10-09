@@ -87,6 +87,28 @@ def image_url_for_sku(sku: str) -> str:
     return IMAGE_URLS.get(sku, FALLBACK_IMAGE_URL)
 
 
+# Marca y tipo de mascota por SKU (perro, gato, ambas).
+BRAND_BY_SKU = {
+    "ALM-PER-001": "NutriCan", "ALM-PER-002": "NutriCan", "ALM-PER-003": "DentaCan",
+    "ALM-GAT-001": "FelixGourmet", "ALM-GAT-002": "FelixGourmet",
+    "JUG-001": "PlayPet", "JUG-002": "PlayPet", "JUG-003": "PlayPet",
+    "HIG-001": "CleanPet", "HIG-002": "CleanPet", "HIG-003": "CleanPet", "HIG-004": "CleanPet",
+    "ACC-001": "WalkPro", "ACC-002": "WalkPro",
+    "ACC-003": "ComfyPet", "ACC-004": "ComfyPet", "ACC-005": "ComfyPet",
+    "SAL-001": "VitaPet", "SAL-002": "VitaPet", "SAL-003": "VitaPet",
+}
+
+PET_TYPE_BY_SKU = {
+    "ALM-PER-001": "perro", "ALM-PER-002": "perro", "ALM-PER-003": "perro",
+    "ALM-GAT-001": "gato", "ALM-GAT-002": "gato",
+    "JUG-001": "perro", "JUG-002": "gato", "JUG-003": "perro",
+    "HIG-001": "ambas", "HIG-002": "ambas", "HIG-003": "gato", "HIG-004": "ambas",
+    "ACC-001": "perro", "ACC-002": "perro",
+    "ACC-003": "ambas", "ACC-004": "ambas", "ACC-005": "ambas",
+    "SAL-001": "ambas", "SAL-002": "perro", "SAL-003": "ambas",
+}
+
+
 def get_or_create_category(db, name, description):
     cat = db.query(Category).filter(Category.name == name).first()
     if cat:
@@ -109,13 +131,24 @@ def main():
         created, updated, skipped = 0, 0, 0
         for name, sku, price, description, category_name in PRODUCTS:
             image_url = image_url_for_sku(sku)
+            brand = BRAND_BY_SKU.get(sku)
+            pet_type = PET_TYPE_BY_SKU.get(sku)
             existing = db.query(Product).filter(Product.sku == sku).first()
             if existing:
+                changed = False
                 if existing.image_url != image_url:
                     existing.image_url = image_url
+                    changed = True
+                if existing.brand != brand:
+                    existing.brand = brand
+                    changed = True
+                if existing.pet_type != pet_type:
+                    existing.pet_type = pet_type
+                    changed = True
+                if changed:
                     db.commit()
                     updated += 1
-                    print(f"  ~ imagen actualizada: {name} ({sku})")
+                    print(f"  ~ datos actualizados: {name} ({sku})")
                 else:
                     skipped += 1
                 continue
@@ -126,6 +159,8 @@ def main():
                 price=price,
                 sku=sku,
                 image_url=image_url,
+                brand=brand,
+                pet_type=pet_type,
                 is_active=1,
                 categories=[categories_by_name[category_name]],
             )

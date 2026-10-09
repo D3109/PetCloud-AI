@@ -9,6 +9,19 @@
   <nav id="nav"></nav>
   <main>
     <h1>Catálogo de productos</h1>
+    <div class="filters">
+      <select id="filter-category">
+        <option value="">Todas las categorías</option>
+      </select>
+      <select id="filter-pet-type">
+        <option value="">Todas las mascotas</option>
+        <option value="perro">Perro</option>
+        <option value="gato">Gato</option>
+        <option value="ambas">Ambas</option>
+        <option value="otro">Otro</option>
+      </select>
+      <input id="filter-search" type="search" placeholder="Buscar producto..." />
+    </div>
     <div id="product-grid" class="grid"></div>
   </main>
   <script src="js/config.js"></script>
