@@ -82,7 +82,7 @@ IMAGE_URLS = {
     "JUG-002": f"https://images.unsplash.com/photo-1723462476788-a8f60eb78658{_IMG}",  # gato jugando con juguete
     "JUG-003": f"https://images.unsplash.com/photo-1522008693277-086ad6075b78{_IMG}",  # perro mordiendo una cuerda
     "HIG-001": f"https://images.unsplash.com/photo-1597603413826-cd1c06b05222{_IMG}",  # perro pequeño (baño/higiene)
-    "HIG-002": f"https://images.unsplash.com/photo-1597603413826-cd1c06b05222{_IMG}",  # perro pequeño (higiene/limpieza)
+    "HIG-002": f"https://plus.unsplash.com/premium_photo-1677234147226-b6864587aa40{_IMG}",  # limpieza con toallitas/paño
     "HIG-003": f"https://images.unsplash.com/photo-1659205143781-a6e263c4aadf{_IMG}",  # gato junto a su caja
     "HIG-004": f"https://images.unsplash.com/photo-1528846104175-4fd300ee59da{_IMG}",  # cepillando el pelo de un perro
     "ACC-001": f"https://images.unsplash.com/photo-1704770064081-07d189b95b10{_IMG}",  # perro con correa
