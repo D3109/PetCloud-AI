@@ -15,4 +15,4 @@ const API_BASE = resolveApiBase();
 // Se obtiene gratis en https://console.cloud.google.com/apis/credentials
 // (tipo "ID de cliente de OAuth" > "Aplicacion web"). Mientras esto sea
 // null, el boton de Google simplemente no se muestra (ver google-auth.js).
-const GOOGLE_CLIENT_ID = null;
+const GOOGLE_CLIENT_ID = '72687542411-541av0c65vu7puv5vqimkm4c88tvp2r6.apps.googleusercontent.com';
