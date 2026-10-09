@@ -32,6 +32,8 @@ def create_user(db: Session, user_in: UserCreate) -> User:
         email=user_in.email,
         hashed_password=hash_password(user_in.password),
         full_name=user_in.full_name,
+        phone=user_in.phone,
+        address=user_in.address,
     )
     db.add(user)
     db.commit()
@@ -50,6 +52,8 @@ def create_user_as_admin(db: Session, user_in: UserAdminCreate, actor: User) -> 
         email=user_in.email,
         hashed_password=hash_password(user_in.password),
         full_name=user_in.full_name,
+        phone=user_in.phone,
+        address=user_in.address,
         role=user_in.role,
     )
     db.add(user)
@@ -93,6 +97,10 @@ def update_own_profile(db: Session, user: User, data: ProfileUpdate) -> User:
     """
     if data.full_name is not None:
         user.full_name = data.full_name
+    if data.phone is not None:
+        user.phone = data.phone
+    if data.address is not None:
+        user.address = data.address
 
     if data.new_password:
         if user.auth_provider == "google":

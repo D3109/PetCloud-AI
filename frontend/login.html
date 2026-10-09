@@ -7,17 +7,32 @@
 </head>
 <body>
   <nav id="nav"></nav>
-  <main>
-    <h1>Ingresar</h1>
-    <form id="login-form">
-      <input type="email" id="login-email" placeholder="Correo electrónico" required />
-      <input type="password" id="login-password" placeholder="Contraseña" required />
-      <button type="submit">Ingresar</button>
-      <p id="login-error" class="error"></p>
-    </form>
-    <div class="auth-divider"><span>o</span></div>
-    <div id="google-signin-container"></div>
-  </main>
+  <div class="auth-page">
+    <aside class="auth-visual">
+      <div class="auth-visual-inner">
+        <span class="auth-visual-emoji">🐶</span>
+        <h2>Bienvenido de nuevo</h2>
+        <p>Ingresa para ver tus pedidos, recibir recomendaciones personalizadas con IA y cuidar mejor a tu mascota.</p>
+        <ul class="auth-visual-points">
+          <li>✓ Catálogo completo para perros y gatos</li>
+          <li>✓ Asistente con inteligencia artificial</li>
+          <li>✓ Historial y seguimiento de compras</li>
+        </ul>
+      </div>
+    </aside>
+    <main class="auth-box">
+      <h1>Ingresar</h1>
+      <form id="login-form">
+        <input type="email" id="login-email" placeholder="Correo electrónico" required />
+        <input type="password" id="login-password" placeholder="Contraseña" required />
+        <button type="submit">Ingresar</button>
+        <p id="login-error" class="error"></p>
+      </form>
+      <div class="auth-divider"><span>o</span></div>
+      <div id="google-signin-container"></div>
+      <p class="auth-switch">¿Aún no tienes cuenta? <a href="register.html">Regístrate</a></p>
+    </main>
+  </div>
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/nav.js"></script>

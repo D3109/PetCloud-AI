@@ -5,13 +5,28 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const email = document.getElementById('reg-email').value;
       const password = document.getElementById('reg-password').value;
+      const passwordConfirm = document.getElementById('reg-password-confirm').value;
       const fullName = document.getElementById('reg-fullname').value;
+      const phone = document.getElementById('reg-phone').value;
+      const address = document.getElementById('reg-address').value;
       const errorBox = document.getElementById('reg-error');
       errorBox.textContent = '';
+
+      if (password !== passwordConfirm) {
+        errorBox.textContent = 'Las contraseñas no coinciden.';
+        return;
+      }
+
       try {
         await apiFetch('/api/v1/users', {
           method: 'POST',
-          body: JSON.stringify({ email, password, full_name: fullName || null }),
+          body: JSON.stringify({
+            email,
+            password,
+            full_name: fullName || null,
+            phone: phone || null,
+            address: address || null,
+          }),
         });
         window.location.href = 'login.html';
       } catch (err) {

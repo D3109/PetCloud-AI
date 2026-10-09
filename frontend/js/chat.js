@@ -6,8 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const toggleBtn = document.createElement('button');
   toggleBtn.id = 'chat-toggle';
-  toggleBtn.setAttribute('aria-label', 'Abrir asistente PetCloud');
-  toggleBtn.textContent = '💬';
+  toggleBtn.setAttribute('aria-label', 'Abrir asistente PetCloud con IA');
+  toggleBtn.innerHTML = `
+    <span id="chat-toggle-ring"></span>
+    <span id="chat-toggle-icon">🐾</span>
+    <span id="chat-toggle-badge">IA</span>
+  `;
 
   const panel = document.createElement('div');
   panel.id = 'chat-panel';

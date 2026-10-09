@@ -10,6 +10,8 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     full_name = Column(String, nullable=True)
+    phone = Column(String, nullable=True)
+    address = Column(String, nullable=True)
     role = Column(String, nullable=False, default="customer")
     is_active = Column(Integer, nullable=False, default=1)
     auth_provider = Column(String, nullable=False, default="local")  # "local" o "google"

@@ -7,18 +7,37 @@
 </head>
 <body>
   <nav id="nav"></nav>
-  <main>
-    <h1>Crear cuenta</h1>
-    <form id="register-form">
-      <input type="text" id="reg-fullname" placeholder="Nombre completo (opcional)" />
-      <input type="email" id="reg-email" placeholder="Correo electrónico" required />
-      <input type="password" id="reg-password" placeholder="Contraseña" required />
-      <button type="submit">Registrarme</button>
-      <p id="reg-error" class="error"></p>
-    </form>
-    <div class="auth-divider"><span>o</span></div>
-    <div id="google-signin-container"></div>
-  </main>
+  <div class="auth-page">
+    <aside class="auth-visual">
+      <div class="auth-visual-inner">
+        <span class="auth-visual-emoji">🐾</span>
+        <h2>Únete a PetCloud</h2>
+        <p>Crea tu cuenta y descubre productos recomendados con IA para tu mascota, con seguimiento de tus pedidos y encuestas de satisfacción.</p>
+        <ul class="auth-visual-points">
+          <li>✓ Recomendaciones inteligentes</li>
+          <li>✓ Seguimiento de tus pedidos</li>
+          <li>✓ Ofertas y novedades para tu mascota</li>
+        </ul>
+      </div>
+    </aside>
+    <main class="auth-box">
+      <h1>Crear cuenta</h1>
+      <p class="muted">Solo el correo y la contraseña son obligatorios; el resto nos ayuda a atenderte mejor.</p>
+      <form id="register-form">
+        <input type="text" id="reg-fullname" placeholder="Nombre completo (opcional)" />
+        <input type="email" id="reg-email" placeholder="Correo electrónico" required />
+        <input type="tel" id="reg-phone" placeholder="Teléfono (opcional)" />
+        <input type="text" id="reg-address" placeholder="Dirección de envío (opcional)" />
+        <input type="password" id="reg-password" placeholder="Contraseña (mín. 8 caracteres, con letras y números)" required minlength="8" />
+        <input type="password" id="reg-password-confirm" placeholder="Confirmar contraseña" required minlength="8" />
+        <button type="submit">Registrarme</button>
+        <p id="reg-error" class="error"></p>
+      </form>
+      <div class="auth-divider"><span>o</span></div>
+      <div id="google-signin-container"></div>
+      <p class="auth-switch">¿Ya tienes cuenta? <a href="login.html">Inicia sesión</a></p>
+    </main>
+  </div>
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/nav.js"></script>

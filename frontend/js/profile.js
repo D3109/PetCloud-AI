@@ -6,12 +6,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const emailInput = document.getElementById('profile-email');
   const fullnameInput = document.getElementById('profile-fullname');
+  const phoneInput = document.getElementById('profile-phone');
+  const addressInput = document.getElementById('profile-address');
   const passwordSection = document.getElementById('password-section');
 
   try {
     const me = await apiFetch('/api/v1/auth/me');
     emailInput.value = me.email;
     fullnameInput.value = me.full_name || '';
+    phoneInput.value = me.phone || '';
+    addressInput.value = me.address || '';
     if (me.auth_provider === 'google' && passwordSection) {
       passwordSection.innerHTML =
         '<h2>Cambiar contraseña</h2><p class="muted">Esta cuenta inicia sesión con Google, no tiene contraseña local que cambiar aquí.</p>';
@@ -30,9 +34,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       await apiFetch('/api/v1/auth/me', {
         method: 'PATCH',
-        body: JSON.stringify({ full_name: fullnameInput.value || null }),
+        body: JSON.stringify({
+          full_name: fullnameInput.value || null,
+          phone: phoneInput.value || null,
+          address: addressInput.value || null,
+        }),
       });
-      successBox.textContent = 'Nombre actualizado.';
+      successBox.textContent = 'Datos actualizados.';
     } catch (err) {
       errorBox.textContent = err.message;
     }
