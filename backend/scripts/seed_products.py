@@ -66,6 +66,20 @@ PRODUCTS = [
     ("Antiparasitario Interno Gato x4 comprimidos", "MED-002", "29900", "Desparasitante interno de amplio espectro para gatos", "Medicamentos"),
     ("Suero Oral Rehidratante Veterinario 250ml", "MED-003", "22900", "Solución rehidratante oral de uso veterinario", "Medicamentos"),
     ("Pomada Cicatrizante para Heridas 30g", "MED-004", "18900", "Pomada tópica para heridas menores, uso veterinario", "Medicamentos"),
+    # Productos de marcas reconocidas, agregados a pedido del cliente. La
+    # marca es solo el dato de texto "brand" (informativo, como en
+    # cualquier catalogo); las fotos siguen siendo fotografia de stock
+    # generica de Unsplash (no son fotos oficiales de empaques de esas
+    # marcas), igual que el resto del catalogo.
+    ("Alimento Royal Canin Adulto Raza Mediana 15kg", "BRA-001", "285000", "Alimento seco completo para perros adultos de raza mediana", "Alimento"),
+    ("Alimento Hill's Science Diet Senior 7+ 12kg", "BRA-002", "320000", "Alimento seco especializado para perros senior mayores de 7 años", "Alimento"),
+    ("Alimento Purina Pro Plan Gato Esterilizado 7.5kg", "BRA-003", "195000", "Alimento seco para gatos esterilizados adultos", "Alimento"),
+    ("Alimento Whiskas Adulto Sabor Pollo 8kg", "BRA-004", "98000", "Alimento seco para gatos adultos sabor pollo", "Alimento"),
+    ("Alimento Eukanuba Cachorro Razas Grandes 15kg", "BRA-005", "265000", "Alimento seco para cachorros de razas grandes en crecimiento", "Alimento"),
+    ("Premios Pedigree Dentastix Perro Mediano x28", "BRA-006", "45000", "Snack dental masticable que ayuda a reducir el sarro", "Alimento"),
+    ("Suplemento Multivitamínico VetriScience 60 tabletas", "BRA-007", "89000", "Complejo multivitamínico para apoyar la salud general de perros y gatos", "Salud"),
+    ("Antiparasitario NexGard Spectra Perro x3 comprimidos", "BRA-008", "115000", "Tabletas masticables contra pulgas, garrapatas y parásitos internos", "Medicamentos"),
+    ("Antiparasitario Drontal Plus Perro x2 tabletas", "BRA-009", "42000", "Tabletas desparasitantes de amplio espectro para perros", "Medicamentos"),
 ]
 
 # Foto real de Unsplash elegida a mano para cada SKU, para que la imagen
@@ -73,42 +87,60 @@ PRODUCTS = [
 # de gato, correa, pastillero, etc.) en vez de una foto genérica sin relación.
 _IMG = "?w=400&h=300&fit=crop&auto=format&q=60"
 IMAGE_URLS = {
-    "ALM-PER-001": f"https://images.unsplash.com/photo-1676193866128-03a926df76ef{_IMG}",  # tazón con comida de perro
-    "ALM-PER-002": f"https://images.unsplash.com/photo-1767023023369-96a7c923be0c{_IMG}",  # perro comiendo de su tazón
-    "ALM-GAT-001": f"https://images.unsplash.com/photo-1520811607976-6d7812b0ecac{_IMG}",  # gatos comiendo
-    "ALM-GAT-002": f"https://images.unsplash.com/photo-1764249453874-46864677b10e{_IMG}",  # croquetas secas de cerca
-    "ALM-PER-003": f"https://images.unsplash.com/photo-1488569098285-adeecb95641f{_IMG}",  # dándole premio/snack a un perro
-    "JUG-001": f"https://images.unsplash.com/photo-1696416806113-1f247ff0eb5c{_IMG}",  # perro con pelota en el hocico
-    "JUG-002": f"https://images.unsplash.com/photo-1723462476788-a8f60eb78658{_IMG}",  # gato jugando con juguete
-    "JUG-003": f"https://images.unsplash.com/photo-1522008693277-086ad6075b78{_IMG}",  # perro mordiendo una cuerda
-    "HIG-001": f"https://images.unsplash.com/photo-1597603413826-cd1c06b05222{_IMG}",  # perro pequeño (baño/higiene)
-    "HIG-002": f"https://plus.unsplash.com/premium_photo-1677234147226-b6864587aa40{_IMG}",  # limpieza con toallitas/paño
-    "HIG-003": f"https://images.unsplash.com/photo-1659205143781-a6e263c4aadf{_IMG}",  # gato junto a su caja
-    "HIG-004": f"https://images.unsplash.com/photo-1528846104175-4fd300ee59da{_IMG}",  # cepillando el pelo de un perro
-    "ACC-001": f"https://images.unsplash.com/photo-1704770064081-07d189b95b10{_IMG}",  # perro con correa
-    "ACC-002": f"https://images.unsplash.com/photo-1673069783560-6d4094285be4{_IMG}",  # primer plano de collar
-    "ACC-003": f"https://images.unsplash.com/photo-1708303364738-48188a0e050f{_IMG}",  # perro pequeño en su cama
-    "ACC-004": f"https://images.unsplash.com/photo-1527150602-a98f7a6f2746{_IMG}",  # transportadora de mascota
-    "ACC-005": f"https://images.unsplash.com/photo-1632236568054-12f36ecee2f6{_IMG}",  # perro comiendo de comedero
-    "SAL-001": f"https://images.unsplash.com/photo-1644432757359-b184377d9eb0{_IMG}",  # tabletas/vitaminas
-    "SAL-002": f"https://plus.unsplash.com/premium_photo-1683134036144-82b0a3d50f11{_IMG}",  # perro en clínica veterinaria
-    "SAL-003": f"https://plus.unsplash.com/premium_photo-1668605109201-2dcf7a001215{_IMG}",  # pastillero con cápsulas
+    # --- Fotos actualizadas: se reemplazaron las que mostraban un entorno
+    # ("lifestyle": perro en el parque, persona paseando, etc.) por close-ups
+    # centrados en el producto mismo, a pedido explicito del cliente. Las
+    # que no tienen un reemplazo de producto-solo disponible en Unsplash
+    # (banco de fotos gratuito, sin cobertura completa de este nicho) se
+    # dejaron como estaban; para esos casos puntuales lo ideal es que subas
+    # tu propia foto del producto real desde "Editar" en el panel admin
+    # (campo "URL de imagen").
+    "ALM-PER-001": f"https://images.unsplash.com/photo-1684882726821-2999db517441{_IMG}",  # bolsa de alimento seco para perro, de cerca
+    "ALM-PER-002": f"https://images.unsplash.com/photo-1767023023369-96a7c923be0c{_IMG}",  # perro comiendo de su tazón (sin reemplazo de producto-solo disponible)
+    "ALM-GAT-001": f"https://images.unsplash.com/photo-1520811607976-6d7812b0ecac{_IMG}",  # gatos comiendo (sin reemplazo de producto-solo disponible)
+    "ALM-GAT-002": f"https://images.unsplash.com/photo-1695169954725-fa757fd7315c{_IMG}",  # bowl de croquetas de cerca, sin mascota
+    "ALM-PER-003": f"https://images.unsplash.com/photo-1709810024789-4519a14f05ae{_IMG}",  # empaques de snacks para perro, solos
+    "JUG-001": f"https://images.unsplash.com/photo-1586016008569-4e1d76657ede{_IMG}",  # pelota sola, de cerca, sin perro
+    "JUG-002": f"https://images.unsplash.com/photo-1723462476788-a8f60eb78658{_IMG}",  # gato jugando con juguete (sin reemplazo de producto-solo disponible)
+    "JUG-003": f"https://images.unsplash.com/photo-1522008693277-086ad6075b78{_IMG}",  # perro mordiendo una cuerda (sin reemplazo de producto-solo disponible)
+    "HIG-001": f"https://images.unsplash.com/photo-1747858989102-cca0f4dc4a11{_IMG}",  # botella de shampoo sola, fondo neutro
+    "HIG-002": f"https://plus.unsplash.com/premium_photo-1677234147226-b6864587aa40{_IMG}",  # limpieza con toallitas/paño (sin reemplazo de producto-solo disponible)
+    "HIG-003": f"https://images.unsplash.com/photo-1659205143781-a6e263c4aadf{_IMG}",  # gato junto a su caja (sin reemplazo de producto-solo disponible)
+    "HIG-004": f"https://images.unsplash.com/photo-1528846104175-4fd300ee59da{_IMG}",  # cepillando el pelo de un perro (sin reemplazo de producto-solo disponible)
+    "ACC-001": f"https://images.unsplash.com/photo-1704770064081-07d189b95b10{_IMG}",  # perro con correa (no se encontro foto de producto-solo confiable; recomendado subir foto propia)
+    "ACC-002": f"https://images.unsplash.com/photo-1673069783560-6d4094285be4{_IMG}",  # primer plano de collar (no se encontro foto de producto-solo confiable; recomendado subir foto propia)
+    "ACC-003": f"https://images.unsplash.com/photo-1708303364738-48188a0e050f{_IMG}",  # perro pequeño en su cama (sin reemplazo de producto-solo disponible)
+    "ACC-004": f"https://images.unsplash.com/photo-1778856582851-9da9e3a1a831{_IMG}",  # transportadora sola, sin mascota
+    "ACC-005": f"https://images.unsplash.com/photo-1632236568054-12f36ecee2f6{_IMG}",  # perro comiendo de comedero (sin reemplazo de producto-solo disponible)
+    "SAL-001": f"https://images.unsplash.com/photo-1631669969504-f35518bf96ba{_IMG}",  # frasco de tabletas, solo
+    "SAL-002": f"https://plus.unsplash.com/premium_photo-1683134036144-82b0a3d50f11{_IMG}",  # perro en clínica veterinaria (sin reemplazo de producto-solo disponible)
+    "SAL-003": f"https://images.unsplash.com/photo-1763668331599-487470fb85b2{_IMG}",  # frasco de cápsulas, solo
     "ALM-PER-004": f"https://images.unsplash.com/photo-1671900602295-3cf4fbc121d2{_IMG}",  # perro grande adulto/mayor
     "ALM-GAT-003": f"https://images.unsplash.com/photo-1707642013416-6d7362adc46e{_IMG}",  # gato junto a bolsa de premios
     "ALM-PER-005": f"https://images.unsplash.com/photo-1632236568054-12f36ecee2f6{_IMG}",  # perro comiendo de su tazón
     "JUG-004": f"https://images.unsplash.com/photo-1731315900916-bed2a2ebb856{_IMG}",  # gato jugando con juguete de cuerda
-    "JUG-005": f"https://images.unsplash.com/photo-1690876821657-1fe926211657{_IMG}",  # perro mordiendo un hueso/palo
-    "HIG-005": f"https://images.unsplash.com/photo-1760920250029-36af9369a0bb{_IMG}",  # frasco de colonia
-    "HIG-006": f"https://images.unsplash.com/photo-1528846104175-4fd300ee59da{_IMG}",  # cuidado/aseo de un perro
-    "ACC-006": f"https://images.unsplash.com/photo-1673069783560-6d4094285be4{_IMG}",  # collar con placa
-    "ACC-007": f"https://images.unsplash.com/photo-1541887796712-054f4b0f8e5d{_IMG}",  # perro bebiendo de dispensador portátil
-    "ACC-008": f"https://images.unsplash.com/photo-1724023838952-a12ba4b36a8a{_IMG}",  # gato en su rascador
-    "SAL-004": f"https://images.unsplash.com/photo-1644432757359-b184377d9eb0{_IMG}",  # cápsulas/suplemento
-    "SAL-005": f"https://plus.unsplash.com/premium_photo-1668605109201-2dcf7a001215{_IMG}",  # sobres/pastillero
-    "MED-001": f"https://images.unsplash.com/photo-1711265767477-924313b833c5{_IMG}",  # comprimidos/tabletas
-    "MED-002": f"https://images.unsplash.com/photo-1711265767477-924313b833c5{_IMG}",  # comprimidos/tabletas
-    "MED-003": f"https://plus.unsplash.com/premium_photo-1683134036144-82b0a3d50f11{_IMG}",  # atención veterinaria
-    "MED-004": f"https://plus.unsplash.com/premium_photo-1679106767239-95b814bf9795{_IMG}",  # pomada/crema en tubo
+    "JUG-005": f"https://images.unsplash.com/photo-1535294435445-d7249524ef2e{_IMG}",  # hueso de juguete solo, sobre superficie neutra
+    "HIG-005": f"https://images.unsplash.com/photo-1763631403216-8d193008481e{_IMG}",  # frasco de colonia solo, fondo neutro
+    "HIG-006": f"https://images.unsplash.com/photo-1765464281325-d9bae89108dc{_IMG}",  # cortaúñas solos, fondo blanco
+    "ACC-006": f"https://images.unsplash.com/photo-1673069783560-6d4094285be4{_IMG}",  # collar con placa (sin reemplazo de producto-solo disponible)
+    "ACC-007": f"https://images.unsplash.com/photo-1541887796712-054f4b0f8e5d{_IMG}",  # perro bebiendo de dispensador portátil (sin reemplazo de producto-solo disponible)
+    "ACC-008": f"https://images.unsplash.com/photo-1724023838952-a12ba4b36a8a{_IMG}",  # gato en su rascador (sin reemplazo de producto-solo disponible)
+    "SAL-004": f"https://images.unsplash.com/photo-1670850756988-a1943aa0e554{_IMG}",  # botella de aceite/cápsulas blandas, sola
+    "SAL-005": f"https://images.unsplash.com/photo-1760024888924-0bb9b5181f8e{_IMG}",  # sobres de suplemento en caja, solos
+    "MED-001": f"https://images.unsplash.com/photo-1789983361998-1cf433741217{_IMG}",  # blíster de comprimidos, solo
+    "MED-002": f"https://images.unsplash.com/photo-1776107490671-4be91775c558{_IMG}",  # blíster de comprimidos (distinto), solo
+    "MED-003": f"https://plus.unsplash.com/premium_photo-1683134036144-82b0a3d50f11{_IMG}",  # atención veterinaria (sin reemplazo de producto-solo disponible)
+    "MED-004": f"https://images.unsplash.com/photo-1638609927040-8a7e97cd9d6a{_IMG}",  # tubo de pomada/crema, solo
+    # --- Productos de marcas reconocidas ---
+    "BRA-001": f"https://images.unsplash.com/photo-1764249453874-46864677b10e{_IMG}",  # croquetas secas de cerca (foto generica, marca es solo texto)
+    "BRA-002": f"https://images.unsplash.com/photo-1764249453874-46864677b10e{_IMG}",  # croquetas secas de cerca
+    "BRA-003": f"https://images.unsplash.com/photo-1695169954725-fa757fd7315c{_IMG}",  # bowl de croquetas de cerca
+    "BRA-004": f"https://images.unsplash.com/photo-1695169954725-fa757fd7315c{_IMG}",  # bowl de croquetas de cerca
+    "BRA-005": f"https://images.unsplash.com/photo-1764249453874-46864677b10e{_IMG}",  # croquetas secas de cerca
+    "BRA-006": f"https://images.unsplash.com/photo-1568640347023-a616a30bc3bd{_IMG}",  # snack dental, solo
+    "BRA-007": f"https://images.unsplash.com/photo-1700911772670-410b44ac7392{_IMG}",  # frasco de multivitamínico, solo
+    "BRA-008": f"https://images.unsplash.com/photo-1714642764170-fb950305c397{_IMG}",  # blíster de comprimidos, solo
+    "BRA-009": f"https://images.unsplash.com/photo-1714642764170-fb950305c397{_IMG}",  # blíster de comprimidos, solo
 }
 
 # Foto genérica de respaldo para cualquier producto nuevo que no esté en
@@ -135,6 +167,9 @@ BRAND_BY_SKU = {
     "ACC-006": "WalkPro", "ACC-007": "ComfyPet", "ACC-008": "ComfyPet",
     "SAL-004": "VitaPet", "SAL-005": "VitaPet",
     "MED-001": "VetCare", "MED-002": "VetCare", "MED-003": "VetCare", "MED-004": "VetCare",
+    "BRA-001": "Royal Canin", "BRA-002": "Hill's", "BRA-003": "Purina",
+    "BRA-004": "Whiskas", "BRA-005": "Eukanuba", "BRA-006": "Pedigree",
+    "BRA-007": "VetriScience", "BRA-008": "NexGard", "BRA-009": "Drontal",
 }
 
 PET_TYPE_BY_SKU = {
@@ -151,6 +186,9 @@ PET_TYPE_BY_SKU = {
     "ACC-006": "ambas", "ACC-007": "ambas", "ACC-008": "gato",
     "SAL-004": "ambas", "SAL-005": "ambas",
     "MED-001": "perro", "MED-002": "gato", "MED-003": "ambas", "MED-004": "ambas",
+    "BRA-001": "perro", "BRA-002": "perro", "BRA-003": "gato",
+    "BRA-004": "gato", "BRA-005": "perro", "BRA-006": "perro",
+    "BRA-007": "ambas", "BRA-008": "perro", "BRA-009": "perro",
 }
 
 
