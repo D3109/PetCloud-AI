@@ -20,36 +20,42 @@
       </div>
     </div>
   </section>
-  <main>
-    <h2 class="section-title">Catálogo de productos</h2>
-    <div class="filters">
-      <select id="filter-category">
-        <option value="">Todas las categorías</option>
-      </select>
-      <select id="filter-pet-type">
-        <option value="">Todas las mascotas</option>
-        <option value="perro">Perro</option>
-        <option value="gato">Gato</option>
-        <option value="ambas">Ambas</option>
-        <option value="otro">Otro</option>
-      </select>
-      <input id="filter-search" type="search" placeholder="Buscar por nombre, marca o descripción..." />
-      <div class="price-filter">
-        <input id="filter-price-min" type="number" min="0" step="1000" placeholder="Precio mín." />
-        <span class="price-filter-sep">—</span>
-        <input id="filter-price-max" type="number" min="0" step="1000" placeholder="Precio máx." />
+  <div class="page-shell">
+    <aside class="side-art side-art-left" aria-hidden="true"></aside>
+    <main>
+      <h2 class="section-title">Catálogo de productos</h2>
+      <div class="filters">
+        <select id="filter-category">
+          <option value="">Todas las categorías</option>
+        </select>
+        <select id="filter-pet-type">
+          <option value="">Todas las mascotas</option>
+          <option value="perro">Perro</option>
+          <option value="gato">Gato</option>
+          <option value="ambas">Ambas</option>
+          <option value="otro">Otro</option>
+        </select>
+        <input id="filter-search" type="search" placeholder="Buscar por nombre, marca o descripción..." />
+        <div class="price-filter">
+          <input id="filter-price-min" type="number" min="0" step="1000" placeholder="Precio mín." />
+          <span class="price-filter-sep">—</span>
+          <input id="filter-price-max" type="number" min="0" step="1000" placeholder="Precio máx." />
+        </div>
+        <button type="button" id="filter-clear" class="btn-small">Limpiar filtros</button>
       </div>
-      <button type="button" id="filter-clear" class="btn-small">Limpiar filtros</button>
-    </div>
-    <div id="product-grid" class="grid"></div>
-  </main>
+      <div id="product-grid" class="grid"></div>
+    </main>
+    <aside class="side-art side-art-right" aria-hidden="true"></aside>
+  </div>
   <div id="product-modal-backdrop" class="modal-backdrop hidden">
     <div class="modal" id="product-modal-content"></div>
   </div>
+  <footer id="site-footer"></footer>
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/chat.js"></script>
   <script src="js/catalog.js"></script>
+  <script src="js/footer.js"></script>
 </body>
 </html>

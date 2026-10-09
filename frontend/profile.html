@@ -7,24 +7,30 @@
 </head>
 <body>
   <nav id="nav"></nav>
-  <main>
+  <div class="page-shell">
+    <aside class="side-art side-art-left" aria-hidden="true"></aside>
+    <main>
     <h1>Mi perfil</h1>
 
     <section class="profile-section">
       <h2>Mis datos</h2>
       <form id="profile-form">
-        <label for="profile-email">Correo electrónico</label>
-        <input type="email" id="profile-email" disabled />
-
-        <label for="profile-fullname">Nombre completo</label>
-        <input type="text" id="profile-fullname" placeholder="Tu nombre completo" />
-
-        <label for="profile-phone">Teléfono</label>
-        <input type="tel" id="profile-phone" placeholder="Tu teléfono" />
-
-        <label for="profile-address">Dirección de envío</label>
-        <input type="text" id="profile-address" placeholder="Tu dirección" />
-
+        <div class="form-group">
+          <label for="profile-email">Correo electrónico</label>
+          <input type="email" id="profile-email" disabled />
+        </div>
+        <div class="form-group">
+          <label for="profile-fullname">Nombre completo</label>
+          <input type="text" id="profile-fullname" placeholder="Tu nombre completo" />
+        </div>
+        <div class="form-group">
+          <label for="profile-phone">Teléfono</label>
+          <input type="tel" id="profile-phone" placeholder="Tu teléfono" />
+        </div>
+        <div class="form-group">
+          <label for="profile-address">Dirección de envío</label>
+          <input type="text" id="profile-address" placeholder="Tu dirección" />
+        </div>
         <button type="submit">Guardar cambios</button>
         <p id="profile-error" class="error"></p>
         <p id="profile-success" class="success"></p>
@@ -34,22 +40,28 @@
     <section class="profile-section" id="password-section">
       <h2>Cambiar contraseña</h2>
       <form id="password-form">
-        <label for="current-password">Contraseña actual</label>
-        <input type="password" id="current-password" />
-
-        <label for="new-password">Nueva contraseña</label>
-        <input type="password" id="new-password" />
-
+        <div class="form-group">
+          <label for="current-password">Contraseña actual</label>
+          <input type="password" id="current-password" />
+        </div>
+        <div class="form-group">
+          <label for="new-password">Nueva contraseña</label>
+          <input type="password" id="new-password" />
+        </div>
         <button type="submit">Cambiar contraseña</button>
         <p id="password-error" class="error"></p>
         <p id="password-success" class="success"></p>
       </form>
     </section>
   </main>
+    <aside class="side-art side-art-right" aria-hidden="true"></aside>
+  </div>
+  <footer id="site-footer"></footer>
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/nav.js"></script>
   <script src="js/chat.js"></script>
   <script src="js/profile.js"></script>
+  <script src="js/footer.js"></script>
 </body>
 </html>

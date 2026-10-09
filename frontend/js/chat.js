@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <span>Asistente PetCloud</span>
       <button id="chat-close" aria-label="Cerrar asistente">&times;</button>
     </div>
+    <p id="chat-ai-warning">⚠️ Respuestas generadas por IA: pueden contener errores. Verifica la información importante.</p>
     <div id="chat-messages"></div>
     <form id="chat-form">
       <input id="chat-input" type="text" placeholder="Escribe tu pregunta..." autocomplete="off" />
