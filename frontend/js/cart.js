@@ -18,9 +18,15 @@ async function loadCart() {
             <tr>
               <td>${item.product_name}</td>
               <td>$${Number(item.unit_price).toLocaleString('es-CO')}</td>
-              <td>${item.quantity}</td>
+              <td>
+                <div class="qty-stepper">
+                  <button type="button" class="qty-btn qty-decrease" data-product-id="${item.product_id}" data-qty="${item.quantity}" aria-label="Disminuir cantidad">−</button>
+                  <span class="qty-value">${item.quantity}</span>
+                  <button type="button" class="qty-btn qty-increase" data-product-id="${item.product_id}" data-qty="${item.quantity}" aria-label="Aumentar cantidad">+</button>
+                </div>
+              </td>
               <td>$${Number(item.subtotal).toLocaleString('es-CO')}</td>
-              <td><button class="remove-item" data-product-id="${item.product_id}">Quitar</button></td>
+              <td><button class="remove-item btn-small" data-product-id="${item.product_id}">Quitar</button></td>
             </tr>
           `).join('')}
         </tbody>
@@ -28,14 +34,40 @@ async function loadCart() {
       <p class="total">Total: $${Number(cart.total).toLocaleString('es-CO')}</p>
       <button id="checkout-btn">Finalizar compra</button>
       <p id="checkout-error" class="error"></p>
+      <p class="payment-disclaimer">
+        ⚠️ Este es un entorno de demostración: el pago se procesa de forma <strong>simulada</strong>,
+        no hay una pasarela de pagos real conectada ni se realizan cobros verdaderos.
+      </p>
     `;
 
     document.querySelectorAll('.remove-item').forEach((btn) => {
       btn.addEventListener('click', () => removeItem(btn.dataset.productId));
     });
+    document.querySelectorAll('.qty-increase').forEach((btn) => {
+      btn.addEventListener('click', () => changeQuantity(btn.dataset.productId, Number(btn.dataset.qty) + 1));
+    });
+    document.querySelectorAll('.qty-decrease').forEach((btn) => {
+      btn.addEventListener('click', () => changeQuantity(btn.dataset.productId, Number(btn.dataset.qty) - 1));
+    });
     document.getElementById('checkout-btn').addEventListener('click', checkout);
   } catch (err) {
     container.innerHTML = `<p class="error">${err.message}</p>`;
+  }
+}
+
+async function changeQuantity(productId, newQuantity) {
+  try {
+    if (newQuantity <= 0) {
+      await apiFetch(`/api/v1/cart/items/${productId}`, { method: 'DELETE' });
+    } else {
+      await apiFetch(`/api/v1/cart/items/${productId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ quantity: newQuantity }),
+      });
+    }
+    loadCart();
+  } catch (err) {
+    alert(err.message);
   }
 }
 

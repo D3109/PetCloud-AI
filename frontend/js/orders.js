@@ -11,6 +11,7 @@ function renderOrderCard(order) {
       <p class="total">Total: $${Number(order.total_amount).toLocaleString('es-CO')}</p>
       ${isPending ? `
         <button class="pay-btn" data-order-id="${order.id}">Pagar ahora</button>
+        <p class="payment-disclaimer small">⚠️ Pago simulado de demostración: no hay una pasarela de pagos real conectada.</p>
         <p class="error pay-error" data-order-id="${order.id}"></p>
       ` : ''}
       ${isPaid ? `

@@ -10,6 +10,11 @@
   --color-text: #2b2420;
   --color-muted: #8a7b6e;
   --color-border: #ece2d4;
+  /* Acento complementario (verde azulado profundo), usado con moderacion
+     para que el slide superior y el pie de pagina no se sientan "todo
+     del mismo tono naranja": un contrapunto frio sobre la paleta calida. */
+  --color-ink: #1f4743;
+  --color-ink-light: #3c6d66;
 }
 
 body {
@@ -43,18 +48,30 @@ nav { background: var(--color-primary); }
 
 main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
 
-/* Hero del catalogo */
+/* Hero del catalogo: gradiente de tres paradas (tinte frio -> calido) mas
+   un resplandor radial suave, para que no se sienta un degradado plano de
+   un solo tono. El titular usa el crema de fondo en vez de blanco puro,
+   para que el acento calido siga leyendose "de marca" incluso en el
+   bloque mas oscuro de la pagina. */
 .hero {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(120deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-  color: #fff;
-  padding: 44px 20px;
+  background:
+    radial-gradient(ellipse 60% 90% at 85% 0%, rgba(246, 201, 168, 0.35) 0%, transparent 60%),
+    linear-gradient(115deg, var(--color-ink) 0%, var(--color-primary-dark) 48%, var(--color-primary) 100%);
+  color: var(--color-bg);
+  padding: 48px 20px;
   text-align: center;
 }
 .hero-inner { position: relative; max-width: 700px; margin: 0 auto; z-index: 1; }
-.hero h1 { margin: 0 0 10px; font-size: 1.9rem; }
-.hero p { margin: 0 0 18px; opacity: 0.95; font-size: 1.02rem; }
+.hero h1 {
+  margin: 0 0 10px;
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--color-bg);
+}
+.hero p { margin: 0 0 18px; opacity: 0.92; font-size: 1.02rem; }
 .hero-badges {
   display: flex;
   flex-wrap: wrap;
@@ -62,12 +79,13 @@ main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
   gap: 10px;
 }
 .hero-badges span {
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(246, 201, 168, 0.45);
   border-radius: 999px;
   padding: 6px 14px;
   font-size: 0.85rem;
   font-weight: 600;
+  backdrop-filter: blur(2px);
 }
 .hero-deco {
   position: absolute;
@@ -221,13 +239,69 @@ input:focus { outline: none; border-color: var(--color-accent); }
   max-width: 480px;
 }
 .profile-section h2 { margin-top: 0; font-size: 1.1rem; }
-.profile-section form { display: flex; flex-direction: column; gap: 4px; }
+.profile-section form { display: flex; flex-direction: column; gap: 16px; }
+
+/* Agrupa cada etiqueta con su campo (antes quedaban sueltas en la misma
+   columna flex, con la misma separacion entre una etiqueta y su propio
+   campo que entre un campo y la etiqueta del siguiente grupo). */
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label { font-weight: 600; font-size: 0.9rem; color: var(--color-text); }
+.form-group input:disabled { background: var(--color-bg); color: var(--color-muted); }
 
 .total { font-size: 1.2rem; font-weight: bold; margin: 16px 0; color: var(--color-primary-dark); }
 
 .cart-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
 .cart-table th, .cart-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--color-border); }
 .cart-table th { color: var(--color-muted); font-weight: 600; }
+
+/* Control +/- de cantidad en el carrito */
+.qty-stepper { display: inline-flex; align-items: center; gap: 8px; }
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-size: 1rem;
+  line-height: 1;
+}
+.qty-value { min-width: 1.5em; text-align: center; font-weight: 600; }
+
+/* Aviso de que el pago/pasarela es simulado, no un cobro real */
+.payment-disclaimer {
+  background: #fff6e8;
+  border: 1px solid #f0d9ad;
+  color: #7a5c1e;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  margin-top: 10px;
+}
+.payment-disclaimer.small { font-size: 0.82rem; padding: 8px 12px; }
+
+/* Nota de privacidad junto al formulario de login/registro */
+.auth-privacy-note {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* Advertencia de IA dentro del panel del chatbot */
+#chat-ai-warning {
+  margin: 0;
+  padding: 8px 12px;
+  background: #fff6e8;
+  color: #7a5c1e;
+  font-size: 0.75rem;
+  line-height: 1.35;
+  border-bottom: 1px solid var(--color-border);
+}
 
 h1 { color: var(--color-primary-dark); }
 
@@ -732,4 +806,76 @@ h1 { color: var(--color-primary-dark); }
   .inline-form input, .inline-form select { flex: 1 1 auto; }
   .admin-table { display: block; overflow-x: auto; white-space: nowrap; }
   .tabs { overflow-x: auto; flex-wrap: nowrap; }
+}
+
+/* ---------------------------------------------------------------------
+   Pie de pagina: datos de la mini empresa + aviso de copyright. Se
+   inyecta con js/footer.js en todas las paginas, igual que el nav.
+   Usa el "ink" oscuro (no un negro generico) para que combine con el
+   acento frio del slide superior en vez de verse desconectado.
+--------------------------------------------------------------------- */
+.site-footer {
+  background: var(--color-ink);
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 56px;
+}
+.site-footer-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 36px 20px 24px;
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr;
+  gap: 28px;
+}
+.site-footer h3 { color: #fff; margin: 0 0 10px; font-size: 1.05rem; }
+.site-footer p { margin: 0 0 8px; font-size: 0.88rem; line-height: 1.5; }
+.site-footer-brand { font-weight: 700; color: #fff; font-size: 1.1rem; }
+.site-footer-links { list-style: none; margin: 0; padding: 0; }
+.site-footer-links li { margin-bottom: 6px; }
+.site-footer-links a { color: rgba(255, 255, 255, 0.85); text-decoration: none; font-size: 0.88rem; }
+.site-footer-links a:hover { text-decoration: underline; }
+.site-footer-bottom {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 14px 20px 22px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.5;
+}
+@media (max-width: 760px) {
+  .site-footer-inner { grid-template-columns: 1fr; gap: 20px; }
+}
+
+/* ---------------------------------------------------------------------
+   Relleno lateral de paginas "simples" (perfil, carrito, pedidos,
+   encuesta) y del catalogo debajo del hero: en pantallas anchas, a los
+   lados del contenido central de 1000px quedaba fondo vacio. Se agregan
+   dos fotos reales (ya usadas en el catalogo) atenuadas con un degradado
+   hacia el color de fondo, para que no compitan con el contenido. Se
+   ocultan por debajo de 1300px, que es donde de todas formas casi no
+   queda espacio sobrante.
+--------------------------------------------------------------------- */
+.page-shell { display: flex; align-items: stretch; }
+.page-shell > main { flex: 0 1 1000px; }
+.side-art {
+  flex: 1 1 0%;
+  background-size: cover;
+  background-position: center;
+}
+.side-art-left {
+  background-image:
+    linear-gradient(to right, rgba(193, 98, 58, 0.22), rgba(193, 98, 58, 0.05)),
+    linear-gradient(to right, transparent 0%, var(--color-bg) 96%),
+    url('https://images.unsplash.com/photo-1704770064081-07d189b95b10?w=600&h=1200&fit=crop&auto=format&q=60');
+}
+.side-art-right {
+  background-image:
+    linear-gradient(to left, rgba(31, 71, 67, 0.22), rgba(31, 71, 67, 0.05)),
+    linear-gradient(to left, transparent 0%, var(--color-bg) 96%),
+    url('https://images.unsplash.com/photo-1659205143781-a6e263c4aadf?w=600&h=1200&fit=crop&auto=format&q=60');
+}
+@media (max-width: 1300px) {
+  .page-shell { display: block; }
+  .side-art { display: none; }
 }

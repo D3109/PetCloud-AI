@@ -38,6 +38,26 @@ def add_item(db: Session, user_id: int, product_id: int, quantity: int) -> Cart:
     return cart
 
 
+def update_item_quantity(db: Session, user_id: int, product_id: int, quantity: int) -> Cart:
+    """Fija la cantidad exacta de un producto en el carrito (para los
+    botones +/- del carrito). Una cantidad de 0 o menor simplemente quita
+    el producto del carrito, igual que el boton "Quitar"."""
+    if quantity <= 0:
+        return remove_item(db, user_id, product_id)
+
+    cart = get_or_create_cart(db, user_id)
+    item = db.query(CartItem).filter(
+        CartItem.cart_id == cart.id, CartItem.product_id == product_id
+    ).first()
+    if item is None:
+        raise ValueError(f"Product {product_id} is not in the cart")
+
+    item.quantity = quantity
+    db.commit()
+    db.refresh(cart)
+    return cart
+
+
 def remove_item(db: Session, user_id: int, product_id: int) -> Cart:
     cart = get_or_create_cart(db, user_id)
     item = db.query(CartItem).filter(
