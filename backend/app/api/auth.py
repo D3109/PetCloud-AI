@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.core import rate_limit
 from app.core.database import get_db
 from app.core.deps import get_current_user
 from app.core.security import create_access_token, verify_password
@@ -20,12 +21,22 @@ router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
 
 @router.post("/login", response_model=TokenResponse)
 def login(credentials: LoginRequest, db: Session = Depends(get_db)):
+    email_key = credentials.email.lower()
+
+    if rate_limit.is_locked(email_key):
+        raise HTTPException(
+            status_code=429,
+            detail="Demasiados intentos fallidos. Intenta de nuevo en unos minutos.",
+        )
+
     user = db.query(User).filter(User.email == credentials.email).first()
     if not user or not verify_password(credentials.password, user.hashed_password):
+        rate_limit.register_failure(email_key)
         raise HTTPException(status_code=401, detail="Invalid email or password")
     if not user.is_active:
         raise HTTPException(status_code=403, detail="Esta cuenta esta bloqueada")
 
+    rate_limit.clear(email_key)
     token = create_access_token(subject=user.email)
     return TokenResponse(access_token=token)
 

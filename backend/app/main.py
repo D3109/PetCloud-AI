@@ -22,7 +22,13 @@ app = FastAPI(title="PetCloud IA")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    # allow_credentials=False porque la autenticacion es con un Bearer
+    # token en el header Authorization (nunca con cookies), por lo que
+    # no se necesitan credenciales de navegador. Combinar
+    # allow_origins=["*"] con allow_credentials=True permitiria que
+    # cualquier sitio hiciera solicitudes "con credenciales" contra la
+    # API, asi que se deja explicitamente desactivado.
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
