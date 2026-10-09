@@ -44,7 +44,7 @@
 
       <!-- Productos -->
       <section id="tab-productos" class="tab-panel">
-        <h2>Crear producto</h2>
+        <h2 id="product-form-title">Crear producto</h2>
         <form id="product-form" class="inline-form">
           <input id="p-name" placeholder="Nombre" required />
           <input id="p-sku" placeholder="SKU" required />
@@ -63,7 +63,8 @@
             <option value="">Categoría (opcional)</option>
           </select>
           <input id="p-stock" type="number" step="1" min="0" placeholder="Existencias iniciales" />
-          <button type="submit">Crear</button>
+          <button type="submit" id="product-form-submit">Crear</button>
+          <button type="button" id="product-form-cancel" class="btn-small hidden">Cancelar edición</button>
         </form>
         <p id="product-error" class="error"></p>
 

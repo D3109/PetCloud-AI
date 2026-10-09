@@ -207,20 +207,63 @@ async function loadProducts() {
           <td>${p.is_active ? 'Activo' : 'Inactivo'}</td>
           <td>${p.updated_at ? new Date(p.updated_at).toLocaleDateString('es-CO') : '-'}</td>
           <td>
+            <button class="btn-small edit-product-btn" data-id="${p.id}">Editar</button>
             ${p.is_active ? `<button class="btn-small deactivate-btn" data-id="${p.id}">Desactivar</button>` : ''}
           </td>
         </tr>`
       )
       .join('');
+    LOADED_PRODUCTS_BY_ID = Object.fromEntries(products.map((p) => [p.id, p]));
     tbody.querySelectorAll('.deactivate-btn').forEach((btn) => {
       btn.addEventListener('click', () => deactivateProduct(btn.dataset.id));
     });
     tbody.querySelectorAll('.stock-adjust-btn').forEach((btn) => {
       btn.addEventListener('click', () => adjustProductStock(btn.dataset.id));
     });
+    tbody.querySelectorAll('.edit-product-btn').forEach((btn) => {
+      btn.addEventListener('click', () => startEditProduct(btn.dataset.id));
+    });
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="10" class="error">${err.message}</td></tr>`;
   }
+}
+
+let LOADED_PRODUCTS_BY_ID = {};
+let EDITING_PRODUCT_ID = null;
+
+function startEditProduct(id) {
+  const product = LOADED_PRODUCTS_BY_ID[id];
+  if (!product) return;
+  EDITING_PRODUCT_ID = Number(id);
+
+  document.getElementById('p-name').value = product.name || '';
+  document.getElementById('p-sku').value = product.sku || '';
+  document.getElementById('p-sku').disabled = true;
+  document.getElementById('p-price').value = product.price;
+  document.getElementById('p-description').value = product.description || '';
+  document.getElementById('p-image-url').value = product.image_url || '';
+  document.getElementById('p-brand').value = product.brand || '';
+  document.getElementById('p-pet-type').value = product.pet_type || '';
+  document.getElementById('p-category').value =
+    product.categories && product.categories.length ? product.categories[0].id : '';
+  document.getElementById('p-stock').value = product.stock_quantity ?? 0;
+  document.getElementById('p-stock').disabled = true; // el stock se ajusta desde la tabla, no aqui
+
+  document.getElementById('product-form-title').textContent = `Editando: ${product.name}`;
+  document.getElementById('product-form-submit').textContent = 'Guardar cambios';
+  document.getElementById('product-form-cancel').classList.remove('hidden');
+  document.getElementById('product-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function cancelEditProduct() {
+  EDITING_PRODUCT_ID = null;
+  const form = document.getElementById('product-form');
+  form.reset();
+  document.getElementById('p-sku').disabled = false;
+  document.getElementById('p-stock').disabled = false;
+  document.getElementById('product-form-title').textContent = 'Crear producto';
+  document.getElementById('product-form-submit').textContent = 'Crear';
+  document.getElementById('product-form-cancel').classList.add('hidden');
 }
 
 async function adjustProductStock(productId) {
@@ -261,6 +304,8 @@ function setupProductForm() {
   loadProductCategoryOptions();
   const form = document.getElementById('product-form');
   const errorBox = document.getElementById('product-error');
+  document.getElementById('product-form-cancel')?.addEventListener('click', cancelEditProduct);
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorBox.textContent = '';
@@ -273,27 +318,44 @@ function setupProductForm() {
     const petType = document.getElementById('p-pet-type').value;
     const categoryId = document.getElementById('p-category').value;
     const initialStock = Number(document.getElementById('p-stock').value || 0);
+
     try {
-      const product = await apiFetch('/api/v1/products', {
-        method: 'POST',
-        body: JSON.stringify({
-          name,
-          sku,
-          price,
-          description: description || null,
-          image_url: imageUrl || null,
-          brand: brand || null,
-          pet_type: petType || null,
-          category_ids: categoryId ? [Number(categoryId)] : [],
-        }),
-      });
-      if (initialStock > 0) {
-        await apiFetch(`/api/v1/inventory/${product.id}/adjust`, {
+      if (EDITING_PRODUCT_ID) {
+        await apiFetch(`/api/v1/products/${EDITING_PRODUCT_ID}`, {
           method: 'PUT',
-          body: JSON.stringify({ delta: initialStock }),
+          body: JSON.stringify({
+            name,
+            price,
+            description: description || null,
+            image_url: imageUrl || null,
+            brand: brand || null,
+            pet_type: petType || null,
+            category_ids: categoryId ? [Number(categoryId)] : [],
+          }),
         });
+        cancelEditProduct();
+      } else {
+        const product = await apiFetch('/api/v1/products', {
+          method: 'POST',
+          body: JSON.stringify({
+            name,
+            sku,
+            price,
+            description: description || null,
+            image_url: imageUrl || null,
+            brand: brand || null,
+            pet_type: petType || null,
+            category_ids: categoryId ? [Number(categoryId)] : [],
+          }),
+        });
+        if (initialStock > 0) {
+          await apiFetch(`/api/v1/inventory/${product.id}/adjust`, {
+            method: 'PUT',
+            body: JSON.stringify({ delta: initialStock }),
+          });
+        }
+        form.reset();
       }
-      form.reset();
       loadProducts();
     } catch (err) {
       errorBox.textContent = err.message;
