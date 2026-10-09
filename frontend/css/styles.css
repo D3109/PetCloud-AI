@@ -269,19 +269,6 @@ input:focus { outline: none; border-color: var(--color-accent); }
 }
 .qty-value { min-width: 1.5em; text-align: center; font-weight: 600; }
 
-/* Aviso de que el pago/pasarela es simulado, no un cobro real */
-.payment-disclaimer {
-  background: #fff6e8;
-  border: 1px solid #f0d9ad;
-  color: #7a5c1e;
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 0.88rem;
-  line-height: 1.4;
-  margin-top: 10px;
-}
-.payment-disclaimer.small { font-size: 0.82rem; padding: 8px 12px; }
-
 /* Nota de privacidad junto al formulario de login/registro */
 .auth-privacy-note {
   margin-top: 22px;

@@ -34,10 +34,6 @@ async function loadCart() {
       <p class="total">Total: $${Number(cart.total).toLocaleString('es-CO')}</p>
       <button id="checkout-btn">Finalizar compra</button>
       <p id="checkout-error" class="error"></p>
-      <p class="payment-disclaimer">
-        ⚠️ Este es un entorno de demostración: el pago se procesa de forma <strong>simulada</strong>,
-        no hay una pasarela de pagos real conectada ni se realizan cobros verdaderos.
-      </p>
     `;
 
     document.querySelectorAll('.remove-item').forEach((btn) => {
