@@ -10,3 +10,9 @@ function resolveApiBase() {
 }
 
 const API_BASE = resolveApiBase();
+
+// ID de cliente OAuth de Google para el boton "Ingresar con Google".
+// Se obtiene gratis en https://console.cloud.google.com/apis/credentials
+// (tipo "ID de cliente de OAuth" > "Aplicacion web"). Mientras esto sea
+// null, el boton de Google simplemente no se muestra (ver google-auth.js).
+const GOOGLE_CLIENT_ID = null;

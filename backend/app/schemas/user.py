@@ -21,6 +21,7 @@ class UserOut(BaseModel):
     full_name: str | None = None
     role: str
     is_active: int
+    auth_provider: str
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

@@ -12,4 +12,6 @@ class User(Base):
     full_name = Column(String, nullable=True)
     role = Column(String, nullable=False, default="customer")
     is_active = Column(Integer, nullable=False, default=1)
+    auth_provider = Column(String, nullable=False, default="local")  # "local" o "google"
+    google_sub = Column(String, unique=True, nullable=True, index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
