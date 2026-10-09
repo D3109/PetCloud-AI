@@ -99,7 +99,7 @@ main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
 .hero-deco-left { left: -30px; transform: translateY(-50%) rotate(-18deg); }
 .hero-deco-right { right: -30px; transform: translateY(-50%) rotate(18deg); }
 
-.section-title { margin-top: 0; }
+.section-title { margin-top: 0; color: #111; }
 
 @media (max-width: 640px) {
   .hero-deco { display: none; }
@@ -290,7 +290,7 @@ input:focus { outline: none; border-color: var(--color-accent); }
   border-bottom: 1px solid var(--color-border);
 }
 
-h1 { color: var(--color-primary-dark); }
+h1 { color: #111; }
 
 /* Insignia tipo "Carrito (2)" al estilo del mockup */
 .cart-badge {
@@ -591,7 +591,9 @@ h1 { color: var(--color-primary-dark); }
   padding: 5px 10px;
   font-size: 0.85rem;
   border-radius: 6px;
+  margin: 2px 6px 2px 0;
 }
+.btn-small:last-child { margin-right: 0; }
 
 .stats-grid {
   display: grid;
@@ -642,6 +644,7 @@ h1 { color: var(--color-primary-dark); }
   border-radius: 8px;
   font-size: 0.95rem;
   background: var(--color-card);
+  color: #000;
 }
 .filters input[type="search"] { flex: 1 1 200px; }
 .price-filter {
@@ -805,33 +808,62 @@ h1 { color: var(--color-primary-dark); }
   background: var(--color-ink);
   color: rgba(255, 255, 255, 0.85);
   margin-top: 56px;
+  border-top: 3px solid var(--color-accent);
 }
 .site-footer-inner {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 36px 20px 24px;
+  padding: 40px 20px 26px;
   display: grid;
   grid-template-columns: 1.3fr 1fr 1fr;
-  gap: 28px;
+  gap: 32px;
 }
-.site-footer h3 { color: #fff; margin: 0 0 10px; font-size: 1.05rem; }
-.site-footer p { margin: 0 0 8px; font-size: 0.88rem; line-height: 1.5; }
-.site-footer-brand { font-weight: 700; color: #fff; font-size: 1.1rem; }
+.site-footer h3 {
+  color: #fff;
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+.site-footer p { margin: 0 0 8px; font-size: 0.88rem; line-height: 1.6; color: rgba(255, 255, 255, 0.78); }
+.site-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #fff;
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+}
 .site-footer-links { list-style: none; margin: 0; padding: 0; }
-.site-footer-links li { margin-bottom: 6px; }
-.site-footer-links a { color: rgba(255, 255, 255, 0.85); text-decoration: none; font-size: 0.88rem; }
-.site-footer-links a:hover { text-decoration: underline; }
+.site-footer-links li { margin-bottom: 8px; }
+.site-footer-links a {
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  font-size: 0.88rem;
+  transition: color 0.15s ease;
+}
+.site-footer-links a:hover { color: var(--color-accent); text-decoration: underline; }
 .site-footer-bottom {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 14px 20px 22px;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.5;
+  padding: 16px 20px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
 }
+.site-footer-bottom-legal { max-width: 640px; }
+.site-footer-bottom-made { white-space: nowrap; opacity: 0.8; }
 @media (max-width: 760px) {
-  .site-footer-inner { grid-template-columns: 1fr; gap: 20px; }
+  .site-footer-inner { grid-template-columns: 1fr; gap: 22px; }
+  .site-footer-bottom { flex-direction: column; }
 }
 
 /* ---------------------------------------------------------------------
@@ -850,17 +882,21 @@ h1 { color: var(--color-primary-dark); }
   background-size: cover;
   background-position: center;
 }
+.side-art {
+  background-repeat: repeat-y;
+  background-size: 220px 600px;
+}
 .side-art-left {
   background-image:
-    linear-gradient(to right, rgba(193, 98, 58, 0.22), rgba(193, 98, 58, 0.05)),
+    linear-gradient(to right, rgba(250, 245, 238, 0.35), rgba(250, 245, 238, 0.1)),
     linear-gradient(to right, transparent 0%, var(--color-bg) 96%),
-    url('https://images.unsplash.com/photo-1704770064081-07d189b95b10?w=600&h=1200&fit=crop&auto=format&q=60');
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27220%27%20height%3D%27600%27%20viewBox%3D%270%200%20220%20600%27%3E%20%3Cg%20transform%3D%27translate%28110%2C70%29%27%3E%20%3Cellipse%20cx%3D%270%27%20cy%3D%2725%27%20rx%3D%2728%27%20ry%3D%2722%27%20fill%3D%27%23c1623a%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-30%27%20cy%3D%27-10%27%20r%3D%2712%27%20fill%3D%27%23c1623a%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-10%27%20cy%3D%27-25%27%20r%3D%2712%27%20fill%3D%27%23c1623a%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2714%27%20cy%3D%27-25%27%20r%3D%2712%27%20fill%3D%27%23c1623a%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2732%27%20cy%3D%27-8%27%20r%3D%2712%27%20fill%3D%27%23c1623a%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3C/g%3E%20%3Cg%20transform%3D%27translate%28110%2C290%29%27%3E%20%3Crect%20x%3D%27-40%27%20y%3D%27-8%27%20width%3D%2780%27%20height%3D%2716%27%20rx%3D%278%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-40%27%20cy%3D%27-10%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-40%27%20cy%3D%2710%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2740%27%20cy%3D%27-10%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2740%27%20cy%3D%2710%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3C/g%3E%20%3Cg%20transform%3D%27translate%28110%2C500%29%27%3E%20%3Cellipse%20cx%3D%270%27%20cy%3D%270%27%20rx%3D%2735%27%20ry%3D%2720%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Cpath%20d%3D%27M35%2C0%20L58%2C-16%20L58%2C16%20Z%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-18%27%20cy%3D%27-4%27%20r%3D%273%27%20fill%3D%27%231f1a16%27/%3E%20%3C/g%3E%20%3C/svg%3E");
 }
 .side-art-right {
   background-image:
-    linear-gradient(to left, rgba(31, 71, 67, 0.22), rgba(31, 71, 67, 0.05)),
+    linear-gradient(to left, rgba(250, 245, 238, 0.35), rgba(250, 245, 238, 0.1)),
     linear-gradient(to left, transparent 0%, var(--color-bg) 96%),
-    url('https://images.unsplash.com/photo-1659205143781-a6e263c4aadf?w=600&h=1200&fit=crop&auto=format&q=60');
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27220%27%20height%3D%27600%27%20viewBox%3D%270%200%20220%20600%27%3E%20%3Cg%20transform%3D%27translate%28110%2C70%29%27%3E%20%3Cellipse%20cx%3D%270%27%20cy%3D%2725%27%20rx%3D%2728%27%20ry%3D%2722%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-30%27%20cy%3D%27-10%27%20r%3D%2712%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-10%27%20cy%3D%27-25%27%20r%3D%2712%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2714%27%20cy%3D%27-25%27%20r%3D%2712%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2732%27%20cy%3D%27-8%27%20r%3D%2712%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3C/g%3E%20%3Cg%20transform%3D%27translate%28110%2C290%29%27%3E%20%3Crect%20x%3D%27-40%27%20y%3D%27-8%27%20width%3D%2780%27%20height%3D%2716%27%20rx%3D%278%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-40%27%20cy%3D%27-10%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-40%27%20cy%3D%2710%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2740%27%20cy%3D%27-10%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2740%27%20cy%3D%2710%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3C/g%3E%20%3Cg%20transform%3D%27translate%28110%2C500%29%27%3E%20%3Cellipse%20cx%3D%270%27%20cy%3D%270%27%20rx%3D%2735%27%20ry%3D%2720%27%20fill%3D%27%23c1623a%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Cpath%20d%3D%27M35%2C0%20L58%2C-16%20L58%2C16%20Z%27%20fill%3D%27%23c1623a%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-18%27%20cy%3D%27-4%27%20r%3D%273%27%20fill%3D%27%231f1a16%27/%3E%20%3C/g%3E%20%3C/svg%3E");
 }
 @media (max-width: 1300px) {
   .page-shell { display: block; }

@@ -25,10 +25,13 @@ function renderFooter() {
       </div>
     </div>
     <div class="site-footer-bottom">
-      © ${year} PetCloud. Todos los derechos reservados. Proyecto de demostración, sin fines comerciales reales.
-      Las imágenes de productos son fotografías de stock (Unsplash) usadas con fines ilustrativos;
-      los nombres de marcas mencionados en el catálogo son propiedad de sus respectivos dueños y se
-      muestran únicamente a modo de referencia, sin afiliación ni respaldo real de esas marcas.
+      <p class="site-footer-bottom-legal">
+        © ${year} PetCloud. Todos los derechos reservados. Proyecto de demostración, sin fines comerciales reales.
+        Las ilustraciones de producto son gráficos de referencia y los nombres de marcas mencionados en el
+        catálogo son propiedad de sus respectivos dueños, mostrados únicamente a modo de referencia,
+        sin afiliación ni respaldo real de esas marcas.
+      </p>
+      <p class="site-footer-bottom-made">Hecho con 🐾 para mascotas</p>
     </div>
   `;
 }
