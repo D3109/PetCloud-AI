@@ -1,6 +1,16 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 from app.schemas.audit import AuditLogOut
+
+
+class RecentSurveyOut(BaseModel):
+    id: int
+    order_id: int | None = None
+    nivel_satisfaccion: int
+    comentario: str | None = None
+    created_at: datetime
 
 
 class DashboardOut(BaseModel):
@@ -14,4 +24,5 @@ class DashboardOut(BaseModel):
     total_sales: float
     survey_total_respuestas: int
     survey_promedio_satisfaccion: float
+    recent_surveys: list[RecentSurveyOut]
     recent_audit: list[AuditLogOut]

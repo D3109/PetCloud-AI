@@ -31,3 +31,10 @@ class Product(Base):
     categories = relationship(
         "Category", secondary=product_categories, back_populates="products"
     )
+
+    @property
+    def stock_quantity(self) -> int:
+        """Existencias disponibles (0 si aun no tiene registro de inventario)."""
+        if self.inventory:
+            return self.inventory[0].quantity
+        return 0

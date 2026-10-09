@@ -38,3 +38,4 @@ class SurveyStats(BaseModel):
     promedio_nivel_satisfaccion: float
     promedio_percepcion_seguridad: float
     promedio_intencion_recompra: float
+    distribucion_nivel_satisfaccion: dict[str, int] = {}

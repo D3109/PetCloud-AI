@@ -69,18 +69,32 @@ function renderGrid() {
   grid.querySelectorAll('.add-to-cart').forEach((btn) => {
     btn.addEventListener('click', () => addToCart(btn.dataset.productId, btn));
   });
+  grid.querySelectorAll('.view-details').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const product = ALL_PRODUCTS.find((p) => p.id === Number(btn.dataset.productId));
+      if (product) openProductModal(product);
+    });
+  });
 }
 
 const PET_TYPE_LABELS = { perro: 'Perro', gato: 'Gato', ambas: 'Perro y gato', otro: 'Otro' };
+const FALLBACK_IMAGE =
+  'https://plus.unsplash.com/premium_photo-1729111978398-821b4930c4c2?w=300&h=200&fit=crop&auto=format&q=60';
+
+function availabilityLabel(product) {
+  const stock = product.stock_quantity ?? 0;
+  if (stock <= 0) return { text: 'Agotado', cls: 'stock-out' };
+  if (stock <= 5) return { text: `Quedan ${stock}`, cls: 'stock-low' };
+  return { text: 'Disponible', cls: 'stock-ok' };
+}
 
 function renderProductCard(product) {
   const categories = product.categories.map((c) => c.name).join(', ') || 'Sin categoría';
-  const fallback =
-    'https://plus.unsplash.com/premium_photo-1729111978398-821b4930c4c2?w=300&h=200&fit=crop&auto=format&q=60';
-  const imgSrc = product.image_url || fallback;
+  const imgSrc = product.image_url || FALLBACK_IMAGE;
   const petBadge = product.pet_type
     ? `<span class="pet-badge">${PET_TYPE_LABELS[product.pet_type] || product.pet_type}</span>`
     : '';
+  const availability = availabilityLabel(product);
   return `
     <div class="card">
       <img
@@ -88,18 +102,59 @@ function renderProductCard(product) {
         src="${imgSrc}"
         alt="${product.name}"
         loading="lazy"
-        onerror="this.onerror=null;this.src='${fallback}';"
+        onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';"
       />
       <div class="card-tags">
         ${product.brand ? `<span class="muted">${product.brand}</span>` : ''}
         ${petBadge}
+        <span class="stock-badge ${availability.cls}">${availability.text}</span>
       </div>
       <h3>${product.name}</h3>
       <p class="muted">${categories}</p>
+      <p class="card-description">${product.description || ''}</p>
       <p class="price">$${Number(product.price).toLocaleString('es-CO')}</p>
-      <button class="add-to-cart" data-product-id="${product.id}">Agregar al carrito</button>
+      <div class="card-actions">
+        <button class="view-details" data-product-id="${product.id}">Ver detalles</button>
+        <button class="add-to-cart" data-product-id="${product.id}" ${availability.cls === 'stock-out' ? 'disabled' : ''}>
+          ${availability.cls === 'stock-out' ? 'Agotado' : 'Agregar al carrito'}
+        </button>
+      </div>
     </div>
   `;
+}
+
+function openProductModal(product) {
+  const backdrop = document.getElementById('product-modal-backdrop');
+  const content = document.getElementById('product-modal-content');
+  if (!backdrop || !content) return;
+
+  const categories = product.categories.map((c) => c.name).join(', ') || 'Sin categoría';
+  const imgSrc = product.image_url || FALLBACK_IMAGE;
+  const availability = availabilityLabel(product);
+
+  content.innerHTML = `
+    <button class="modal-close" aria-label="Cerrar">×</button>
+    <img class="modal-image" src="${imgSrc}" alt="${product.name}"
+      onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';" />
+    <h2>${product.name}</h2>
+    <p class="muted">${categories}${product.brand ? ' · ' + product.brand : ''}</p>
+    <p class="stock-badge ${availability.cls}">${availability.text}</p>
+    <p>${product.description || 'Sin descripción disponible.'}</p>
+    <p class="price">$${Number(product.price).toLocaleString('es-CO')}</p>
+    <button class="add-to-cart" data-product-id="${product.id}" ${availability.cls === 'stock-out' ? 'disabled' : ''}>
+      ${availability.cls === 'stock-out' ? 'Agotado' : 'Agregar al carrito'}
+    </button>
+  `;
+  backdrop.classList.remove('hidden');
+
+  content.querySelector('.modal-close').addEventListener('click', closeProductModal);
+  content.querySelector('.add-to-cart')?.addEventListener('click', (e) => {
+    addToCart(product.id, e.target);
+  });
+}
+
+function closeProductModal() {
+  document.getElementById('product-modal-backdrop')?.classList.add('hidden');
 }
 
 async function addToCart(productId, btn) {
@@ -133,4 +188,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById(id)?.addEventListener('change', renderGrid);
   });
   document.getElementById('filter-search')?.addEventListener('input', renderGrid);
+
+  const backdrop = document.getElementById('product-modal-backdrop');
+  backdrop?.addEventListener('click', (e) => {
+    if (e.target === backdrop) closeProductModal();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeProductModal();
+  });
 });

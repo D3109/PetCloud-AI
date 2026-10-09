@@ -40,6 +40,7 @@ def get_dashboard(db: Session) -> dict:
 
     survey_stats = survey_service.get_stats(db)
     recent_audit = audit_service.list_audit_logs(db, skip=0, limit=10)
+    recent_surveys = survey_service.get_recent(db, limit=5)
 
     return {
         "total_users": total_users,
@@ -52,5 +53,6 @@ def get_dashboard(db: Session) -> dict:
         "total_sales": float(total_sales),
         "survey_total_respuestas": survey_stats.total_respuestas,
         "survey_promedio_satisfaccion": survey_stats.promedio_nivel_satisfaccion,
+        "recent_surveys": recent_surveys,
         "recent_audit": recent_audit,
     }

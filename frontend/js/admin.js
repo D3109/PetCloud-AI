@@ -74,10 +74,27 @@ function renderAuditRows(entries) {
     .join('');
 }
 
+function renderRecentSurveys(surveys) {
+  if (!surveys || surveys.length === 0) {
+    return '<p class="muted">Aún no hay encuestas respondidas.</p>';
+  }
+  return surveys
+    .map(
+      (s) => `
+      <div class="survey-mini-card">
+        <span class="survey-mini-stars">${'★'.repeat(s.nivel_satisfaccion)}${'☆'.repeat(5 - s.nivel_satisfaccion)}</span>
+        <span class="muted">${s.order_id ? `Pedido #${s.order_id} · ` : ''}${new Date(s.created_at).toLocaleDateString('es-CO')}</span>
+        ${s.comentario ? `<p>"${s.comentario}"</p>` : ''}
+      </div>`
+    )
+    .join('');
+}
+
 async function loadDashboard() {
   if (!canSeeTab('dashboard')) return;
   const statsBox = document.getElementById('dashboard-stats');
   const ordersBox = document.getElementById('dashboard-orders');
+  const surveysBox = document.getElementById('dashboard-surveys');
   const auditBody = document.getElementById('dashboard-audit-body');
   statsBox.innerHTML = 'Cargando...';
   try {
@@ -103,6 +120,7 @@ async function loadDashboard() {
             .map(([status, count]) => renderStatTile(statusLabels[status] || status, count))
             .join('');
 
+    surveysBox.innerHTML = renderRecentSurveys(d.recent_surveys);
     auditBody.innerHTML = renderAuditRows(d.recent_audit);
   } catch (err) {
     statsBox.innerHTML = `<p class="error">${err.message}</p>`;
@@ -396,9 +414,29 @@ function setupOrderFilter() {
 
 // ---------- Encuestas ----------
 
+function renderSatisfactionDistribution(distribucion) {
+  if (!distribucion) return '';
+  const total = Object.values(distribucion).reduce((sum, n) => sum + n, 0);
+  if (total === 0) return '';
+  const rows = [5, 4, 3, 2, 1]
+    .map((estrella) => {
+      const cantidad = distribucion[String(estrella)] || 0;
+      const pct = total ? Math.round((cantidad / total) * 100) : 0;
+      return `
+        <div class="dist-row">
+          <span class="dist-label">${'★'.repeat(estrella)}</span>
+          <div class="dist-bar-track"><div class="dist-bar-fill" style="width:${pct}%"></div></div>
+          <span class="dist-count">${cantidad}</span>
+        </div>`;
+    })
+    .join('');
+  return `<h3>Distribución de satisfacción general</h3><div class="dist-chart">${rows}</div>`;
+}
+
 async function loadSurveys() {
   if (!canSeeTab('encuestas')) return;
   const statsBox = document.getElementById('survey-stats');
+  const distBox = document.getElementById('survey-distribution');
   const tbody = document.getElementById('survey-table-body');
   statsBox.innerHTML = 'Cargando...';
   tbody.innerHTML = '<tr><td colspan="9">Cargando...</td></tr>';
@@ -413,6 +451,7 @@ async function loadSurveys() {
       renderStatTile('Seguridad', stats.promedio_percepcion_seguridad),
       renderStatTile('Intención recompra', stats.promedio_intencion_recompra),
     ].join('');
+    if (distBox) distBox.innerHTML = renderSatisfactionDistribution(stats.distribucion_nivel_satisfaccion);
 
     const surveys = await apiFetch('/api/v1/surveys?limit=200');
     if (surveys.length === 0) {
