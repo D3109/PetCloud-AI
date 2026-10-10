@@ -19,6 +19,7 @@
         <button class="tab-btn" data-tab="usuarios">Usuarios</button>
         <button class="tab-btn" data-tab="pedidos">Pedidos</button>
         <button class="tab-btn" data-tab="encuestas">Encuestas</button>
+        <button class="tab-btn" data-tab="incidentes">Incidentes</button>
         <button class="tab-btn" data-tab="auditoria">Auditoría</button>
       </div>
 
@@ -142,6 +143,28 @@
             </tr>
           </thead>
           <tbody id="survey-table-body"></tbody>
+        </table>
+      </section>
+
+      <!-- Incidentes -->
+      <section id="tab-incidentes" class="tab-panel">
+        <h2>Gestión de incidentes</h2>
+        <p class="muted">Problemas reportados por clientes o por el propio staff (ej. "no llegó el correo de confirmación"). Prototipo: clasificación, asignación y cierre manual.</p>
+        <div id="incident-stats" class="stats-grid"></div>
+        <div class="filters">
+          <select id="incident-status-filter">
+            <option value="">Todos los estados</option>
+            <option value="abierto">Abiertos</option>
+            <option value="en_progreso">En progreso</option>
+            <option value="resuelto">Resueltos</option>
+            <option value="cerrado">Cerrados</option>
+          </select>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr><th>ID</th><th>Título</th><th>Reportado por</th><th>Prioridad</th><th>Estado</th><th>Notas de resolución</th><th>Creado</th><th>Acciones</th></tr>
+          </thead>
+          <tbody id="incident-table-body"></tbody>
         </table>
       </section>
 

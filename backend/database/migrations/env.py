@@ -22,6 +22,7 @@ from app.models.payment import Payment  # noqa: F401
 from app.models.survey import Survey  # noqa: F401
 from app.models.audit_log import AuditLog  # noqa: F401
 from app.models.pet import Pet  # noqa: F401
+from app.models.incident import Incident  # noqa: F401
 
 
 # this is the Alembic Config object, which provides

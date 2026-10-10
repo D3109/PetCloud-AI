@@ -8,6 +8,7 @@ from app.api import (
     cart,
     categories,
     dashboard,
+    incidents,
     inventory,
     orders,
     payments,
@@ -50,6 +51,7 @@ app.include_router(surveys.router)
 app.include_router(audit.router)
 app.include_router(dashboard.router)
 app.include_router(reports.router)
+app.include_router(incidents.router)
 
 
 @app.get("/api/v1/health")

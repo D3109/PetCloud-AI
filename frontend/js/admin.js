@@ -10,10 +10,10 @@ const ROLE_LABELS = {
 
 // Qué pestañas puede ver cada rol. root y admin ven todo.
 const TAB_ACCESS = {
-  root: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'auditoria'],
-  admin: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'auditoria'],
+  root: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'incidentes', 'auditoria'],
+  admin: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'incidentes', 'auditoria'],
   gestor_productos: ['productos'],
-  atencion_cliente: ['pedidos', 'encuestas'],
+  atencion_cliente: ['pedidos', 'encuestas', 'incidentes'],
 };
 
 function canSeeTab(tab) {
@@ -640,6 +640,98 @@ async function loadSurveys() {
   }
 }
 
+// ---------- Incidentes ----------
+
+const INCIDENT_STATUS_LABELS = {
+  abierto: 'Abierto',
+  en_progreso: 'En progreso',
+  resuelto: 'Resuelto',
+  cerrado: 'Cerrado',
+};
+const INCIDENT_PRIORITY_LABELS = { baja: 'Baja', media: 'Media', alta: 'Alta', critica: 'Crítica' };
+
+async function loadIncidentStats() {
+  const box = document.getElementById('incident-stats');
+  if (!box) return;
+  try {
+    const stats = await apiFetch('/api/v1/incidents/stats');
+    const tiles = [renderStatTile('Total', stats.total)];
+    Object.entries(stats.by_status || {}).forEach(([status, count]) => {
+      tiles.push(renderStatTile(INCIDENT_STATUS_LABELS[status] || status, count));
+    });
+    box.innerHTML = tiles.join('');
+  } catch (err) {
+    box.innerHTML = `<p class="error">${err.message}</p>`;
+  }
+}
+
+async function loadIncidents() {
+  if (!canSeeTab('incidentes')) return;
+  const tbody = document.getElementById('incident-table-body');
+  tbody.innerHTML = '<tr><td colspan="8">Cargando...</td></tr>';
+  const status = document.getElementById('incident-status-filter')?.value || '';
+  try {
+    const qs = status ? `?status=${encodeURIComponent(status)}` : '';
+    const incidents = await apiFetch(`/api/v1/incidents${qs}`);
+    if (incidents.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8">No hay incidentes con ese filtro.</td></tr>';
+    } else {
+      const statusOptions = Object.keys(INCIDENT_STATUS_LABELS)
+        .map((s) => `<option value="${s}">${INCIDENT_STATUS_LABELS[s]}</option>`)
+        .join('');
+      const priorityOptions = Object.keys(INCIDENT_PRIORITY_LABELS)
+        .map((p) => `<option value="${p}">${INCIDENT_PRIORITY_LABELS[p]}</option>`)
+        .join('');
+      tbody.innerHTML = incidents
+        .map((i) => {
+          const statusSelect = statusOptions.replace(`value="${i.status}"`, `value="${i.status}" selected`);
+          const prioritySelect = priorityOptions.replace(
+            `value="${i.priority}"`,
+            `value="${i.priority}" selected`
+          );
+          return `
+          <tr data-id="${i.id}">
+            <td>#${i.id}</td>
+            <td>${i.title}<br><span class="muted">${i.description}</span></td>
+            <td>${i.reporter_email || 'desconocido'}</td>
+            <td><select class="incident-priority-select" data-id="${i.id}">${prioritySelect}</select></td>
+            <td><select class="incident-status-select" data-id="${i.id}">${statusSelect}</select></td>
+            <td><input type="text" class="incident-notes-input" data-id="${i.id}" value="${(i.resolution_notes || '').replace(/"/g, '&quot;')}" placeholder="Notas de resolución" /></td>
+            <td>${new Date(i.created_at).toLocaleDateString('es-CO')}</td>
+            <td><button class="btn-small incident-save-btn" data-id="${i.id}">Guardar</button></td>
+          </tr>`;
+        })
+        .join('');
+      tbody.querySelectorAll('.incident-save-btn').forEach((btn) => {
+        btn.addEventListener('click', () => saveIncident(btn.dataset.id));
+      });
+    }
+    loadIncidentStats();
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="8" class="error">${err.message}</td></tr>`;
+  }
+}
+
+async function saveIncident(incidentId) {
+  const status = document.querySelector(`.incident-status-select[data-id="${incidentId}"]`)?.value;
+  const priority = document.querySelector(`.incident-priority-select[data-id="${incidentId}"]`)?.value;
+  const resolution_notes = document.querySelector(`.incident-notes-input[data-id="${incidentId}"]`)?.value || null;
+  try {
+    await apiFetch(`/api/v1/incidents/${incidentId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status, priority, resolution_notes: resolution_notes || null }),
+    });
+    loadIncidents();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+function setupIncidentFilter() {
+  if (!canSeeTab('incidentes')) return;
+  document.getElementById('incident-status-filter')?.addEventListener('change', loadIncidents);
+}
+
 // ---------- Bootstrap ----------
 
 const STAFF_ROLES = ['root', 'admin', 'gestor_productos', 'atencion_cliente'];
@@ -674,11 +766,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupProductForm();
   setupUserForm();
   setupOrderFilter();
+  setupIncidentFilter();
   setupCsvExportButtons();
   loadDashboard();
   loadProducts();
   loadUsers();
   loadOrders();
   loadSurveys();
+  loadIncidents();
   loadAuditLog();
 });

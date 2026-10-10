@@ -109,6 +109,68 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  const myIncidentsBox = document.getElementById('my-incidents-list');
+  const incidentForm = document.getElementById('incident-form');
+  const incidentStatusLabels = { abierto: 'Abierto', en_progreso: 'En progreso', resuelto: 'Resuelto', cerrado: 'Cerrado' };
+
+  function renderMyIncidents(incidents) {
+    if (!myIncidentsBox) return;
+    if (incidents.length === 0) {
+      myIncidentsBox.innerHTML = '<p class="muted">No has reportado ningún problema.</p>';
+      return;
+    }
+    myIncidentsBox.innerHTML = incidents
+      .map(
+        (i) => `
+      <div class="pet-card">
+        <p class="pet-card-name">${i.title} <span class="muted">(${incidentStatusLabels[i.status] || i.status})</span></p>
+        <p class="muted">${i.description}</p>
+        ${i.resolution_notes ? `<p class="muted">Respuesta: ${i.resolution_notes}</p>` : ''}
+      </div>
+    `
+      )
+      .join('');
+  }
+
+  async function loadMyIncidents() {
+    try {
+      const incidents = await apiFetch('/api/v1/incidents/mine');
+      renderMyIncidents(incidents);
+    } catch (err) {
+      if (myIncidentsBox) myIncidentsBox.innerHTML = `<p class="error">${err.message}</p>`;
+    }
+  }
+
+  if (myIncidentsBox) {
+    loadMyIncidents();
+  }
+
+  if (incidentForm) {
+    incidentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errorBox = document.getElementById('incident-error');
+      errorBox.textContent = '';
+      const title = document.getElementById('new-incident-title').value.trim();
+      const description = document.getElementById('new-incident-description').value.trim();
+      const priority = document.getElementById('new-incident-priority').value;
+      if (!title || !description) {
+        errorBox.textContent = 'Escribe un título y cuéntanos qué pasó.';
+        return;
+      }
+      try {
+        await apiFetch('/api/v1/incidents', {
+          method: 'POST',
+          body: JSON.stringify({ title, description, priority }),
+        });
+        incidentForm.reset();
+        document.getElementById('new-incident-priority').value = 'media';
+        loadMyIncidents();
+      } catch (err) {
+        errorBox.textContent = err.message;
+      }
+    });
+  }
+
   const passwordForm = document.getElementById('password-form');
   if (passwordForm) {
     passwordForm.addEventListener('submit', async (e) => {

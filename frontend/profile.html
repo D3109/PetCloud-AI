@@ -55,6 +55,24 @@
       </form>
     </section>
 
+    <section class="profile-section" id="incidents-section">
+      <h2>Reportar un problema</h2>
+      <p class="muted">¿Algo no funcionó como esperabas (un pago, un correo, un pedido)? Cuéntanos.</p>
+      <div id="my-incidents-list" class="pets-list"></div>
+      <form id="incident-form" class="pet-fields">
+        <input type="text" id="new-incident-title" placeholder="Título breve del problema" />
+        <select id="new-incident-priority">
+          <option value="baja">Prioridad: baja</option>
+          <option value="media" selected>Prioridad: media</option>
+          <option value="alta">Prioridad: alta</option>
+          <option value="critica">Prioridad: crítica</option>
+        </select>
+        <input type="text" id="new-incident-description" placeholder="Cuéntanos qué pasó" />
+        <button type="submit">Reportar</button>
+        <p id="incident-error" class="error"></p>
+      </form>
+    </section>
+
     <section class="profile-section" id="password-section">
       <h2>Cambiar contraseña</h2>
       <form id="password-form">
