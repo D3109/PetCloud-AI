@@ -30,10 +30,19 @@ nav { background: var(--color-primary); }
   margin: 0 auto;
   padding: 14px 20px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
+  row-gap: 8px;
 }
 .brand { color: #fff; font-weight: bold; text-decoration: none; font-size: 1.2rem; }
+.nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  row-gap: 6px;
+}
 .nav-links a, .link-btn {
   color: #fff;
   text-decoration: none;
@@ -43,8 +52,15 @@ nav { background: var(--color-primary); }
   font-size: 1rem;
   cursor: pointer;
   opacity: 0.95;
+  white-space: nowrap;
 }
 .nav-links a:hover, .link-btn:hover { opacity: 1; text-decoration: underline; }
+
+@media (max-width: 760px) {
+  .nav-inner { padding: 12px 16px; }
+  .nav-links { width: 100%; justify-content: flex-start; }
+  .nav-links a, .link-btn { margin: 0 14px 0 0; font-size: 0.92rem; }
+}
 
 main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
 
@@ -690,13 +706,16 @@ h1 { color: #111; }
   background: var(--color-card);
   color: #000;
 }
-.filters input[type="search"] { flex: 1 1 200px; }
+.filters select { flex: 1 1 170px; }
+.filters input[type="search"] { flex: 3 1 220px; }
+.filters #filter-clear { flex: 0 0 auto; margin-left: auto; }
 .price-filter {
+  flex: 1 1 200px;
   display: flex;
   align-items: center;
   gap: 6px;
 }
-.price-filter input[type="number"] { width: 110px; }
+.price-filter input[type="number"] { flex: 1 1 90px; min-width: 70px; }
 .price-filter-sep { color: var(--color-muted); }
 
 /* Etiquetas de marca / tipo de mascota en la tarjeta */
@@ -834,12 +853,17 @@ h1 { color: #111; }
 @media (max-width: 600px) {
   main { padding: 0 14px; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-  .filters { flex-direction: column; }
-  .filters input[type="search"] { flex: 1 1 auto; }
+  .filters { flex-direction: column; align-items: stretch; }
+  .filters select,
+  .filters input[type="search"],
+  .price-filter { flex: 1 1 auto; }
+  .filters #filter-clear { margin-left: 0; width: 100%; }
+  .price-filter input[type="number"] { flex: 1 1 0; }
   .inline-form { flex-direction: column; align-items: stretch; }
   .inline-form input, .inline-form select { flex: 1 1 auto; }
   .admin-table { display: block; overflow-x: auto; white-space: nowrap; }
   .tabs { overflow-x: auto; flex-wrap: nowrap; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ---------------------------------------------------------------------
@@ -928,7 +952,7 @@ h1 { color: #111; }
 }
 .side-art {
   background-repeat: repeat-y;
-  background-size: 220px 600px;
+  background-size: 190px 400px;
 }
 .side-art-left {
   background-image:

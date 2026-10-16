@@ -2,12 +2,15 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PetCloud — Administrador</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <nav id="nav"></nav>
-  <main>
+  <div class="page-shell">
+    <aside class="side-art side-art-left" aria-hidden="true"></aside>
+    <main>
     <h1>Panel de administrador</h1>
     <div id="admin-guard" class="muted">Verificando permisos...</div>
 
@@ -180,7 +183,9 @@
         </table>
       </section>
     </div>
-  </main>
+    </main>
+    <aside class="side-art side-art-right" aria-hidden="true"></aside>
+  </div>
   <footer id="site-footer" class="site-footer"></footer>
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
