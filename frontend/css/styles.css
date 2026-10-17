@@ -26,7 +26,7 @@ body {
 
 nav { background: var(--color-primary); }
 .nav-inner {
-  max-width: 1000px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 14px 20px;
   display: flex;
@@ -62,7 +62,7 @@ nav { background: var(--color-primary); }
   .nav-links a, .link-btn { margin: 0 14px 0 0; font-size: 0.92rem; }
 }
 
-main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+main { max-width: 1300px; margin: 30px auto; padding: 0 20px; }
 
 /* Hero del catalogo: gradiente de tres paradas (tinte frio -> calido) mas
    un resplandor radial suave, para que no se sienta un degradado plano de
@@ -122,7 +122,7 @@ main { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
   .hero h1 { font-size: 1.5rem; }
 }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; align-items: stretch; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; align-items: stretch; }
 
 .card {
   background: var(--color-card);
@@ -657,7 +657,7 @@ h1 { color: #111; }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 12px;
   margin-bottom: 24px;
 }
@@ -852,7 +852,7 @@ h1 { color: #111; }
 /* Responsive: celulares */
 @media (max-width: 600px) {
   main { padding: 0 14px; }
-  .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
   .filters { flex-direction: column; align-items: stretch; }
   .filters select,
   .filters input[type="search"],
@@ -879,7 +879,7 @@ h1 { color: #111; }
   border-top: 3px solid var(--color-accent);
 }
 .site-footer-inner {
-  max-width: 1000px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 40px 20px 26px;
   display: grid;
@@ -915,7 +915,7 @@ h1 { color: #111; }
 }
 .site-footer-links a:hover { color: var(--color-accent); text-decoration: underline; }
 .site-footer-bottom {
-  max-width: 1000px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 16px 20px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
@@ -936,15 +936,14 @@ h1 { color: #111; }
 
 /* ---------------------------------------------------------------------
    Relleno lateral de paginas "simples" (perfil, carrito, pedidos,
-   encuesta) y del catalogo debajo del hero: en pantallas anchas, a los
-   lados del contenido central de 1000px quedaba fondo vacio. Se agregan
-   dos fotos reales (ya usadas en el catalogo) atenuadas con un degradado
-   hacia el color de fondo, para que no compitan con el contenido. Se
-   ocultan por debajo de 1300px, que es donde de todas formas casi no
-   queda espacio sobrante.
+   encuesta, admin) y del catalogo debajo del hero. El contenido central
+   ahora llega hasta 1300px (ver `main` arriba), asi que este relleno
+   decorativo solo entra en pantallas MUY anchas (>1600px) donde todavia
+   sobra fondo; por debajo de eso el propio contenido ya ocupa el ancho
+   disponible y el relleno se oculta.
 --------------------------------------------------------------------- */
 .page-shell { display: flex; align-items: stretch; }
-.page-shell > main { flex: 0 1 1000px; }
+.page-shell > main { flex: 0 1 1300px; }
 .side-art {
   flex: 1 1 0%;
   background-size: cover;
@@ -966,7 +965,7 @@ h1 { color: #111; }
     linear-gradient(to left, transparent 0%, var(--color-bg) 96%),
     url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27220%27%20height%3D%27600%27%20viewBox%3D%270%200%20220%20600%27%3E%20%3Cg%20transform%3D%27translate%28110%2C70%29%27%3E%20%3Cellipse%20cx%3D%270%27%20cy%3D%2725%27%20rx%3D%2728%27%20ry%3D%2722%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-30%27%20cy%3D%27-10%27%20r%3D%2712%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-10%27%20cy%3D%27-25%27%20r%3D%2712%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2714%27%20cy%3D%27-25%27%20r%3D%2712%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2732%27%20cy%3D%27-8%27%20r%3D%2712%27%20fill%3D%27%231f4743%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3C/g%3E%20%3Cg%20transform%3D%27translate%28110%2C290%29%27%3E%20%3Crect%20x%3D%27-40%27%20y%3D%27-8%27%20width%3D%2780%27%20height%3D%2716%27%20rx%3D%278%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-40%27%20cy%3D%27-10%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-40%27%20cy%3D%2710%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2740%27%20cy%3D%27-10%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%2740%27%20cy%3D%2710%27%20r%3D%2710%27%20fill%3D%27%23eb9a68%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3C/g%3E%20%3Cg%20transform%3D%27translate%28110%2C500%29%27%3E%20%3Cellipse%20cx%3D%270%27%20cy%3D%270%27%20rx%3D%2735%27%20ry%3D%2720%27%20fill%3D%27%23c1623a%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Cpath%20d%3D%27M35%2C0%20L58%2C-16%20L58%2C16%20Z%27%20fill%3D%27%23c1623a%27%20stroke%3D%27%231f1a16%27%20stroke-width%3D%274%27/%3E%20%3Ccircle%20cx%3D%27-18%27%20cy%3D%27-4%27%20r%3D%273%27%20fill%3D%27%231f1a16%27/%3E%20%3C/g%3E%20%3C/svg%3E");
 }
-@media (max-width: 1300px) {
+@media (max-width: 1600px) {
   .page-shell { display: block; }
   .side-art { display: none; }
 }
