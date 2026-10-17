@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
 
 * { box-sizing: border-box; }
 
@@ -17,8 +17,8 @@
   --color-border: #ece2d4;
   --color-ink: #1f4743;
   --color-ink-light: #3c6d66;
-  --font-display: "Baloo 2", "Nunito", system-ui, sans-serif;
-  --font-body: "Nunito", system-ui, -apple-system, sans-serif;
+  --font-display: "Poppins", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, sans-serif;
   --radius-lg: 22px;
   --radius-md: 14px;
 }
@@ -464,9 +464,29 @@ select:focus { outline: none; border-color: var(--color-accent); }
 
 .total { font-size: 1.2rem; font-weight: bold; margin: 16px 0; color: var(--color-primary-dark); }
 
-.cart-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-.cart-table th, .cart-table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--color-border); }
-.cart-table th { color: var(--color-muted); font-weight: 600; }
+.cart-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 16px;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(43, 36, 32, 0.05);
+}
+.cart-table th, .cart-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--color-border); }
+.cart-table th {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--color-border);
+}
+.cart-table tbody tr:nth-child(even) { background: rgba(193, 105, 79, 0.04); }
+.cart-table tbody tr:last-child td { border-bottom: none; }
 
 /* Control +/- de cantidad en el carrito */
 .qty-stepper { display: inline-flex; align-items: center; gap: 8px; }
@@ -726,34 +746,65 @@ h1 { color: #111; }
 .survey-cta:hover,
 .pay-btn:hover { background: var(--color-primary-dark); }
 
-/* Encuesta de satisfacción (escala Likert) */
+/* Encuesta de satisfacción (escala Likert): cada seccion es una tarjeta
+   propia con su titulo, y cada pregunta usa chips numerados en vez de
+   radios sueltos (mas facil de leer y de tocar en celular). */
 .survey-form {
-  max-width: 560px;
+  max-width: 640px;
   margin: 0;
+  gap: 20px;
 }
 .survey-form fieldset {
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
-  padding: 14px 16px;
-  margin: 0 0 16px;
+  border: none;
+  background: var(--color-card);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+  margin: 0;
+  box-shadow: 0 2px 10px rgba(43, 36, 32, 0.05);
 }
 .survey-form legend {
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
   color: var(--color-primary-dark);
-  padding: 0 6px;
+  padding: 0 4px 10px 0;
 }
-.likert-row { margin-bottom: 14px; }
-.likert-row label { display: block; margin-bottom: 6px; font-size: 0.95rem; }
-.likert-scale { display: flex; gap: 14px; }
+.likert-row { margin-bottom: 20px; }
+.likert-row:last-child { margin-bottom: 0; }
+.likert-row label { display: block; margin-bottom: 10px; font-size: 0.95rem; font-weight: 600; }
+.likert-scale { display: flex; gap: 10px; flex-wrap: wrap; }
 .likert-option {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.85rem;
-  color: var(--color-muted);
+  position: relative;
   cursor: pointer;
 }
+.likert-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.likert-option span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  color: var(--color-muted);
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+.likert-option:hover span { border-color: var(--color-accent); color: var(--color-primary-dark); }
+.likert-option input[type="radio"]:checked + span {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+  transform: scale(1.06);
+}
+.likert-option input[type="radio"]:focus-visible + span { outline: 2px solid var(--color-primary-dark); outline-offset: 2px; }
 .survey-form textarea {
   padding: 10px;
   border: 1px solid var(--color-border);
@@ -795,18 +846,61 @@ h1 { color: #111; }
 }
 .inline-form input { flex: 1 1 160px; }
 
+/* Tablas estilo "data table": contenedor con esquinas redondeadas y
+   sombra suave, encabezado fijo (sticky) con fondo propio, filas
+   alternadas (cebra) y resaltado al pasar el mouse. Las columnas que
+   llevan la clase .sortable-col (agregada por js/datatable.js) se
+   pueden ordenar con un clic. */
 .admin-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin-bottom: 24px;
   font-size: 0.9rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(43, 36, 32, 0.05);
 }
 .admin-table th, .admin-table td {
   text-align: left;
-  padding: 8px 10px;
+  padding: 11px 14px;
   border-bottom: 1px solid var(--color-border);
 }
-.admin-table th { color: var(--color-muted); font-weight: 600; }
+.admin-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--color-border);
+  white-space: nowrap;
+}
+.admin-table tbody tr:nth-child(even) { background: rgba(193, 105, 79, 0.04); }
+.admin-table tbody tr:hover { background: var(--color-accent-light); }
+.admin-table tbody tr:last-child td { border-bottom: none; }
+.admin-table th.sortable-col {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease;
+}
+.admin-table th.sortable-col:hover { color: var(--color-primary-dark); }
+.admin-table th.sortable-col::after {
+  content: "↕";
+  margin-left: 5px;
+  opacity: 0.35;
+  font-size: 0.75em;
+}
+.admin-table th.sortable-col.sorted-asc::after { content: "↑"; opacity: 0.9; color: var(--color-primary-dark); }
+.admin-table th.sortable-col.sorted-desc::after { content: "↓"; opacity: 0.9; color: var(--color-primary-dark); }
+
+/* Envoltorio con scroll horizontal en pantallas chicas, sin romper las
+   esquinas redondeadas de la tabla. */
+.table-scroll { overflow-x: auto; border-radius: var(--radius-md); }
 
 .btn-small {
   padding: 5px 10px;
