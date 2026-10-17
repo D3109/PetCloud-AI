@@ -193,6 +193,20 @@ async function addToCart(productId, btn) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Soporta llegar desde el buscador o los accesos rapidos (Perros/Gatos) del nav,
+  // vía ?mascota=perro|gato o ?q=texto en la URL.
+  const params = new URLSearchParams(window.location.search);
+  const mascota = params.get('mascota');
+  const q = params.get('q');
+  if (mascota) {
+    const petSelect = document.getElementById('filter-pet-type');
+    if (petSelect) petSelect.value = mascota;
+  }
+  if (q) {
+    const searchInput = document.getElementById('filter-search');
+    if (searchInput) searchInput.value = q;
+  }
+
   loadProducts();
   ['filter-category', 'filter-pet-type'].forEach((id) => {
     document.getElementById(id)?.addEventListener('change', renderGrid);

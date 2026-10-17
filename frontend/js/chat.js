@@ -4,14 +4,17 @@
 document.addEventListener('DOMContentLoaded', () => {
   if (!isLoggedIn()) return; // el asistente solo aplica a usuarios autenticados
 
-  const toggleBtn = document.createElement('button');
-  toggleBtn.id = 'chat-toggle';
-  toggleBtn.setAttribute('aria-label', 'Abrir asistente PetCloud con IA');
-  toggleBtn.innerHTML = `
-    <span id="chat-toggle-ring"></span>
-    <span id="chat-toggle-icon">🐾</span>
-    <span id="chat-toggle-badge">IA</span>
+  const toggleWrap = document.createElement('div');
+  toggleWrap.id = 'chat-toggle-wrap';
+  toggleWrap.innerHTML = `
+    <span id="chat-toggle-bubble">Habla con Pet-IA</span>
+    <button id="chat-toggle" aria-label="Abrir asistente PetCloud con IA">
+      <span id="chat-toggle-ring"></span>
+      <span id="chat-toggle-icon">🐾</span>
+      <span id="chat-toggle-badge">IA</span>
+    </button>
   `;
+  const toggleBtn = toggleWrap.querySelector('#chat-toggle');
 
   const panel = document.createElement('div');
   panel.id = 'chat-panel';
@@ -30,7 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
   `;
 
   document.body.appendChild(panel);
-  document.body.appendChild(toggleBtn);
+  document.body.appendChild(toggleWrap);
+  const toggleBubble = toggleWrap.querySelector('#chat-toggle-bubble');
 
   const messagesBox = panel.querySelector('#chat-messages');
   const form = panel.querySelector('#chat-form');
@@ -47,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openPanel() {
     panel.classList.remove('hidden');
+    toggleBubble.classList.add('hidden');
     if (!messagesBox.dataset.greeted) {
       addMessage('¡Hola! Soy el asistente de PetCloud. ¿En qué te ayudo hoy?', 'bot');
       messagesBox.dataset.greeted = '1';
@@ -56,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function closePanel() {
     panel.classList.add('hidden');
+    toggleBubble.classList.remove('hidden');
   }
 
   toggleBtn.addEventListener('click', () => {

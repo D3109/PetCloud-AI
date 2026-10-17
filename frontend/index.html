@@ -8,22 +8,97 @@
 </head>
 <body>
   <nav id="nav"></nav>
-  <section class="hero">
-    <span class="hero-deco hero-deco-left" aria-hidden="true">🐾</span>
-    <span class="hero-deco hero-deco-right" aria-hidden="true">🐾</span>
-    <div class="hero-inner">
-      <h1>Todo para tu mascota, en un solo lugar</h1>
-      <p>Alimento, juguetes, higiene, salud y medicamentos — con recomendaciones de IA pensadas para tu perro o gato.</p>
-      <div class="hero-badges">
-        <span>🤖 Recomendaciones con IA</span>
-        <span>🚚 Seguimiento de pedidos</span>
-        <span>💊 Ahora con Medicamentos</span>
+  <div class="home-shell">
+    <section class="hero">
+      <div class="hero-text">
+        <h1>Lo mejor para tu mascota,<br>en un click</h1>
+        <p>Nuestra IA te recomienda qué comprar según tu perro o gato</p>
+        <a href="#catalogo" class="hero-cta">Ver productos</a>
       </div>
-    </div>
-  </section>
-  <div class="page-shell">
-    <aside class="side-art side-art-left" aria-hidden="true"></aside>
-    <main>
+      <div class="hero-image" aria-hidden="true">
+        <svg viewBox="0 0 320 220" class="hero-illustration">
+          <ellipse cx="110" cy="190" rx="78" ry="14" fill="rgba(0,0,0,0.08)"/>
+          <ellipse cx="225" cy="192" rx="58" ry="12" fill="rgba(0,0,0,0.08)"/>
+          <!-- perro -->
+          <g>
+            <ellipse cx="58" cy="95" rx="30" ry="40" fill="#e3a655" transform="rotate(-18 58 95)"/>
+            <ellipse cx="150" cy="95" rx="30" ry="40" fill="#e3a655" transform="rotate(18 150 95)"/>
+            <circle cx="105" cy="110" r="68" fill="#eebb73"/>
+            <ellipse cx="105" cy="150" rx="40" ry="32" fill="#f4cf98"/>
+            <circle cx="83" cy="100" r="7" fill="#3a2a1c"/>
+            <circle cx="127" cy="100" r="7" fill="#3a2a1c"/>
+            <ellipse cx="105" cy="140" rx="12" ry="9" fill="#3a2a1c"/>
+            <path d="M90 158 Q105 172 120 158" stroke="#3a2a1c" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M104 150 Q98 172 92 180" stroke="#e8667c" stroke-width="7" fill="none" stroke-linecap="round"/>
+          </g>
+          <!-- gato -->
+          <g>
+            <polygon points="196,70 212,30 228,74" fill="#5b6472"/>
+            <polygon points="268,74 282,32 296,72" fill="#5b6472"/>
+            <circle cx="246" cy="112" r="58" fill="#6b7383"/>
+            <ellipse cx="246" cy="146" rx="34" ry="26" fill="#838c9c"/>
+            <circle cx="228" cy="104" r="6.5" fill="#f4e8b8"/>
+            <circle cx="264" cy="104" r="6.5" fill="#f4e8b8"/>
+            <circle cx="228" cy="104" r="3" fill="#20242c"/>
+            <circle cx="264" cy="104" r="3" fill="#20242c"/>
+            <polygon points="246,128 240,135 252,135" fill="#e8667c"/>
+            <path d="M233 140 Q246 150 259 140" stroke="#20242c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <line x1="196" y1="130" x2="214" y2="126" stroke="#eef1f5" stroke-width="2" stroke-linecap="round"/>
+            <line x1="196" y1="140" x2="214" y2="138" stroke="#eef1f5" stroke-width="2" stroke-linecap="round"/>
+            <line x1="296" y1="130" x2="278" y2="126" stroke="#eef1f5" stroke-width="2" stroke-linecap="round"/>
+            <line x1="296" y1="140" x2="278" y2="138" stroke="#eef1f5" stroke-width="2" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <section class="category-row" aria-label="Categorías rápidas">
+      <a class="category-item" href="index.html?mascota=gato">
+        <span class="category-circle">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <polygon points="14,22 22,8 26,24" fill="#fff"/>
+            <polygon points="50,22 42,8 38,24" fill="#fff"/>
+            <circle cx="32" cy="34" r="20" fill="#fff"/>
+            <circle cx="24" cy="32" r="2.6" fill="var(--color-primary)"/>
+            <circle cx="40" cy="32" r="2.6" fill="var(--color-primary)"/>
+            <path d="M28 40 Q32 44 36 40" stroke="var(--color-primary)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <line x1="6" y1="36" x2="18" y2="34" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="6" y1="42" x2="18" y2="40" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="58" y1="36" x2="46" y2="34" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            <line x1="58" y1="42" x2="46" y2="40" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span class="category-label">Gatos</span>
+      </a>
+      <a class="category-item" href="index.html?mascota=perro">
+        <span class="category-circle">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <ellipse cx="14" cy="28" rx="8" ry="14" fill="#fff" transform="rotate(-20 14 28)"/>
+            <ellipse cx="50" cy="28" rx="8" ry="14" fill="#fff" transform="rotate(20 50 28)"/>
+            <circle cx="32" cy="32" r="18" fill="#fff"/>
+            <ellipse cx="32" cy="42" rx="10" ry="8" fill="#fff"/>
+            <circle cx="24" cy="28" r="2.6" fill="var(--color-primary)"/>
+            <circle cx="40" cy="28" r="2.6" fill="var(--color-primary)"/>
+            <ellipse cx="32" cy="40" rx="4" ry="3" fill="var(--color-primary)"/>
+          </svg>
+        </span>
+        <span class="category-label">Perros</span>
+      </a>
+      <a class="category-item" href="index.html#catalogo">
+        <span class="category-circle">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="18" y="28" width="28" height="8" rx="4" fill="#fff"/>
+            <circle cx="14" cy="24" r="7" fill="#fff"/>
+            <circle cx="14" cy="40" r="7" fill="#fff"/>
+            <circle cx="50" cy="24" r="7" fill="#fff"/>
+            <circle cx="50" cy="40" r="7" fill="#fff"/>
+          </svg>
+        </span>
+        <span class="category-label">Juguetes</span>
+      </a>
+    </section>
+  </div>
+  <main id="catalogo">
       <h2 class="section-title">Catálogo de productos</h2>
       <div class="filters">
         <select id="filter-category">
@@ -46,8 +121,6 @@
       </div>
       <div id="product-grid" class="grid"></div>
     </main>
-    <aside class="side-art side-art-right" aria-hidden="true"></aside>
-  </div>
   <div id="product-modal-backdrop" class="modal-backdrop hidden">
     <div class="modal" id="product-modal-content"></div>
   </div>
