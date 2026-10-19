@@ -44,9 +44,8 @@ nav {
   z-index: 50;
 }
 .nav-inner {
-  max-width: 1920px;
   margin: 0 auto;
-  padding: 14px 20px;
+  padding: 14px 28px;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -183,12 +182,12 @@ nav {
   .nav-links { gap: 14px; }
 }
 
-main { max-width: 1920px; margin: 30px auto; padding: 0 20px; }
+main { margin: 30px auto; padding: 0 28px; }
 
 /* Hero del catalogo: bloque solido en terracota con esquinas redondeadas,
    texto a la izquierda e ilustracion a la derecha, al estilo del mockup
    de referencia (sin degradados ni huellitas de fondo). */
-.home-shell { max-width: 1920px; margin: 24px auto 0; padding: 0 20px; }
+.home-shell { margin: 24px auto 0; padding: 0 28px; }
 
 .hero {
   background: var(--color-primary);
@@ -1140,9 +1139,8 @@ h1 { color: #111; }
   border-top: 3px solid var(--color-accent);
 }
 .site-footer-inner {
-  max-width: 1920px;
   margin: 0 auto;
-  padding: 40px 20px 26px;
+  padding: 40px 28px 26px;
   display: grid;
   grid-template-columns: 1.3fr 1fr 1fr;
   gap: 32px;
@@ -1176,9 +1174,8 @@ h1 { color: #111; }
 }
 .site-footer-links a:hover { color: var(--color-accent); text-decoration: underline; }
 .site-footer-bottom {
-  max-width: 1920px;
   margin: 0 auto;
-  padding: 16px 20px 24px;
+  padding: 16px 28px 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   flex-wrap: wrap;
