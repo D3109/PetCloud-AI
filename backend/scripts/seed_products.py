@@ -4,8 +4,9 @@ Uso (desde backend/, con el entorno virtual / dependencias activas):
     python3 scripts/seed_products.py
 
 Es idempotente: si una categoria ya existe no la duplica, y si un SKU ya
-existe actualiza su imagen (image_url) para que corresponda al producto,
-en vez de dejarla con una imagen genérica aleatoria.
+existe actualiza su imagen, marca, tipo de mascota y descripcion para
+que correspondan a los datos de este script, en vez de dejarlos con
+valores viejos o genericos.
 No necesita token de administrador porque escribe directo a la base de
 datos usando los mismos modelos de SQLAlchemy que usa la API.
 """
@@ -29,57 +30,60 @@ CATEGORIES = [
 ]
 
 # (nombre, sku, precio, descripcion, categoria)
+# Las descripciones llevan 2-3 frases (que hacen, para quien, y un dato
+# concreto de uso) en vez de una sola linea, para que la tarjeta y el
+# modal de detalle no se vean vacios de contenido.
 PRODUCTS = [
-    ("Croquetas Adulto Perro 15kg", "ALM-PER-001", "189900", "Alimento balanceado para perros adultos, todas las razas", "Alimento"),
-    ("Croquetas Cachorro 7kg", "ALM-PER-002", "109900", "Fórmula de crecimiento para cachorros", "Alimento"),
-    ("Alimento Húmedo Gato Salmón 85g", "ALM-GAT-001", "6900", "Lata de alimento húmedo sabor salmón", "Alimento"),
-    ("Croquetas Gato Adulto 3kg", "ALM-GAT-002", "72900", "Alimento balanceado para gatos adultos", "Alimento"),
-    ("Snacks Dentales Perro x10", "ALM-PER-003", "34900", "Premios que ayudan a la limpieza dental", "Alimento"),
-    ("Pelota de Caucho Resistente", "JUG-001", "19900", "Pelota de caucho natural para morder y jugar", "Juguetes"),
-    ("Ratón de Peluche con Sonido", "JUG-002", "12900", "Juguete para gatos con sonido de ratón", "Juguetes"),
-    ("Cuerda para Jalar", "JUG-003", "15900", "Cuerda de algodón trenzada resistente a mordidas", "Juguetes"),
-    ("Shampoo Hipoalergénico 500ml", "HIG-001", "28900", "Shampoo suave para pieles sensibles", "Higiene"),
-    ("Toallitas Húmedas x40", "HIG-002", "17900", "Toallitas de limpieza rápida para patas y pelaje", "Higiene"),
-    ("Arena Sanitaria Aglomerante 10kg", "HIG-003", "45900", "Arena para gatos con control de olores", "Higiene"),
-    ("Cepillo Removedor de Pelo", "HIG-004", "22900", "Cepillo para desenredar y remover pelo muerto", "Higiene"),
-    ("Correa Retráctil 5m", "ACC-001", "49900", "Correa retráctil resistente, hasta 25kg", "Accesorios"),
-    ("Collar Ajustable Reflectivo", "ACC-002", "24900", "Collar con tira reflectiva para paseos nocturnos", "Accesorios"),
-    ("Cama Acolchada Mediana", "ACC-003", "89900", "Cama suave y lavable, talla mediana", "Accesorios"),
-    ("Transportadora Plástica S", "ACC-004", "129900", "Transportadora rígida para mascotas pequeñas", "Accesorios"),
-    ("Comedero Doble Acero Inoxidable", "ACC-005", "32900", "Comedero antideslizante de dos compartimentos", "Accesorios"),
-    ("Suplemento Vitamínico x60 tabletas", "SAL-001", "39900", "Complejo vitamínico para perros y gatos", "Salud"),
-    ("Antipulgas Pipeta Perro Mediano", "SAL-002", "44900", "Protección mensual contra pulgas y garrapatas", "Salud"),
-    ("Probiótico Digestivo x30", "SAL-003", "36900", "Apoyo a la flora intestinal de mascotas", "Salud"),
-    ("Alimento Senior Perro Raza Grande 12kg", "ALM-PER-004", "169900", "Fórmula para perros mayores de razas grandes, con glucosamina", "Alimento"),
-    ("Snacks Liofilizados Gato x50g", "ALM-GAT-003", "24900", "Premios liofilizados de pollo, 100% naturales", "Alimento"),
-    ("Alimento Húmedo Perro Pollo y Arroz 400g", "ALM-PER-005", "8900", "Lata de alimento húmedo sabor pollo y arroz", "Alimento"),
-    ("Varita con Plumas para Gato", "JUG-004", "14900", "Varita interactiva con plumas para estimular el instinto de caza", "Juguetes"),
-    ("Hueso de Nylon para Masticar", "JUG-005", "17900", "Hueso resistente de nylon, ayuda a la limpieza dental", "Juguetes"),
-    ("Colonia para Mascotas 100ml", "HIG-005", "19900", "Colonia suave de uso post-baño, hipoalergénica", "Higiene"),
-    ("Cortaúñas para Mascotas", "HIG-006", "15900", "Cortaúñas de acero inoxidable con protector de seguridad", "Higiene"),
-    ("Placa de Identificación Grabada", "ACC-006", "12900", "Placa metálica grabada con nombre y teléfono de contacto", "Accesorios"),
-    ("Comedero de Viaje Plegable", "ACC-007", "18900", "Comedero/bebedero de silicona plegable para paseos y viajes", "Accesorios"),
-    ("Rascador para Gato con Poste", "ACC-008", "99900", "Rascador vertical con poste de sisal y plataforma superior", "Accesorios"),
-    ("Aceite de Salmón para Piel y Pelaje", "SAL-004", "42900", "Suplemento Omega 3 para piel y pelaje brillante", "Salud"),
-    ("Electrolitos Rehidratantes x10 sobres", "SAL-005", "27900", "Sobres de electrolitos para apoyar la hidratación de la mascota", "Salud"),
-    ("Antiparasitario Interno Perro x4 comprimidos", "MED-001", "32900", "Desparasitante interno de amplio espectro para perros", "Medicamentos"),
-    ("Antiparasitario Interno Gato x4 comprimidos", "MED-002", "29900", "Desparasitante interno de amplio espectro para gatos", "Medicamentos"),
-    ("Suero Oral Rehidratante Veterinario 250ml", "MED-003", "22900", "Solución rehidratante oral de uso veterinario", "Medicamentos"),
-    ("Pomada Cicatrizante para Heridas 30g", "MED-004", "18900", "Pomada tópica para heridas menores, uso veterinario", "Medicamentos"),
+    ("Croquetas Adulto Perro 15kg", "ALM-PER-001", "189900", "Alimento balanceado para perros adultos de todas las razas, formulado con proteína de alta digestibilidad y omega 6 para un pelaje sano. Bolsa familiar de 15kg, ideal para hogares con uno o varios perros.", "Alimento"),
+    ("Croquetas Cachorro 7kg", "ALM-PER-002", "109900", "Fórmula de crecimiento para cachorros de 2 a 12 meses, con mayor aporte calórico y calcio para huesos y dientes en desarrollo. Croqueta de tamaño pequeño, fácil de masticar.", "Alimento"),
+    ("Alimento Húmedo Gato Salmón 85g", "ALM-GAT-001", "6900", "Lata de alimento húmedo sabor salmón, en salsa suave, pensada como complemento o premio para gatos adultos. Alta palatabilidad, ideal para gatos selectivos con el alimento seco.", "Alimento"),
+    ("Croquetas Gato Adulto 3kg", "ALM-GAT-002", "72900", "Alimento balanceado para gatos adultos con control de bolas de pelo y cuidado urinario. Bolsa de 3kg, formulada con taurina para la salud cardiovascular del gato.", "Alimento"),
+    ("Snacks Dentales Perro x10", "ALM-PER-003", "34900", "Premios masticables que ayudan a reducir el sarro y refrescar el aliento con el uso diario. Caja de 10 unidades, aptas para perros adultos de razas pequeñas y medianas.", "Alimento"),
+    ("Pelota de Caucho Resistente", "JUG-001", "19900", "Pelota de caucho natural, resistente a mordidas fuertes, ideal para juego de buscar y morder al aire libre. No es tóxica y flota en el agua.", "Juguetes"),
+    ("Ratón de Peluche con Sonido", "JUG-002", "12900", "Juguete de peluche con forma de ratón y sonido crujiente al morderlo, pensado para estimular el instinto de caza del gato. Tamaño compacto, fácil de llevar en la boca.", "Juguetes"),
+    ("Cuerda para Jalar", "JUG-003", "15900", "Cuerda de algodón 100% trenzado, resistente a mordidas, para juego de jalar entre la mascota y su cuidador. También ayuda a limpiar los dientes mientras muerde.", "Juguetes"),
+    ("Shampoo Hipoalergénico 500ml", "HIG-001", "28900", "Shampoo suave sin fragancias fuertes, formulado para pieles sensibles o con tendencia a la irritación. Apto para perros y gatos, uso recomendado cada 2-3 semanas.", "Higiene"),
+    ("Toallitas Húmedas x40", "HIG-002", "17900", "Toallitas de limpieza rápida para patas y pelaje después del paseo, sin necesidad de baño completo. Paquete de 40 unidades, con aloe vera para no resecar la piel.", "Higiene"),
+    ("Arena Sanitaria Aglomerante 10kg", "HIG-003", "45900", "Arena para gatos con control de olores y aglomerado rápido, que facilita la limpieza diaria de la caja sanitaria. Bolsa de 10kg, de bajo nivel de polvo.", "Higiene"),
+    ("Cepillo Removedor de Pelo", "HIG-004", "22900", "Cepillo con cerdas finas para desenredar el pelo y remover el pelo muerto sin lastimar la piel. Recomendado 2-3 veces por semana, especialmente en épocas de muda.", "Higiene"),
+    ("Correa Retráctil 5m", "ACC-001", "49900", "Correa retráctil de hasta 5 metros, con freno y seguro de un botón, resistente hasta 25kg de peso. Mango ergonómico antideslizante para paseos largos.", "Accesorios"),
+    ("Collar Ajustable Reflectivo", "ACC-002", "24900", "Collar ajustable con tira reflectiva para paseos nocturnos más seguros, disponible en varias tallas. Hebilla de liberación rápida y anillo resistente para la placa de identificación.", "Accesorios"),
+    ("Cama Acolchada Mediana", "ACC-003", "89900", "Cama suave y acolchada, talla mediana, con funda lavable en lavadora para mantenerla siempre limpia. Base antideslizante, ideal para perros y gatos de hasta 15kg.", "Accesorios"),
+    ("Transportadora Plástica S", "ACC-004", "129900", "Transportadora rígida talla S, ventilada en los cuatro costados, apta para viajes en auto o consultas veterinarias. Puerta frontal con seguro y base fácil de limpiar.", "Accesorios"),
+    ("Comedero Doble Acero Inoxidable", "ACC-005", "32900", "Comedero de dos compartimentos en acero inoxidable, con base antideslizante para evitar derrames. Ideal para separar agua y alimento seco en un mismo lugar.", "Accesorios"),
+    ("Suplemento Vitamínico x60 tabletas", "SAL-001", "39900", "Complejo multivitamínico masticable para perros y gatos, pensado para reforzar el sistema inmune y la energía diaria. Frasco de 60 tabletas, sabor carne.", "Salud"),
+    ("Antipulgas Pipeta Perro Mediano", "SAL-002", "44900", "Pipeta de aplicación mensual contra pulgas y garrapatas, para perros medianos de 10 a 25kg. Resistente al agua después de 48 horas de aplicada.", "Salud"),
+    ("Probiótico Digestivo x30", "SAL-003", "36900", "Suplemento probiótico en polvo que apoya la flora intestinal, recomendado tras tratamientos con antibióticos o cambios de dieta. Caja con 30 sobres de dosis diaria.", "Salud"),
+    ("Alimento Senior Perro Raza Grande 12kg", "ALM-PER-004", "169900", "Fórmula para perros mayores de razas grandes, con glucosamina y condroitina para el cuidado articular. Bolsa de 12kg, menor contenido calórico para evitar sobrepeso.", "Alimento"),
+    ("Snacks Liofilizados Gato x50g", "ALM-GAT-003", "24900", "Premios liofilizados de pollo 100% naturales, sin conservantes artificiales, ideales para entrenamiento o como premio ocasional. Bolsa resellable de 50g.", "Alimento"),
+    ("Alimento Húmedo Perro Pollo y Arroz 400g", "ALM-PER-005", "8900", "Lata de alimento húmedo sabor pollo y arroz, de fácil digestión, pensada como complemento del alimento seco diario. Textura en trozos con salsa.", "Alimento"),
+    ("Varita con Plumas para Gato", "JUG-004", "14900", "Varita interactiva con plumas en el extremo, pensada para jugar junto al gato y estimular su instinto de caza. Vara flexible de buen alcance, ideal para sesiones cortas de ejercicio.", "Juguetes"),
+    ("Hueso de Nylon para Masticar", "JUG-005", "17900", "Hueso resistente de nylon con sabor a carne, pensado para perros que mastican con fuerza. Ayuda a la limpieza dental mientras entretiene a la mascota por horas.", "Juguetes"),
+    ("Colonia para Mascotas 100ml", "HIG-005", "19900", "Colonia suave de uso post-baño, hipoalergénica y sin alcohol, deja un aroma fresco de larga duración. Apta para perros y gatos de piel sensible.", "Higiene"),
+    ("Cortaúñas para Mascotas", "HIG-006", "15900", "Cortaúñas de acero inoxidable con protector de seguridad para evitar cortes profundos. Mango ergonómico antideslizante, apto para razas pequeñas y grandes.", "Higiene"),
+    ("Placa de Identificación Grabada", "ACC-006", "12900", "Placa metálica grabada con nombre y teléfono de contacto, pensada para que tu mascota siempre lleve su identificación en el collar. Resistente al agua y al desgaste diario.", "Accesorios"),
+    ("Comedero de Viaje Plegable", "ACC-007", "18900", "Comedero/bebedero de silicona plegable, ideal para paseos largos o viajes, ocupa muy poco espacio guardado. Fácil de lavar y de secado rápido.", "Accesorios"),
+    ("Rascador para Gato con Poste", "ACC-008", "99900", "Rascador vertical con poste forrado en sisal y plataforma superior para descansar, ayuda a cuidar los muebles de casa. Base amplia y estable para gatos adultos.", "Accesorios"),
+    ("Aceite de Salmón para Piel y Pelaje", "SAL-004", "42900", "Suplemento de Omega 3 puro de salmón, para un pelaje brillante y una piel más hidratada. Se agrega directamente a la comida, unas gotas al día según el peso de la mascota.", "Salud"),
+    ("Electrolitos Rehidratantes x10 sobres", "SAL-005", "27900", "Sobres de electrolitos para apoyar la hidratación de la mascota en episodios de calor, diarrea leve o post-ejercicio intenso. Se disuelven fácilmente en el agua de tomar.", "Salud"),
+    ("Antiparasitario Interno Perro x4 comprimidos", "MED-001", "32900", "Desparasitante interno de amplio espectro para perros, en comprimidos masticables de buen sabor. Recomendado cada 3 meses según indicación veterinaria.", "Medicamentos"),
+    ("Antiparasitario Interno Gato x4 comprimidos", "MED-002", "29900", "Desparasitante interno de amplio espectro para gatos, en comprimidos de fácil administración. Protege contra los parásitos intestinales más comunes.", "Medicamentos"),
+    ("Suero Oral Rehidratante Veterinario 250ml", "MED-003", "22900", "Solución rehidratante oral de uso veterinario, pensada para apoyar la recuperación tras vómito, diarrea o baja ingesta de líquidos. Uso bajo indicación profesional.", "Medicamentos"),
+    ("Pomada Cicatrizante para Heridas 30g", "MED-004", "18900", "Pomada tópica para heridas menores y raspones, de uso veterinario, que ayuda a mantener la zona limpia mientras cicatriza. Tubo de 30g de fácil aplicación.", "Medicamentos"),
     # Productos de marcas reconocidas, agregados a pedido del cliente. La
     # marca es solo el dato de texto "brand" (informativo, como en
     # cualquier catalogo); el icono sigue siendo una ilustracion generica
     # del tipo de producto (no un empaque oficial de esas marcas), igual
     # que el resto del catalogo.
-    ("Alimento Royal Canin Adulto Raza Mediana 15kg", "BRA-001", "285000", "Alimento seco completo para perros adultos de raza mediana", "Alimento"),
-    ("Alimento Hill's Science Diet Senior 7+ 12kg", "BRA-002", "320000", "Alimento seco especializado para perros senior mayores de 7 años", "Alimento"),
-    ("Alimento Purina Pro Plan Gato Esterilizado 7.5kg", "BRA-003", "195000", "Alimento seco para gatos esterilizados adultos", "Alimento"),
-    ("Alimento Whiskas Adulto Sabor Pollo 8kg", "BRA-004", "98000", "Alimento seco para gatos adultos sabor pollo", "Alimento"),
-    ("Alimento Eukanuba Cachorro Razas Grandes 15kg", "BRA-005", "265000", "Alimento seco para cachorros de razas grandes en crecimiento", "Alimento"),
-    ("Premios Pedigree Dentastix Perro Mediano x28", "BRA-006", "45000", "Snack dental masticable que ayuda a reducir el sarro", "Alimento"),
-    ("Suplemento Multivitamínico VetriScience 60 tabletas", "BRA-007", "89000", "Complejo multivitamínico para apoyar la salud general de perros y gatos", "Salud"),
-    ("Antiparasitario NexGard Spectra Perro x3 comprimidos", "BRA-008", "115000", "Tabletas masticables contra pulgas, garrapatas y parásitos internos", "Medicamentos"),
-    ("Antiparasitario Drontal Plus Perro x2 tabletas", "BRA-009", "42000", "Tabletas desparasitantes de amplio espectro para perros", "Medicamentos"),
+    ("Alimento Royal Canin Adulto Raza Mediana 15kg", "BRA-001", "285000", "Alimento seco completo para perros adultos de raza mediana, formulado según el tamaño y la edad del perro. Bolsa de 15kg, con antioxidantes para apoyar las defensas naturales.", "Alimento"),
+    ("Alimento Hill's Science Diet Senior 7+ 12kg", "BRA-002", "320000", "Alimento seco especializado para perros senior mayores de 7 años, con nutrientes pensados para la movilidad y la función cerebral. Bolsa de 12kg de fácil digestión.", "Alimento"),
+    ("Alimento Purina Pro Plan Gato Esterilizado 7.5kg", "BRA-003", "195000", "Alimento seco para gatos esterilizados adultos, con control de peso y cuidado del tracto urinario. Bolsa de 7.5kg, fórmula con proteína de alta calidad.", "Alimento"),
+    ("Alimento Whiskas Adulto Sabor Pollo 8kg", "BRA-004", "98000", "Alimento seco para gatos adultos sabor pollo, con vitaminas y minerales para una vida sana y activa. Bolsa familiar de 8kg.", "Alimento"),
+    ("Alimento Eukanuba Cachorro Razas Grandes 15kg", "BRA-005", "265000", "Alimento seco para cachorros de razas grandes en crecimiento, con control del desarrollo óseo y articular. Bolsa de 15kg, con DHA para el desarrollo cognitivo.", "Alimento"),
+    ("Premios Pedigree Dentastix Perro Mediano x28", "BRA-006", "45000", "Snack dental masticable de uso diario que ayuda a reducir hasta un 80% la formación de sarro. Caja de 28 unidades para razas medianas.", "Alimento"),
+    ("Suplemento Multivitamínico VetriScience 60 tabletas", "BRA-007", "89000", "Complejo multivitamínico para apoyar la salud general de perros y gatos, incluyendo piel, pelaje y sistema inmune. Frasco de 60 tabletas masticables.", "Salud"),
+    ("Antiparasitario NexGard Spectra Perro x3 comprimidos", "BRA-008", "115000", "Tabletas masticables de aplicación mensual contra pulgas, garrapatas y parásitos internos en un solo producto. Caja de 3 comprimidos, uno por mes.", "Medicamentos"),
+    ("Antiparasitario Drontal Plus Perro x2 tabletas", "BRA-009", "42000", "Tabletas desparasitantes de amplio espectro para perros, eficaces contra los parásitos intestinales más frecuentes. Caja de 2 tabletas, según peso del perro.", "Medicamentos"),
 ]
 
 # ---------------------------------------------------------------------
@@ -288,6 +292,9 @@ def main():
                     changed = True
                 if existing.pet_type != pet_type:
                     existing.pet_type = pet_type
+                    changed = True
+                if existing.description != description:
+                    existing.description = description
                     changed = True
                 if changed:
                     db.commit()
