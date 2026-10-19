@@ -1,4 +1,64 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap");
+/* Tipografia auto-hospedada (Poppins + Inter, archivos .woff2 en
+   assets/fonts/) en vez de un @import a Google Fonts: asi la pagina no
+   depende de que el navegador pueda alcanzar fonts.googleapis.com (puede
+   fallar por conexion lenta, bloqueadores de anuncios/privacidad, o redes
+   restringidas), y la fuente se ve igual siempre, incluso sin internet. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../assets/fonts/poppins-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("../assets/fonts/poppins-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/poppins-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("../assets/fonts/poppins-latin-800-normal.woff2") format("woff2");
+}
 
 * { box-sizing: border-box; }
 
@@ -271,6 +331,30 @@ main { margin: 30px auto; padding: 0 28px; }
 .category-label { font-weight: 700; font-size: 1.02rem; }
 
 .section-title { margin-top: 0; color: #111; }
+
+/* Tarjeta "Consejo del dia" (feature plus con clima real via Open-Meteo,
+   ver backend/app/services/weather_tip_service.py). Oculta por defecto
+   (clase .hidden) hasta que el JS confirma que hay datos que mostrar. */
+.weather-tip {
+  max-width: 900px;
+  margin: 0 auto 8px;
+  background: var(--color-accent-light);
+  color: var(--color-ink);
+  border-radius: 999px;
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+.weather-tip.hidden { display: none; }
+.weather-tip-icon { font-size: 1.15rem; flex-shrink: 0; }
+.weather-tip strong { font-family: var(--font-display); }
+
+@media (max-width: 760px) {
+  .weather-tip { border-radius: var(--radius-md); margin: 0 20px 8px; }
+}
 
 @media (max-width: 760px) {
   .hero { flex-direction: column; text-align: center; padding: 32px 24px; }
@@ -1079,6 +1163,27 @@ h1 { color: #111; }
 .modal .add-to-cart {
   width: 100%;
   margin-top: 8px;
+}
+.modal-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 16px;
+  margin: 14px 0;
+  padding: 12px 14px;
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+}
+.modal-specs dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-muted);
+  margin: 0 0 2px;
+}
+.modal-specs dd {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 /* Estado vacío */

@@ -18,6 +18,7 @@ from app.api import (
     reports,
     surveys,
     users,
+    weather,
 )
 
 app = FastAPI(title="PetCloud IA")
@@ -52,6 +53,7 @@ app.include_router(audit.router)
 app.include_router(dashboard.router)
 app.include_router(reports.router)
 app.include_router(incidents.router)
+app.include_router(weather.router)
 
 
 @app.get("/api/v1/health")

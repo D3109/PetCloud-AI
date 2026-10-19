@@ -41,7 +41,7 @@ todo el archivo, sin tener que leer este documento:
 
 | Carpeta | Capa | Qué contiene |
 |---|---|---|
-| `backend/app/api/` | 1. Presentación | 17 routers (`products.py`, `orders.py`, `auth.py`...), uno por dominio. Endpoints REST. |
+| `backend/app/api/` | 1. Presentación | 18 routers (`products.py`, `orders.py`, `auth.py`, `weather.py`...), uno por dominio. Endpoints REST. |
 | `backend/app/schemas/` | — (contrato) | Clases Pydantic: forma del JSON que entra y sale de cada endpoint. |
 | `backend/app/services/` | 2. Negocio | Reglas de negocio reales, una por dominio (`product_service.py`...). |
 | `backend/app/models/` | 3. Persistencia | Clases SQLAlchemy = tablas de PostgreSQL. |
@@ -54,6 +54,13 @@ Regla simple para ubicar cualquier cambio:
 - ¿Es una regla de negocio ("no permitir X si Y")? → `services/`.
 - ¿Es un campo nuevo en una tabla? → `models/` + una migración en `database/migrations/versions/`.
 - ¿Es configuración, autenticación o algo que usan todas las capas? → `core/`.
+
+## Integraciones con APIs externas
+
+| Qué | Capa / archivo | Para qué |
+|---|---|---|
+| IA generativa (Gemini) | `services/ai_client.py` + `services/ai_service.py` | Chat de recomendaciones ("Pet-IA") |
+| Clima (Open-Meteo, sin API key) | `services/weather_tip_service.py` + `api/weather.py` | Tarjeta "Consejo del día" en la portada. Documentada en detalle en [docs/api_clima_mascotas.md](./docs/api_clima_mascotas.md) (cómo se aplicó, pros/contras y mitigaciones). |
 
 ## Frontend
 

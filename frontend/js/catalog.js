@@ -142,6 +142,8 @@ function openProductModal(product) {
   const imgSrc = product.image_url || FALLBACK_IMAGE;
   const availability = availabilityLabel(product);
 
+  const petLabel = product.pet_type ? (PET_TYPE_LABELS[product.pet_type] || product.pet_type) : 'No especificado';
+
   content.innerHTML = `
     <button class="modal-close" aria-label="Cerrar">×</button>
     <img class="modal-image" src="${imgSrc}" alt="${product.name}"
@@ -150,6 +152,12 @@ function openProductModal(product) {
     <p class="muted">${categories}${product.brand ? ' · ' + product.brand : ''}</p>
     <p class="stock-badge ${availability.cls}">${availability.text}</p>
     <p>${product.description || 'Sin descripción disponible.'}</p>
+    <dl class="modal-specs">
+      <div><dt>SKU</dt><dd>${product.sku || '—'}</dd></div>
+      <div><dt>Para</dt><dd>${petLabel}</dd></div>
+      <div><dt>Marca</dt><dd>${product.brand || 'Sin marca registrada'}</dd></div>
+      <div><dt>Categoría</dt><dd>${categories}</dd></div>
+    </dl>
     <p class="price">$${Number(product.price).toLocaleString('es-CO')}</p>
     <button class="add-to-cart" data-product-id="${product.id}" ${availability.cls === 'stock-out' ? 'disabled' : ''}>
       ${availability.cls === 'stock-out' ? 'Agotado' : 'Agregar al carrito'}
