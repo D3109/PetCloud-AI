@@ -4,6 +4,67 @@ Documentación de la integración con una API externa, agregada como función
 "plus" del catálogo: una tarjeta en la portada con un consejo de cuidado
 de la mascota según el clima real del día.
 
+## 0. Arquitectura general en capas del proyecto (contexto)
+
+PetCloud IA usa una arquitectura **cliente-servidor en capas (N-capas),
+tipo monolito modular**: el frontend y el backend están totalmente
+desacoplados (solo se comunican por HTTP/JSON) y el backend está
+organizado en 4 capas internas con responsabilidades separadas. No es
+microservicios: un único proceso de FastAPI sirve toda la API.
+
+```
+Petición HTTP (del frontend)
+        │
+        ▼
+1. API (presentación)       → backend/app/api/
+        │   valida la entrada, exige permisos
+        ▼
+2. Servicios (negocio)       → backend/app/services/
+        │   reglas de negocio, decide qué hacer
+        ▼
+3. Modelos (persistencia)    → backend/app/models/
+        │   estructura de las tablas (ORM)
+        ▼
+   PostgreSQL (la base de datos real)
+```
+
+Transversales a esas 3 capas (las usan todas, no son un escalón más):
+- **`backend/app/schemas/`** — forma del JSON de entrada/salida de cada endpoint.
+- **`backend/app/core/`** — configuración, conexión a la base de datos, seguridad/JWT, permisos.
+
+| Capa | Carpeta | Ejemplos de archivos |
+|---|---|---|
+| 1. API (presentación) | `backend/app/api/` | `products.py`, `orders.py`, `auth.py`, `cart.py`, `weather.py`... (18 routers, uno por dominio) |
+| 2. Servicios (negocio) | `backend/app/services/` | `product_service.py`, `order_service.py`, `cart_service.py`, `weather_tip_service.py` |
+| 3. Modelos (persistencia) | `backend/app/models/` | `product.py` → tabla `products`, `user.py` → tabla `users`, `order.py` → tabla `orders` |
+| — Base de datos | *(fuera del código)* | PostgreSQL; estructura versionada con migraciones en `backend/database/migrations/versions/` |
+| Transversal (contrato) | `backend/app/schemas/` | `product.py`, `weather.py`... |
+| Transversal (infraestructura) | `backend/app/core/` | `config.py`, `database.py`, `security.py`, `deps.py` |
+| Arranque | `backend/app/main.py` | Crea la app de FastAPI y registra todos los routers de `api/` |
+
+Regla simple para ubicar cualquier cambio:
+- ¿Es una ruta nueva o cambia qué devuelve un endpoint? → `api/` (+ `schemas/` si cambia el JSON).
+- ¿Es una regla de negocio ("no permitir X si Y")? → `services/`.
+- ¿Es un campo nuevo en una tabla? → `models/` + una migración.
+- ¿Es configuración, autenticación o algo que usan todas las capas? → `core/`.
+
+**Frontend** (sin capas de negocio, sin framework — HTML/CSS/JS "vanilla"):
+
+```
+frontend/
+├── *.html          10 páginas (index, admin, cart, login...)
+├── css/styles.css  Un único stylesheet
+└── js/
+    ├── config.js, api.js   Base de la API + helper de fetch
+    ├── nav.js, footer.js, chat.js   Se cargan en todas las páginas
+    └── catalog.js, cart.js, admin.js...   Uno por página/módulo
+```
+
+El detalle completo de esta arquitectura general (con el diagrama ASCII
+íntegro) vive en [`ARCHITECTURE.md`](../ARCHITECTURE.md), en la raíz del
+repositorio. El resto de este documento se enfoca específicamente en la
+API del clima.
+
 ## 1. Cómo se aplicó
 
 Se integró contra **Open-Meteo** (`https://api.open-meteo.com`), una API
