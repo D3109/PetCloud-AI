@@ -26,7 +26,7 @@ async function loadCart() {
                 </div>
               </td>
               <td>$${Number(item.subtotal).toLocaleString('es-CO')}</td>
-              <td><button class="remove-item btn-small" data-product-id="${item.product_id}">Quitar</button></td>
+              <td><button class="remove-item btn-small" data-product-id="${item.product_id}">Eliminar producto</button></td>
             </tr>
           `).join('')}
         </tbody>
