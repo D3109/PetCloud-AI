@@ -1,6 +1,7 @@
-// Pagina tecnica standalone de auditoria (ver audit.html): logica propia,
-// separada de admin.js, porque esta pagina no comparte nav/footer/tabs
-// con el resto del sitio.
+// Pagina standalone de auditoria (ver audit.html): logica propia,
+// separada de admin.js porque esta pagina no comparte el sistema de tabs
+// del panel admin (vive en su propia URL), aunque si reusa el mismo
+// css/styles.css y el nav/footer del sitio para verse igual al resto.
 
 function escapeHtml(value) {
   const div = document.createElement('div');
@@ -33,13 +34,13 @@ async function loadAudit() {
 
   table.hidden = true;
   state.hidden = false;
-  state.className = 'state';
-  state.textContent = 'cargando…';
+  state.className = 'muted';
+  state.textContent = 'Cargando...';
 
   try {
     const entries = await apiFetch(`/api/v1/audit?limit=${limit}`);
     if (entries.length === 0) {
-      state.textContent = 'sin actividad registrada todavía.';
+      state.textContent = 'Sin actividad registrada todavía.';
       count.textContent = '';
       return;
     }
@@ -48,8 +49,8 @@ async function loadAudit() {
     state.hidden = true;
     table.hidden = false;
   } catch (err) {
-    state.className = 'state err';
-    state.textContent = `error: ${err.message}`;
+    state.className = 'error';
+    state.textContent = err.message;
   }
 }
 
@@ -62,8 +63,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const me = await apiFetch('/api/v1/auth/me');
     if (!['root', 'admin'].includes(me.role)) {
       const state = document.getElementById('audit-state');
-      state.className = 'state err';
-      state.textContent = 'no tienes permisos para ver la auditoría.';
+      state.className = 'error';
+      state.textContent = 'No tienes permisos para ver la auditoría.';
       return;
     }
   } catch (err) {
