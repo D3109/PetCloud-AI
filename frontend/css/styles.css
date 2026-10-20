@@ -526,6 +526,15 @@ select:focus { outline: none; border-color: var(--color-accent); }
   align-items: center;
   justify-content: center;
   padding: 48px 32px;
+  /* Formularios largos (p. ej. registro, con mascota opcional) hacen que
+     .auth-box sea mucho mas alto que el contenido del panel naranja; como
+     .auth-page estira ambas columnas a la misma altura, el panel quedaba
+     con un hueco vacio enorme debajo. Al anclarlo (sticky) justo bajo el
+     nav, se queda del alto de su propio contenido y acompaña el scroll
+     del formulario en vez de estirarse de mas. */
+  align-self: flex-start;
+  position: sticky;
+  top: 64px;
 }
 .auth-visual-inner { max-width: 360px; }
 .auth-visual-emoji { font-size: 3.2rem; display: block; margin-bottom: 14px; }
@@ -558,7 +567,7 @@ select:focus { outline: none; border-color: var(--color-accent); }
 
 @media (max-width: 760px) {
   .auth-page { flex-direction: column; min-height: auto; }
-  .auth-visual { padding: 32px 24px; text-align: center; }
+  .auth-visual { padding: 32px 24px; text-align: center; position: static; }
   .auth-visual-inner { max-width: none; }
   .auth-visual-points { align-items: center; }
   .auth-box { max-width: none; padding: 32px 20px; }
@@ -988,6 +997,24 @@ h1 { color: #111; }
 .tab-btn:hover { background: none; color: var(--color-primary-dark); }
 .tab-btn.active { color: var(--color-primary-dark); border-bottom-color: var(--color-primary); }
 .tab-panel { display: none; }
+
+/* La auditoria no es una pestaña mas: es un enlace a audit.html, una
+   herramienta tecnica aparte con su propio estilo (ver ese archivo). Se
+   ve distinta a proposito -icono + fondo tenue- para que quede claro que
+   te saca del sitio hacia esa herramienta. */
+.tab-link {
+  color: var(--color-muted);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+  padding: 10px 6px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.tab-link:hover { color: var(--color-primary-dark); }
+.tab-link .ext-icon { font-size: 0.8rem; opacity: 0.7; }
 .tab-panel.active { display: block; }
 
 .inline-form {
