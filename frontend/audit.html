@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registro de auditoría — PetCloud IA</title>
+  <!--
+    A proposito, esta pagina NO usa css/styles.css ni el nav/footer del
+    sitio: la auditoria es una herramienta tecnica interna (quien hizo
+    que accion administrativa y cuando), no una vista pensada para
+    "sentirse" parte de la tienda. Por eso tiene su propio look, simple
+    y neutro, separado del resto de la marca.
+  -->
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0e1116;
+      --panel: #161b22;
+      --border: #2a313c;
+      --text: #d8dee9;
+      --muted: #7d8794;
+      --accent: #5fb3f9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    header h1 {
+      font-size: 15px;
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    header .meta { color: var(--muted); font-size: 12px; }
+    a.back {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    a.back:hover { text-decoration: underline; }
+    main { padding: 20px 24px; max-width: 1200px; margin: 0 auto; }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .toolbar label { color: var(--muted); }
+    .toolbar select, .toolbar button {
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 5px 9px;
+      font-family: inherit;
+      font-size: 12px;
+    }
+    .toolbar button { cursor: pointer; }
+    .toolbar button:hover { border-color: var(--accent); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td {
+      text-align: left;
+      padding: 6px 10px;
+      border-bottom: 1px solid var(--border);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    th {
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+    }
+    tr:hover td { background: var(--panel); }
+    .state { padding: 24px 0; color: var(--muted); }
+    .state.err { color: #ff6b6b; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>// registro_de_auditoria — PetCloud IA</h1>
+    <span class="meta"><a class="back" href="admin.html">← volver al panel de administración</a></span>
+  </header>
+  <main>
+    <div class="toolbar">
+      <label for="audit-limit">límite</label>
+      <select id="audit-limit">
+        <option value="100">100</option>
+        <option value="200" selected>200</option>
+        <option value="500">500</option>
+      </select>
+      <button type="button" id="audit-refresh">actualizar</button>
+      <span class="meta" id="audit-count"></span>
+    </div>
+    <div id="audit-state" class="state">cargando…</div>
+    <table id="audit-table" hidden>
+      <thead>
+        <tr><th>fecha</th><th>quién</th><th>acción</th><th>entidad</th><th>id</th><th>detalle</th></tr>
+      </thead>
+      <tbody id="audit-table-body"></tbody>
+    </table>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/audit-log.js"></script>
+</body>
+</html>

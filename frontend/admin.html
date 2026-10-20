@@ -21,7 +21,7 @@
         <button class="tab-btn" data-tab="pedidos">Pedidos</button>
         <button class="tab-btn" data-tab="encuestas">Encuestas</button>
         <button class="tab-btn" data-tab="incidentes">Incidentes</button>
-        <button class="tab-btn" data-tab="auditoria">Auditoría</button>
+        <a id="audit-link" class="tab-link hidden" href="audit.html" target="_blank" rel="noopener">Auditoría <span class="ext-icon">↗</span></a>
       </div>
 
       <!-- Dashboard -->
@@ -166,18 +166,6 @@
             <tr><th>ID</th><th>Título</th><th>Reportado por</th><th>Prioridad</th><th>Estado</th><th>Notas de resolución</th><th>Creado</th><th>Acciones</th></tr>
           </thead>
           <tbody id="incident-table-body"></tbody>
-        </table>
-      </section>
-
-      <!-- Auditoría -->
-      <section id="tab-auditoria" class="tab-panel">
-        <h2>Registro de auditoría</h2>
-        <p class="muted">Acciones administrativas sensibles: creación de usuarios, cambios de rol, bloqueos y cambios en productos.</p>
-        <table class="admin-table">
-          <thead>
-            <tr><th>Fecha</th><th>Quién</th><th>Acción</th><th>Entidad</th><th>ID</th><th>Detalle</th></tr>
-          </thead>
-          <tbody id="audit-table-body"></tbody>
         </table>
       </section>
     </div>

@@ -9,12 +9,21 @@ const ROLE_LABELS = {
 };
 
 // Qué pestañas puede ver cada rol. root y admin ven todo.
+// "auditoria" ya no es una pestaña: es el enlace a audit.html, una
+// herramienta aparte (ver setupAuditLink).
 const TAB_ACCESS = {
-  root: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'incidentes', 'auditoria'],
-  admin: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'incidentes', 'auditoria'],
+  root: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'incidentes'],
+  admin: ['dashboard', 'productos', 'usuarios', 'pedidos', 'encuestas', 'incidentes'],
   gestor_productos: ['productos'],
   atencion_cliente: ['pedidos', 'encuestas', 'incidentes'],
 };
+
+function setupAuditLink() {
+  const link = document.getElementById('audit-link');
+  if (!link) return;
+  const allowed = ['root', 'admin'].includes(CURRENT_USER.role);
+  link.classList.toggle('hidden', !allowed);
+}
 
 function canSeeTab(tab) {
   const allowed = TAB_ACCESS[CURRENT_USER.role] || [];
@@ -124,36 +133,6 @@ async function loadDashboard() {
     auditBody.innerHTML = renderAuditRows(d.recent_audit);
   } catch (err) {
     statsBox.innerHTML = `<p class="error">${err.message}</p>`;
-  }
-}
-
-// ---------- Auditoría (listado completo) ----------
-
-async function loadAuditLog() {
-  if (!canSeeTab('auditoria')) return;
-  const tbody = document.getElementById('audit-table-body');
-  tbody.innerHTML = '<tr><td colspan="6">Cargando...</td></tr>';
-  try {
-    const entries = await apiFetch('/api/v1/audit?limit=200');
-    if (entries.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6">Sin actividad registrada todavía.</td></tr>';
-      return;
-    }
-    tbody.innerHTML = entries
-      .map(
-        (a) => `
-        <tr>
-          <td>${new Date(a.created_at).toLocaleString('es-CO')}</td>
-          <td>${a.actor_email || 'sistema'}</td>
-          <td>${a.action}</td>
-          <td>${a.entity_type}</td>
-          <td>${a.entity_id ?? '-'}</td>
-          <td>${a.detail || '-'}</td>
-        </tr>`
-      )
-      .join('');
-  } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="6" class="error">${err.message}</td></tr>`;
   }
 }
 
@@ -763,6 +742,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     `Conectado como ${CURRENT_USER.email} — ${ROLE_LABELS[CURRENT_USER.role] || CURRENT_USER.role}`;
 
   setupTabs();
+  setupAuditLink();
   setupProductForm();
   setupUserForm();
   setupOrderFilter();
@@ -774,5 +754,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   loadOrders();
   loadSurveys();
   loadIncidents();
-  loadAuditLog();
 });
