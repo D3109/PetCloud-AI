@@ -17,6 +17,9 @@ class AuditLog(Base):
     entity_type = Column(String, nullable=False)
     entity_id = Column(Integer, nullable=True)
     detail = Column(String, nullable=True)
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    # Indexado: la lista de auditoria siempre ordena por esta columna (ver
+    # audit_service.list_audit_logs). Sin indice, esa consulta se vuelve
+    # lenta si la tabla crece mucho.
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
 
     actor = relationship("User")
