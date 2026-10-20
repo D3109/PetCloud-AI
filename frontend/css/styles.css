@@ -239,9 +239,24 @@ nav {
 .nav-cart:hover { background: var(--color-primary-dark); }
 
 @media (max-width: 760px) {
+  /* En celular el nav de escritorio (logo + links + carrito + buscador,
+     todos en una fila que se envuelve) terminaba en 4 filas apiladas:
+     logo solo, links solos, carrito solo y por ultimo el buscador. Eso
+     comia media pantalla antes de ver cualquier contenido. Ahora el logo
+     y el carrito comparten la primera fila (ambos caben comodos), los
+     links van en su propia fila mas compacta (con scroll horizontal si
+     no caben todos) y el buscador cierra abajo: 3 filas en vez de 4, y
+     la primera se siente como una barra de verdad, no como texto suelto. */
   .nav-inner { padding: 12px 16px; }
-  .nav-search { order: 3; flex-basis: 100%; max-width: none; }
-  .nav-links { gap: 14px; }
+  .brand { order: 1; }
+  .nav-cart { order: 2; margin-left: auto; }
+  .nav-links {
+    order: 3;
+    flex-basis: 100%;
+    gap: 18px;
+    margin-left: 0;
+  }
+  .nav-search { order: 4; flex-basis: 100%; max-width: none; }
 }
 
 main { margin: 30px auto; padding: 0 28px; }
