@@ -35,7 +35,7 @@ async function renderNav() {
     <div class="nav-inner">
       <a href="index.html" class="brand">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 5.2c-3 0-4.6 2.3-4.6 4.6 0 1 .35 1.75.9 2.45-1.5.55-2.9 1.7-2.9 3.55 0 2.1 1.9 3.2 3.9 3.2 1 0 1.85-.3 2.7-.65.85.35 1.7.65 2.7.65 2 0 3.9-1.1 3.9-3.2 0-1.85-1.4-3-2.9-3.55.55-.7.9-1.45.9-2.45 0-2.3-1.6-4.6-4.6-4.6z" fill="currentColor"/><circle cx="8.6" cy="4.4" r="1.6" fill="currentColor"/><circle cx="15.4" cy="4.4" r="1.6" fill="currentColor"/><circle cx="5.3" cy="8.6" r="1.6" fill="currentColor"/><circle cx="18.7" cy="8.6" r="1.6" fill="currentColor"/></svg>
+          <svg viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="15.3" rx="5.8" ry="4.5" fill="currentColor"/><ellipse cx="4.9" cy="10.4" rx="2.1" ry="2.6" fill="currentColor"/><ellipse cx="8.8" cy="5.6" rx="2.3" ry="2.8" fill="currentColor"/><ellipse cx="15.2" cy="5.6" rx="2.3" ry="2.8" fill="currentColor"/><ellipse cx="19.1" cy="10.4" rx="2.1" ry="2.6" fill="currentColor"/></svg>
         </span>
         Pet Cloud IA
       </a>
@@ -85,21 +85,24 @@ async function renderNav() {
     });
   }
 
-  // Buscador del nav: en el catalogo filtra en vivo, en otras paginas navega con ?q=
+  // Buscador del nav: es el UNICO buscador de texto del catalogo (ya no hay
+  // un segundo campo de busqueda dentro de los filtros, para no mostrar dos
+  // buscadores a la vez). En el catalogo filtra en vivo llamando directo a
+  // renderGrid() (definida en catalog.js); en otras paginas navega con ?q=.
   const searchForm = document.getElementById('nav-search-form');
   const searchInput = document.getElementById('nav-search-input');
   const searchClear = document.getElementById('nav-search-clear');
   const onCatalog = /(^|\/)index\.html$/.test(window.location.pathname) || window.location.pathname.endsWith('/');
-  const catalogSearchField = document.getElementById('filter-search');
 
-  if (onCatalog && catalogSearchField) {
-    searchInput.value = catalogSearchField.value;
+  if (onCatalog) {
+    const q = new URLSearchParams(window.location.search).get('q');
+    if (q) searchInput.value = q;
     searchClear.classList.toggle('hidden', !searchInput.value);
     searchInput.addEventListener('input', () => {
-      catalogSearchField.value = searchInput.value;
-      catalogSearchField.dispatchEvent(new Event('input', { bubbles: true }));
       searchClear.classList.toggle('hidden', !searchInput.value);
+      if (typeof renderGrid === 'function') renderGrid();
     });
+    if (typeof renderGrid === 'function') renderGrid();
   }
 
   searchForm?.addEventListener('submit', (e) => {
@@ -112,10 +115,7 @@ async function renderNav() {
   searchClear?.addEventListener('click', () => {
     searchInput.value = '';
     searchClear.classList.add('hidden');
-    if (onCatalog && catalogSearchField) {
-      catalogSearchField.value = '';
-      catalogSearchField.dispatchEvent(new Event('input', { bubbles: true }));
-    }
+    if (onCatalog && typeof renderGrid === 'function') renderGrid();
     searchInput.focus();
   });
 }

@@ -291,8 +291,9 @@ main { margin: 30px 0; padding: 0 28px; }
    y deja un espacio vacio enorme a la derecha en pantallas anchas. Esta
    clase SOLO se aplica a esas paginas -el catalogo, el panel admin, la
    auditoria y el carrito siguen fluidos a proposito, porque ahi si
-   aprovechan el ancho completo-. */
-main.page-narrow { max-width: 760px; margin-left: auto; margin-right: auto; }
+   aprovechan el ancho completo-. 920px (antes 760px) para que sobre menos
+   espacio vacio a los lados en pantallas de escritorio normales. */
+main.page-narrow { max-width: 920px; margin-left: auto; margin-right: auto; }
 
 /* Hero del catalogo: bloque solido en terracota con esquinas redondeadas,
    texto a la izquierda e ilustracion a la derecha, al estilo del mockup
@@ -662,14 +663,21 @@ select:focus { outline: none; border-color: var(--color-accent); }
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 20px;
-  /* Sin "auto" en el margen izquierdo/derecho, la tarjeta (480px) quedaba
-     pegada al borde izquierdo del main, dejando todo el resto de la
-     pantalla vacio a la derecha. */
+  /* Sin "auto" en el margen izquierdo/derecho, la tarjeta quedaba pegada
+     al borde izquierdo del main, dejando todo el resto de la pantalla
+     vacio a la derecha. 640px (antes 480px) para aprovechar mejor el
+     ancho de main.page-narrow y que no sobre tanto espacio a los lados. */
   margin: 0 auto 20px;
-  max-width: 480px;
+  max-width: 640px;
 }
 .profile-section h2 { margin-top: 0; font-size: 1.1rem; }
-.profile-section form { display: flex; flex-direction: column; gap: 16px; }
+/* max-width:none: el selector generico "form" (linea ~516) trae su propio
+   max-width:360px + margin:0 auto pensado para los formularios de login/
+   registro. Sin anularlo aqui, cada form dentro de la tarjeta (datos,
+   mascotas, incidentes, contraseña) se volvia a encoger y centrar DENTRO
+   de la tarjeta ya angosta, sumando un tercer nivel de espacio vacio a
+   los lados. */
+.profile-section form { display: flex; flex-direction: column; gap: 16px; max-width: none; }
 
 .pets-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .pet-card {
@@ -816,8 +824,10 @@ h1 { color: #111; }
 }
 #chat-toggle-icon {
   position: relative;
+  display: flex;
   filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.25));
 }
+#chat-toggle-icon svg { width: 26px; height: 26px; }
 #chat-toggle-badge {
   position: absolute;
   top: -4px;
@@ -997,7 +1007,7 @@ h1 { color: #111; }
   font-weight: 700;
   font-size: 1.05rem;
   color: var(--color-primary-dark);
-  padding: 0 4px 10px 0;
+  padding: 20px 4px 10px 0;
 }
 .likert-row { margin-bottom: 20px; }
 .likert-row:last-child { margin-bottom: 0; }
@@ -1219,32 +1229,10 @@ h1 { color: #111; }
 }
 .filters select { flex: 1 1 170px; }
 .filters #filter-clear { flex: 0 0 auto; margin-left: auto; }
-/* Buscador + filtro de precio agrupados: antes el filtro de precio podia
-   quedar solo (separado del buscador) al envolver la fila en pantallas
-   intermedias, porque cada uno era un item flex independiente dentro de
-   .filters. Agrupandolos en un mismo contenedor flex, se mueven y
-   envuelven siempre juntos -alineados, en un solo lugar- sin importar el
-   ancho disponible. */
-.filters-search-group {
-  flex: 3 1 420px;
-  /* min-width:0 en vez del "auto" por defecto: .price-filter es a su vez
-     un contenedor flex con inputs que tienen min-width propio, y sin
-     esto el navegador usaba ese tamaño minimo de contenido (en vez del
-     flex-basis declarado) para decidir si envolver la fila, haciendo
-     que el buscador y el filtro de precio saltaran cada uno a su propia
-     linea aunque sobrara espacio de sobra para los dos juntos. */
-  min-width: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-/* type="text" (no "search"): el input[type=search] nativo tiene un
-   bug de layout en Chromium que ignora su flex-basis al decidir si
-   envolver la fila, haciendo que ocupe 100% del ancho y empuje el
-   filtro de precio a su propia linea aparte. Con type="text" el campo
-   respeta su flex-basis normalmente y quedan alineados en una fila. */
-.filters-search-group input[type="text"] { flex: 2 1 220px; }
+/* El buscador de texto del catalogo vive solo en la barra del nav (ver
+   nav.js) -ya no hay un segundo campo de busqueda aqui dentro de los
+   filtros, para no mostrar dos buscadores a la vez-. El filtro de precio
+   queda como item flex directo de .filters. */
 .price-filter {
   flex: 1 1 200px;
   min-width: 0;
@@ -1271,6 +1259,20 @@ h1 { color: #111; }
   padding: 2px 10px;
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+/* Etiqueta de tipo/categoria del producto: antes usaba la misma clase
+   ".muted" (mismo color y tamaño) que la descripcion justo debajo, y las
+   dos lineas de texto gris se veian pegadas entre si, sin jerarquia. Como
+   "kicker" pequeño, en mayusculas y en el color de acento, queda claramente
+   distinta tanto del nombre (arriba) como de la descripcion (abajo). */
+.card-category {
+  color: var(--color-primary-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 6px;
 }
 
 .card-description {
@@ -1419,10 +1421,7 @@ h1 { color: #111; }
      mas anchos que la pantalla, con scroll horizontal en todo el sitio-. */
   .filters { flex-direction: column; flex-wrap: nowrap; align-items: stretch; }
   .filters select,
-  .filters-search-group,
-  .filters input[type="text"],
   .price-filter { flex: 1 1 auto; }
-  .filters-search-group { flex-direction: column; flex-wrap: nowrap; align-items: stretch; }
   .filters #filter-clear { margin-left: 0; width: 100%; }
   .price-filter input[type="number"] { flex: 1 1 0; }
   /* mismo fix que .filters: sin flex-wrap:nowrap explicito aqui, el

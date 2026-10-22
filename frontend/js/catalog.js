@@ -41,7 +41,10 @@ function getFilters() {
   return {
     category: document.getElementById('filter-category')?.value || '',
     petType: document.getElementById('filter-pet-type')?.value || '',
-    search: (document.getElementById('filter-search')?.value || '').trim().toLowerCase(),
+    // El texto de busqueda ya no tiene un campo propio dentro de los filtros:
+    // vive unicamente en la barra de busqueda del nav, para no mostrar dos
+    // buscadores a la vez en el catalogo.
+    search: (document.getElementById('nav-search-input')?.value || '').trim().toLowerCase(),
     priceMin: document.getElementById('filter-price-min')?.value || '',
     priceMax: document.getElementById('filter-price-max')?.value || '',
   };
@@ -120,7 +123,7 @@ function renderProductCard(product) {
         <span class="stock-badge ${availability.cls}">${availability.text}</span>
       </div>
       <h3>${product.name}</h3>
-      <p class="muted">${categories}</p>
+      <p class="card-category">${categories}</p>
       <p class="card-description">${product.description || ''}</p>
       <p class="price">$${Number(product.price).toLocaleString('es-CO')}</p>
       <div class="card-actions">
@@ -205,29 +208,30 @@ document.addEventListener('DOMContentLoaded', () => {
   // vía ?mascota=perro|gato o ?q=texto en la URL.
   const params = new URLSearchParams(window.location.search);
   const mascota = params.get('mascota');
-  const q = params.get('q');
+  // El parametro ?q= (buscador del nav en otras paginas) lo toma el propio
+  // nav.js, que es quien ahora controla el unico campo de texto de busqueda.
   if (mascota) {
     const petSelect = document.getElementById('filter-pet-type');
     if (petSelect) petSelect.value = mascota;
-  }
-  if (q) {
-    const searchInput = document.getElementById('filter-search');
-    if (searchInput) searchInput.value = q;
   }
 
   loadProducts();
   ['filter-category', 'filter-pet-type'].forEach((id) => {
     document.getElementById(id)?.addEventListener('change', renderGrid);
   });
-  ['filter-search', 'filter-price-min', 'filter-price-max'].forEach((id) => {
+  ['filter-price-min', 'filter-price-max'].forEach((id) => {
     document.getElementById(id)?.addEventListener('input', renderGrid);
   });
   document.getElementById('filter-clear')?.addEventListener('click', () => {
     document.getElementById('filter-category').value = '';
     document.getElementById('filter-pet-type').value = '';
-    document.getElementById('filter-search').value = '';
     document.getElementById('filter-price-min').value = '';
     document.getElementById('filter-price-max').value = '';
+    const navSearch = document.getElementById('nav-search-input');
+    if (navSearch) {
+      navSearch.value = '';
+      document.getElementById('nav-search-clear')?.classList.add('hidden');
+    }
     renderGrid();
   });
 
