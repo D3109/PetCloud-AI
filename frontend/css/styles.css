@@ -311,6 +311,15 @@ main { margin: 30px 0; padding: 0 28px; }
    espacio vacio a los lados en pantallas de escritorio normales. */
 main.page-narrow { max-width: 920px; margin-left: auto; margin-right: auto; }
 
+/* Columna angosta y centrada DENTRO de main.page-narrow, para perfil y
+   encuesta: el titulo (h1) y los parrafos de introduccion vivian sueltos
+   (ocupando todo el ancho de page-narrow, pegados a la izquierda) mientras
+   las tarjetas de abajo (.profile-section, .survey-form) se centraban por
+   su cuenta en una columna mas angosta -el borde izquierdo de unos no
+   coincidia con el de otros-. Envolviendo TODO (titulo, parrafos y
+   tarjetas) en este mismo contenedor, comparten un solo borde izquierdo. */
+.page-narrow-col { max-width: 640px; margin: 0 auto; }
+
 /* Hero del catalogo: bloque solido en terracota con esquinas redondeadas,
    texto a la izquierda e ilustracion a la derecha, al estilo del mockup
    de referencia (sin degradados ni huellitas de fondo). */
@@ -679,12 +688,10 @@ select:focus { outline: none; border-color: var(--color-accent); }
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 20px;
-  /* Sin "auto" en el margen izquierdo/derecho, la tarjeta quedaba pegada
-     al borde izquierdo del main, dejando todo el resto de la pantalla
-     vacio a la derecha. 640px (antes 480px) para aprovechar mejor el
-     ancho de main.page-narrow y que no sobre tanto espacio a los lados. */
-  margin: 0 auto 20px;
-  max-width: 640px;
+  /* El centrado/ancho ya lo da ".page-narrow-col" (el contenedor que
+     envuelve el h1 y todas las tarjetas de la pagina): aqui solo queda el
+     espacio vertical entre una tarjeta y la siguiente. */
+  margin: 0 0 20px;
 }
 .profile-section h2 { margin-top: 0; font-size: 1.1rem; }
 /* max-width:none: el selector generico "form" (linea ~516) trae su propio
@@ -1003,11 +1010,14 @@ h1 { color: #111; }
    propia con su titulo, y cada pregunta usa chips numerados en vez de
    radios sueltos (mas facil de leer y de tocar en celular). */
 .survey-form {
-  max-width: 640px;
-  /* Antes "margin: 0" pisaba el auto-centrado que trae el selector
-     generico "form" (linea ~516), dejando la encuesta pegada a la
-     izquierda con un hueco enorme a la derecha en pantallas anchas. */
-  margin: 0 auto;
+  /* El centrado/ancho ya lo da ".page-narrow-col" (el contenedor que
+     envuelve el h1, los parrafos de introduccion y el formulario). Aqui
+     solo se anula el max-width:360px + margin:0 auto que trae el selector
+     generico "form" (linea ~516) -pensado para login/registro-, para que
+     el formulario no se vuelva a encoger y centrar DENTRO de la columna
+     que ya lo esta centrando. */
+  max-width: none;
+  margin: 0;
   gap: 20px;
 }
 .survey-form fieldset {
