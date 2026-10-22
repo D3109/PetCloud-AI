@@ -42,7 +42,7 @@ async function renderNav() {
 
       <form id="nav-search-form" class="nav-search" role="search">
         <svg class="nav-search-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><line x1="16.3" y1="16.3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <input id="nav-search-input" type="search" placeholder="Buscar productos..." aria-label="Buscar productos" />
+        <input id="nav-search-input" type="text" placeholder="Buscar productos..." aria-label="Buscar productos" autocomplete="off" />
         <button type="button" id="nav-search-clear" class="nav-search-clear hidden" aria-label="Limpiar búsqueda">&times;</button>
       </form>
 
