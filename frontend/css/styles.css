@@ -1028,12 +1028,36 @@ h1 { color: #111; }
   margin: 0;
   box-shadow: 0 2px 10px rgba(43, 36, 32, 0.05);
 }
-.survey-form legend {
+/* El <legend> de un <fieldset> tiene un posicionamiento especial definido
+   por el estandar HTML: el navegador SIEMPRE reserva espacio para el
+   "legend renderizado" montado sobre el borde superior del fieldset, y
+   eso no se puede desactivar con padding, margin ni display:block -lo
+   intentamos y, aun asi, el legend seguia midiendo su borde superior
+   exactamente igual al borde superior del fieldset en vez de respetar su
+   padding, y distintos navegadores/motores lo renderizan de forma distinta
+   (en algunos el texto queda cruzando visualmente el borde de la tarjeta).
+   Para evitar ese comportamiento inconsistente entre navegadores: el
+   <legend> real se oculta visualmente pero queda accesible para lectores
+   de pantalla (sigue describiendo el grupo de preguntas), y el titulo que
+   SI se ve es un <p class="fieldset-title"> normal, dentro del flujo del
+   fieldset, que respeta su padding como cualquier otro texto. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.survey-form .fieldset-title {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.05rem;
   color: var(--color-primary-dark);
-  padding: 20px 4px 10px 0;
+  margin: 0 0 16px;
 }
 .likert-row { margin-bottom: 20px; }
 .likert-row:last-child { margin-bottom: 0; }
