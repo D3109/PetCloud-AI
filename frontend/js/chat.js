@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toggleWrap = document.createElement('div');
   toggleWrap.id = 'chat-toggle-wrap';
   toggleWrap.innerHTML = `
-    <span id="chat-toggle-bubble">Habla con Pet-IA</span>
+    <span id="chat-toggle-bubble" class="hidden">Habla con Pet-IA</span>
     <button id="chat-toggle" aria-label="Abrir asistente PetCloud con IA">
       <span id="chat-toggle-ring"></span>
       <span id="chat-toggle-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><ellipse cx="12" cy="15.3" rx="5.8" ry="4.5" fill="currentColor"/><ellipse cx="4.9" cy="10.4" rx="2.1" ry="2.6" fill="currentColor"/><ellipse cx="8.8" cy="5.6" rx="2.3" ry="2.8" fill="currentColor"/><ellipse cx="15.2" cy="5.6" rx="2.3" ry="2.8" fill="currentColor"/><ellipse cx="19.1" cy="10.4" rx="2.1" ry="2.6" fill="currentColor"/></svg></span>
@@ -41,6 +41,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const input = panel.querySelector('#chat-input');
   const closeBtn = panel.querySelector('#chat-close');
 
+  // La burbuja "Habla con Pet-IA" es bastante ancha (~220px con el boton
+  // redondo) y vive fija abajo a la derecha: en paginas donde algun
+  // contenido tambien cae en esa esquina (p. ej. "Limpiar filtros" del
+  // catalogo en ventanas de poca altura), la burbuja lo tapaba todo el
+  // tiempo. Mostrandola solo unos segundos y dejando despues solo el
+  // boton redondo (mucho mas angosto) baja muchisimo esa posibilidad,
+  // sin perder el aviso inicial de que el chat existe.
+  let bubbleTimer = null;
+  function showBubbleTemporarily() {
+    toggleBubble.classList.remove('hidden');
+    clearTimeout(bubbleTimer);
+    bubbleTimer = setTimeout(() => toggleBubble.classList.add('hidden'), 4500);
+  }
+
   function addMessage(text, who) {
     const bubble = document.createElement('div');
     bubble.className = `chat-bubble chat-${who}`;
@@ -51,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openPanel() {
     panel.classList.remove('hidden');
+    clearTimeout(bubbleTimer);
     toggleBubble.classList.add('hidden');
     if (!messagesBox.dataset.greeted) {
       addMessage('¡Hola! Soy el asistente de PetCloud. ¿En qué te ayudo hoy?', 'bot');
@@ -61,13 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function closePanel() {
     panel.classList.add('hidden');
-    toggleBubble.classList.remove('hidden');
+    showBubbleTemporarily();
   }
 
   toggleBtn.addEventListener('click', () => {
     panel.classList.contains('hidden') ? openPanel() : closePanel();
   });
   closeBtn.addEventListener('click', closePanel);
+  showBubbleTemporarily();
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();

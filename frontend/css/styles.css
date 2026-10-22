@@ -1228,7 +1228,12 @@ h1 { color: #111; }
   color: #000;
 }
 .filters select { flex: 1 1 170px; }
-.filters #filter-clear { flex: 0 0 auto; margin-left: auto; }
+/* Sin "margin-left: auto" (antes empujaba el boton hasta el borde derecho
+   de la fila): justo ahi vive el widget flotante del chat (abajo a la
+   derecha), y en ventanas de poca altura "Limpiar filtros" terminaba
+   tapado detras de la burbuja "Habla con Pet-IA". Alineado junto al resto
+   de los filtros, nunca coincide con esa esquina. */
+.filters #filter-clear { flex: 0 0 auto; }
 /* El buscador de texto del catalogo vive solo en la barra del nav (ver
    nav.js) -ya no hay un segundo campo de busqueda aqui dentro de los
    filtros, para no mostrar dos buscadores a la vez-. El filtro de precio
