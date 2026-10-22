@@ -83,11 +83,27 @@
   --radius-md: 14px;
 }
 
+/* "Footer pegado al fondo": nav + contenido (main o .auth-page) + footer
+   en columna, con el contenido creciendo (flex:1) para llenar lo que
+   sobre de alto de pantalla. Asi el footer verde siempre queda justo
+   despues del contenido -nunca separado por un hueco- y en paginas
+   cortas (login, un pedido suelto, etc.) baja hasta el borde inferior
+   real de la ventana en vez de quedarse flotando a medio camino. */
 body {
   margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   font-family: var(--font-body);
   background: var(--color-bg);
   color: var(--color-text);
+}
+body > main,
+body > .auth-page {
+  flex: 1 0 auto;
+}
+.site-footer {
+  flex-shrink: 0;
 }
 
 h1, h2, h3, .brand, .hero-cta, .category-label, button {
@@ -259,7 +275,24 @@ nav {
   .nav-search { order: 4; flex-basis: 100%; max-width: none; }
 }
 
-main { margin: 30px auto; padding: 0 28px; }
+/* Sin "auto" en los margenes laterales: main es un flex item de body
+   (ver el patron de footer pegado al fondo, arriba). Un flex item con
+   margenes auto en el eje transversal deja de estirarse para llenar el
+   ancho disponible (se encoge al ancho de su contenido y se centra con
+   esos margenes) -eso rompia el catalogo en celular, donde el contenido
+   interno es mas ancho que la pantalla y terminaba empujando TODO el
+   main (y la pagina) a un ancho mayor al del viewport, con scroll
+   horizontal-. El "auto" solo se vuelve a activar en .page-narrow (abajo),
+   que es la unica situacion donde realmente se necesita centrar. */
+main { margin: 30px 0; padding: 0 28px; }
+
+/* Paginas de una sola columna (perfil, encuesta, pedidos): sin un ancho
+   maximo, el contenido (una tarjeta angosta) queda pegado a la izquierda
+   y deja un espacio vacio enorme a la derecha en pantallas anchas. Esta
+   clase SOLO se aplica a esas paginas -el catalogo, el panel admin, la
+   auditoria y el carrito siguen fluidos a proposito, porque ahi si
+   aprovechan el ancho completo-. */
+main.page-narrow { max-width: 760px; margin-left: auto; margin-right: auto; }
 
 /* Hero del catalogo: bloque solido en terracota con esquinas redondeadas,
    texto a la izquierda e ilustracion a la derecha, al estilo del mockup
@@ -444,7 +477,14 @@ main { margin: 30px auto; padding: 0 28px; }
   .category-row { gap: 32px; }
 }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; align-items: stretch; }
+/* auto-fill (no auto-fit): con auto-fit, cuando hay pocos resultados
+   (p. ej. 1 solo producto filtrado) la(s) columna(s) vacias se colapsan y
+   la tarjeta restante se estira para llenar TODA la fila -haciendo que su
+   imagen (width:100% del card) se vea gigante y deformada-. Con auto-fill
+   el grid conserva esas columnas vacias en vez de colapsarlas, asi que
+   una tarjeta sola mantiene su ancho normal (minmax) sin importar cuantos
+   resultados haya. */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; align-items: stretch; }
 
 .card {
   background: var(--color-card);
@@ -531,7 +571,10 @@ select:focus { outline: none; border-color: var(--color-accent); }
 /* Paginas de login / registro: panel visual + formulario */
 .auth-page {
   display: flex;
-  min-height: calc(100vh - 64px);
+  /* Sin min-height propio: el alto correcto lo da el flex:1 de
+     body > .auth-page (arriba), que crece justo lo necesario para que el
+     footer siempre quede pegado al fondo de la ventana, sin forzar un
+     piso arbitrario aqui. */
 }
 .auth-visual {
   flex: 1 1 42%;
@@ -541,15 +584,19 @@ select:focus { outline: none; border-color: var(--color-accent); }
   align-items: center;
   justify-content: center;
   padding: 48px 32px;
-  /* Formularios largos (p. ej. registro, con mascota opcional) hacen que
-     .auth-box sea mucho mas alto que el contenido del panel naranja; como
-     .auth-page estira ambas columnas a la misma altura, el panel quedaba
-     con un hueco vacio enorme debajo. Al anclarlo (sticky) justo bajo el
-     nav, se queda del alto de su propio contenido y acompaña el scroll
-     del formulario en vez de estirarse de mas. */
-  align-self: flex-start;
-  position: sticky;
-  top: 64px;
+  /* Antes este panel se anclaba (sticky) al alto de su propio contenido
+     para no dejar espacio naranja de mas cuando el formulario de al lado
+     era mucho mas largo (registro). Pero eso tiene un efecto secundario
+     peor: en paginas cortas (login) o pantallas altas, la fila crece
+     (flex:1 de body > .auth-page) para empujar el footer hasta el fondo,
+     y como este panel ya no acompañaba ese crecimiento, quedaba un hueco
+     color crema entre el naranja y el footer verde -exactamente el bug
+     reportado ("no queda fijo", "no se junta con la parte naranja")-.
+     Por eso ahora se deja con el "stretch" por defecto: el panel naranja
+     siempre llena toda la fila, sin importar el alto de pantalla o cual
+     columna sea mas larga, asi nunca queda un hueco entre el y el
+     footer. El "costo" es mas color solido debajo del contenido en
+     paginas con formularios cortos, que es preferible a un hueco vacio. */
 }
 .auth-visual-inner { max-width: 360px; }
 .auth-visual-emoji { font-size: 3.2rem; display: block; margin-bottom: 14px; }
@@ -581,8 +628,8 @@ select:focus { outline: none; border-color: var(--color-accent); }
 .auth-switch a:hover { text-decoration: underline; }
 
 @media (max-width: 760px) {
-  .auth-page { flex-direction: column; min-height: auto; }
-  .auth-visual { padding: 32px 24px; text-align: center; position: static; }
+  .auth-page { flex-direction: column; }
+  .auth-visual { padding: 32px 24px; text-align: center; }
   .auth-visual-inner { max-width: none; }
   .auth-visual-points { align-items: center; }
   .auth-box { max-width: none; padding: 32px 20px; }
@@ -615,7 +662,10 @@ select:focus { outline: none; border-color: var(--color-accent); }
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 20px;
-  margin-bottom: 20px;
+  /* Sin "auto" en el margen izquierdo/derecho, la tarjeta (480px) quedaba
+     pegada al borde izquierdo del main, dejando todo el resto de la
+     pantalla vacio a la derecha. */
+  margin: 0 auto 20px;
   max-width: 480px;
 }
 .profile-section h2 { margin-top: 0; font-size: 1.1rem; }
@@ -928,7 +978,10 @@ h1 { color: #111; }
    radios sueltos (mas facil de leer y de tocar en celular). */
 .survey-form {
   max-width: 640px;
-  margin: 0;
+  /* Antes "margin: 0" pisaba el auto-centrado que trae el selector
+     generico "form" (linea ~516), dejando la encuesta pegada a la
+     izquierda con un hueco enorme a la derecha en pantallas anchas. */
+  margin: 0 auto;
   gap: 20px;
 }
 .survey-form fieldset {
@@ -1055,8 +1108,16 @@ h1 { color: #111; }
   background: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  overflow: hidden;
   box-shadow: 0 2px 10px rgba(43, 36, 32, 0.05);
+  /* display:block + overflow-x:auto (en vez de solo "overflow:hidden"):
+     algunas tablas (p. ej. Encuestas, con 13 columnas) son mas anchas
+     que cualquier pantalla razonable. Sin esto, antes solo se corregia
+     en movil y en escritorio esa tabla empujaba TODA la pagina a un
+     ancho mayor al de la ventana (scroll horizontal de la pagina
+     entera). Asi el scroll horizontal queda contenido dentro de la
+     tabla, sin importar el ancho de pantalla. */
+  display: block;
+  overflow-x: auto;
 }
 .admin-table th, .admin-table td {
   text-align: left;
@@ -1157,10 +1218,36 @@ h1 { color: #111; }
   color: #000;
 }
 .filters select { flex: 1 1 170px; }
-.filters input[type="search"] { flex: 3 1 220px; }
 .filters #filter-clear { flex: 0 0 auto; margin-left: auto; }
+/* Buscador + filtro de precio agrupados: antes el filtro de precio podia
+   quedar solo (separado del buscador) al envolver la fila en pantallas
+   intermedias, porque cada uno era un item flex independiente dentro de
+   .filters. Agrupandolos en un mismo contenedor flex, se mueven y
+   envuelven siempre juntos -alineados, en un solo lugar- sin importar el
+   ancho disponible. */
+.filters-search-group {
+  flex: 3 1 420px;
+  /* min-width:0 en vez del "auto" por defecto: .price-filter es a su vez
+     un contenedor flex con inputs que tienen min-width propio, y sin
+     esto el navegador usaba ese tamaño minimo de contenido (en vez del
+     flex-basis declarado) para decidir si envolver la fila, haciendo
+     que el buscador y el filtro de precio saltaran cada uno a su propia
+     linea aunque sobrara espacio de sobra para los dos juntos. */
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+/* type="text" (no "search"): el input[type=search] nativo tiene un
+   bug de layout en Chromium que ignora su flex-basis al decidir si
+   envolver la fila, haciendo que ocupe 100% del ancho y empuje el
+   filtro de precio a su propia linea aparte. Con type="text" el campo
+   respeta su flex-basis normalmente y quedan alineados en una fila. */
+.filters-search-group input[type="text"] { flex: 2 1 220px; }
 .price-filter {
   flex: 1 1 200px;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1324,16 +1411,27 @@ h1 { color: #111; }
 /* Responsive: celulares */
 @media (max-width: 600px) {
   main { padding: 0 14px; }
-  .grid { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-  .filters { flex-direction: column; align-items: stretch; }
+  .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  /* flex-wrap:nowrap explicito: la regla base trae flex-wrap:wrap (para
+     la fila de escritorio) y si se queda activo junto con flex-direction
+     column aqui, cada item puede terminar tratado como su propia linea
+     y "stretch" deja de repartir el ancho completo -los campos quedaban
+     mas anchos que la pantalla, con scroll horizontal en todo el sitio-. */
+  .filters { flex-direction: column; flex-wrap: nowrap; align-items: stretch; }
   .filters select,
-  .filters input[type="search"],
+  .filters-search-group,
+  .filters input[type="text"],
   .price-filter { flex: 1 1 auto; }
+  .filters-search-group { flex-direction: column; flex-wrap: nowrap; align-items: stretch; }
   .filters #filter-clear { margin-left: 0; width: 100%; }
   .price-filter input[type="number"] { flex: 1 1 0; }
-  .inline-form { flex-direction: column; align-items: stretch; }
+  /* mismo fix que .filters: sin flex-wrap:nowrap explicito aqui, el
+     flex-wrap:wrap de la regla base (para la fila de escritorio) se
+     combina mal con flex-direction:column y rompe el "stretch", dejando
+     los campos del formulario mas anchos que la pantalla. */
+  .inline-form { flex-direction: column; flex-wrap: nowrap; align-items: stretch; }
   .inline-form input, .inline-form select { flex: 1 1 auto; }
-  .admin-table { display: block; overflow-x: auto; white-space: nowrap; }
+  .admin-table, .cart-table { display: block; overflow-x: auto; white-space: nowrap; }
   .tabs { overflow-x: auto; flex-wrap: nowrap; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -1350,6 +1448,11 @@ h1 { color: #111; }
   margin-top: 56px;
   border-top: 3px solid var(--color-accent);
 }
+/* En login/registro el panel naranja debe terminar justo donde empieza
+   el footer verde (sin respiro de por medio): ese margen de 56px es el
+   que dejaba el hueco crema entre ambos ("no se junta con la parte
+   naranja"), aun con el panel ya estirado a la altura completa. */
+.auth-page + .site-footer { margin-top: 0; }
 .site-footer-inner {
   margin: 0 auto;
   padding: 40px 28px 26px;
@@ -1376,6 +1479,24 @@ h1 { color: #111; }
   font-size: 1.15rem;
   margin-bottom: 10px;
 }
+/* Patita del footer: antes era el emoji 🐾, que en varios sistemas se
+   renderiza en negro y queda invisible sobre el verde oscuro del footer.
+   Se reemplaza por el mismo SVG del logo del nav (fill: currentColor),
+   fijando un color claro explicito para que el contraste nunca dependa
+   de la fuente de emoji del dispositivo. */
+.footer-paw {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--color-accent);
+}
+.footer-paw-inline {
+  width: 14px;
+  height: 14px;
+  vertical-align: -2px;
+  margin: 0 1px;
+  color: var(--color-accent);
+}
 .site-footer-links { list-style: none; margin: 0; padding: 0; }
 .site-footer-links li { margin-bottom: 8px; }
 .site-footer-links a {
@@ -1401,6 +1522,10 @@ h1 { color: #111; }
 .site-footer-bottom-made { white-space: nowrap; opacity: 0.8; }
 @media (max-width: 760px) {
   .site-footer-inner { grid-template-columns: 1fr; gap: 22px; }
-  .site-footer-bottom { flex-direction: column; }
+  /* mismo fix que .filters/.inline-form arriba: sin flex-wrap:nowrap
+     explicito, el flex-wrap:wrap de la regla base no se lleva bien con
+     flex-direction:column y puede dejar ".site-footer-bottom-legal" (que
+     tiene max-width:640px) mas ancho que la pantalla. */
+  .site-footer-bottom { flex-direction: column; flex-wrap: nowrap; }
 }
 
