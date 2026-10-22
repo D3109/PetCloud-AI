@@ -275,6 +275,22 @@ nav {
   .nav-search { order: 4; flex-basis: 100%; max-width: none; }
 }
 
+/* Fila de filtros del catalogo (categoria, mascota, precio), combinada
+   dentro del propio nav -pegada justo debajo de la barra principal, como
+   una segunda fila del mismo bloque blanco y pegajoso (sticky)-, en vez de
+   su propia fila separada mas abajo despues del banner. Reutiliza toda la
+   base de ".filters" (select/input, #filter-clear) y solo agrega el
+   espaciado y la linea divisoria propios de vivir dentro del nav. */
+.nav-filters {
+  padding: 0 28px 14px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 14px;
+  margin-bottom: 0;
+}
+@media (max-width: 760px) {
+  .nav-filters { padding-left: 16px; padding-right: 16px; }
+}
+
 /* Sin "auto" en los margenes laterales: main es un flex item de body
    (ver el patron de footer pegado al fondo, arriba). Un flex item con
    margenes auto en el eje transversal deja de estirarse para llenar el
