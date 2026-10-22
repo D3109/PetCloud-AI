@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <span id="chat-toggle-bubble">Habla con Pet-IA</span>
     <button id="chat-toggle" aria-label="Abrir asistente PetCloud con IA">
       <span id="chat-toggle-ring"></span>
-      <span id="chat-toggle-icon">🐾</span>
+      <span id="chat-toggle-icon"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><ellipse cx="12" cy="15.3" rx="5.8" ry="4.5" fill="currentColor"/><ellipse cx="4.9" cy="10.4" rx="2.1" ry="2.6" fill="currentColor"/><ellipse cx="8.8" cy="5.6" rx="2.3" ry="2.8" fill="currentColor"/><ellipse cx="15.2" cy="5.6" rx="2.3" ry="2.8" fill="currentColor"/><ellipse cx="19.1" cy="10.4" rx="2.1" ry="2.6" fill="currentColor"/></svg></span>
       <span id="chat-toggle-badge">IA</span>
     </button>
   `;
