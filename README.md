@@ -80,7 +80,7 @@ el frontend.
 | `JWT_ALGORITHM` | No (`HS256`) | Algoritmo de firma del JWT |
 | `JWT_EXPIRE_MINUTES` | No (`60`) | Minutos de expiración del token |
 | `AI_MODEL` | No (`gemini-3.8-flash`) | Modelo de Gemini usado por el asistente |
-| `GOOGLE_OAUTH_CLIENT_ID` | No | Client ID de Google para "Ingresar con Google" |
+| `GOOGLE_OAUTH_CLIENT_ID` | Solo para Google login | Debe ser igual a `GOOGLE_CLIENT_ID` en `frontend/js/config.js`; sin esto, "Ingresar con Google" responde 501 |
 | `FRONTEND_BASE_URL` | No | URL pública del frontend, para el enlace de restablecer contraseña en el correo |
 | `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` / `SMTP_FROM` / `SMTP_USE_TLS` | No | Envío de correos transaccionales (confirmación de pago, recuperación de contraseña) |
 
