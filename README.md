@@ -31,11 +31,17 @@ cd backend
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-cp ../.env.example ../.env   # completar con tus valores, ver abajo
+cp ../.env.example ../.env   # DATABASE_URL ya coincide con docker-compose.yml;
+                              # completar JWT_SECRET_KEY y GOOGLE_API_KEY, ver abajo
 
 alembic upgrade head                                  # aplica las migraciones
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
+
+> Los cuatro comandos de arriba (`pip install`, `cp`, `alembic`, `uvicorn`)
+> asumen que seguís parado en `backend/`. Si abrís una terminal nueva o
+> cambiás de carpeta, hacé `cd backend` de nuevo antes de repetirlos — es el
+> error más común al levantar el proyecto.
 
 API en `http://localhost:8000`, documentación interactiva (Swagger) en
 `http://localhost:8000/docs`.
@@ -68,7 +74,7 @@ el frontend.
 
 | Variable | Obligatoria | Qué es |
 | --- | --- | --- |
-| `DATABASE_URL` | Sí | Cadena de conexión a PostgreSQL (`postgresql://user:password@host:5432/db`) |
+| `DATABASE_URL` | Sí | Cadena de conexión a PostgreSQL; el valor de `.env.example` ya coincide con `docker-compose.yml` |
 | `JWT_SECRET_KEY` | Sí | Clave para firmar los tokens JWT |
 | `GOOGLE_API_KEY` | Sí | API key de Google Gemini (asistente de compras con IA) |
 | `JWT_ALGORITHM` | No (`HS256`) | Algoritmo de firma del JWT |
