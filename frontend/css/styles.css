@@ -323,7 +323,11 @@ main.page-narrow { max-width: 920px; margin-left: auto; margin-right: auto; }
 /* Hero del catalogo: bloque solido en terracota con esquinas redondeadas,
    texto a la izquierda e ilustracion a la derecha, al estilo del mockup
    de referencia (sin degradados ni huellitas de fondo). */
-.home-shell { margin: 24px auto 0; padding: 0 28px; }
+/* Sin "auto" en los margenes laterales: mismo motivo que en "main" (arriba,
+   linea ~303) -.home-shell tambien es flex item de body, y "auto" lo
+   encogia a su contenido y lo centraba, dejando huecos a los lados del
+   hero en vez de que este ocupara todo el ancho disponible-. */
+.home-shell { margin: 24px 0 0; padding: 0 28px; }
 
 .hero {
   background: var(--color-primary);
